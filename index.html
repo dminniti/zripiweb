@@ -67,6 +67,7 @@ Hero Section
             -->
             <div class="actions">
                 <a href="#about" class="btn-get-started">Empecemos</a>
+                <!--<a href="workshop.html" class="btn-main">Talleres</a>-->
             </div>
         </div>
     </div>
@@ -176,22 +177,28 @@ Services Section
 
         <div class="row">
             <div class="col-md-4 service-item">
-                <div class="service-icon"><i class="fa fa-area-chart"></i></div>
-                <h4 class="service-title"><a href="">Talleres / Cursos</a></h4>
-                <p class="service-description">Voluptatum deleniti atque corrupti quos dolores et quas molestias
-                    excepturi sint occaecati cupiditate non provident</p>
+                <!--<div class="service-icon"><i class="fa fa-area-chart"></i></div>-->
+                <h4 class="service-title"><a href="">👨‍🏫 Talleres / Cursos 👨‍🏫</a></h4>
+                <p class="service-description">Estamos convencidos que la mejor manera de aprender es viviendo
+                    experiencias. Generamos espacios de aprendizaje y reflexión, simulando y experimentando situaciones
+                    reales, donde las personas y las interacciones hacen que cada evento sea único. <br><br>
+                    <!--<a href="workshop.html" class="btn btn-success text-center">Ver más</a>-->
+                </p>
             </div>
             <div class="col-md-4 service-item">
-                <div class="service-icon"><i class="fa fa-road"></i></div>
-                <h4 class="service-title"><a href="">Consultoría - Seguimiento</a></h4>
-                <p class="service-description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat tarad limino ata</p>
+                <!--<div class="service-icon"><i class="fa fa-road"></i></div>-->
+                <h4 class="service-title"><a href="">📈 Consultoría 📈</a></h4>
+                <p class="service-description">Acompañamos a las organizaciones y a sus equipos en plena transformación.
+                    En conjunto, ayudamos a la elaboración de estrategias para la entrega de valor real de negocio, con
+                    foco en maximizar el impacto minimizando costos, esfuerzos y riesgos.</p>
             </div>
             <div class="col-md-4 service-item">
-                <div class="service-icon"><i class="fa fa-paper-plane"></i></div>
-                <h4 class="service-title"><a href="">Charlas</a></h4>
-                <p class="service-description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                    dolore eu fugiat nulla pariatur</p>
+                <!--<div class="service-icon"><i class="fa fa-paper-plane"></i></div>-->
+                <h4 class="service-title"><a href="">🤓 Charlas 🤓</a></h4>
+                <p class="service-description">Retribuyendo a la comunidad ágil, generando intercambio de ideas y
+                    fomentando la inteligencia colectiva, estamos presentes en Open Spaces. Universidades, escuelas y
+                    empresas.
+                </p>
             </div>
         </div>
     </div>
@@ -203,13 +210,14 @@ Subscrbe Section
 <section id="subscribe">
     <div class="container wow fadeInUp">
         <div class="row">
-            <div class="col-md-8">
-                <h3 class="subscribe-title">Suscribite a nuestro Newsletter Mensual</h3>
-                <p class="subscribe-text">Te compartiremos artículos, novedades y descuentos!</p>
+            <div class="col-md-12">
+                <h3 class="subscribe-title">"For every complex problem there is an answer that is clear, simple, and
+                    wrong."</h3>
+                <p class="subscribe-text text-center">— H.L. Mencken</p>
             </div>
-            <div class="col-md-4 subscribe-btn-container">
+            <!--<div class="col-md-4 subscribe-btn-container">
                 <a class="subscribe-btn" href="#">Subscrirme!</a>
-            </div>
+            </div>-->
         </div>
     </div>
 </section>
@@ -276,8 +284,8 @@ Porfolio Section
             <div class="col-md-3">
                 <a class="portfolio-item" style="background-image: url(img/portfolio-6.jpg);" href="">
                     <div class="details">
-                        <h4>Portfolio 6</h4>
-                        <span>Alored dono par</span>
+                        <h4>Taller</h4>
+                        <span>Agile Inception</span>
                     </div>
                 </a>
             </div>
@@ -295,7 +303,6 @@ Porfolio Section
                 <a class="portfolio-item" style="background-image: url(img/portfolio-8.jpg);" href="">
                     <div class="details">
                         <h4>Taller</h4>
-                        <span>Product owner</span>
                         <span>Product owner</span>
                     </div>
                 </a>
@@ -445,29 +452,29 @@ Contact Section
                 <div class="form">
                     <div id="sendmessage">Your message has been sent. Thank you!</div>
                     <div id="errormessage"></div>
-                    <form action="" method="post" role="form" class="contactForm">
+                    <form action="sender.php" method="post" role="form" class="contactForm">
                         <div class="form-group">
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name"
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Nombre o Empresa..."
                                    data-rule="minlen:4" data-msg="Please enter at least 4 chars"/>
                             <div class="validation"></div>
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email"
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Email..."
                                    data-rule="email" data-msg="Please enter a valid email"/>
                             <div class="validation"></div>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject"
+                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto..."
                                    data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject"/>
                             <div class="validation"></div>
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" name="message" rows="5" data-rule="required"
-                                      data-msg="Please write something for us" placeholder="Message"></textarea>
+                                      data-msg="Please write something for us" placeholder="Deje su mensaje..."></textarea>
                             <div class="validation"></div>
                         </div>
                         <div class="text-center">
-                            <button type="submit">Send Message</button>
+                            <button type="submit">Enviar</button>
                         </div>
                     </form>
                 </div>

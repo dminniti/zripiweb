@@ -41,6 +41,10 @@ h2{
   font-weight: bold;
 }
 
+hr{
+  border-top: 1px solid #e0e0e0;
+}
+
 /* Prelaoder */
 #preloader {
   position: fixed;
@@ -186,6 +190,18 @@ h2{
 #hero .btn-services:hover {
   background: #03C4EB;
   border: 2px solid #03C4EB;
+}
+
+#hero .btn-main {
+  background: #AB9DFF;
+  border: 2px solid #AB9DFF;
+  color: #fff;
+}
+
+#hero .btn-main:hover {
+  background: none;
+  border: 2px solid #fff;
+  color: #fff;
 }
 
 /*--------------------------------------------------------------
