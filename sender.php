@@ -19,7 +19,7 @@ if ($_POST['email'] != "") {
     $mensaje .= "HORA:     " . date("h:i:s a") . "\n";
     $mensaje .= "IP:       " . $_SERVER['REMOTE_ADDR'] . "\n\n";
     $mensaje .= "---------------------------------- \n\n";
-    $mensaje .= $_POST['comment'] . "\n\n";
+    $mensaje .= $_POST['message'] . "\n\n";
     $mensaje .= "---------------------------------- \n";
 
     // headers del email
