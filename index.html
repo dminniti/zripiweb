@@ -195,9 +195,9 @@ Services Section
             <div class="col-md-4 service-item">
                 <!--<div class="service-icon"><i class="fa fa-paper-plane"></i></div>-->
                 <h4 class="service-title"><a href="">🤓 Charlas 🤓</a></h4>
-                <p class="service-description">Retribuyendo a la comunidad ágil, generando intercambio de ideas y
-                    fomentando la inteligencia colectiva, estamos presentes en Open Spaces en universidades, escuelas y
-                    empresas.
+                <p class="service-description">Nos encanta intercambiar ideas y fomentar la inteligencia colectiva.
+                    Estamos presentes en universidades, escuelas y empresas. Algunos de los temas que nos apasionan:
+                    sociocracia, organizaciones horizontales, estructuras liberadoras, agilidad, y muchos más...
                 </p>
             </div>
         </div>
@@ -237,7 +237,7 @@ Porfolio Section
 
         <div class="row">
             <div class="col-md-3">
-                <a class="portfolio-item" style="background-image: url(img/portfolio-1.jpg);" href="">
+                <a class="portfolio-item" style="background-image: url(img/portfolio1.jpg);" href="">
                     <div class="details">
                         <h4>Taller</h4>
                         <span>Facilitación gráfica</span>
@@ -246,7 +246,16 @@ Porfolio Section
             </div>
 
             <div class="col-md-3">
-                <a class="portfolio-item" style="background-image: url(img/portfolio-2.jpg);" href="">
+                <a class="portfolio-item" style="background-image: url(img/portfolio2.jpg);" href="">
+                    <div class="details">
+                        <h4>Taller</h4>
+                        <span>Scrum master</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-md-3">
+                <a class="portfolio-item" style="background-image: url(img/portfolio3.jpg);" href="">
                     <div class="details">
                         <h4>Taller</h4>
                         <span>Product owner</span>
@@ -255,16 +264,7 @@ Porfolio Section
             </div>
 
             <div class="col-md-3">
-                <a class="portfolio-item" style="background-image: url(img/portfolio-3.jpg);" href="">
-                    <div class="details">
-                        <h4>Taller</h4>
-                        <span>Product owner</span>
-                    </div>
-                </a>
-            </div>
-
-            <div class="col-md-3">
-                <a class="portfolio-item" style="background-image: url(img/portfolio-4.jpg);" href="">
+                <a class="portfolio-item" style="background-image: url(img/portfolio4.jpg);" href="">
                     <div class="details">
                         <h4>Retrospectivas</h4>
                         <span>Consultoría</span>
@@ -273,7 +273,7 @@ Porfolio Section
             </div>
 
             <div class="col-md-3">
-                <a class="portfolio-item" style="background-image: url(img/portfolio-5.jpg);" href="">
+                <a class="portfolio-item" style="background-image: url(img/portfolio5.jpg);" href="">
                     <div class="details">
                         <h4>Taller</h4>
                         <span>Intro a la agilidad</span>
@@ -282,7 +282,7 @@ Porfolio Section
             </div>
 
             <div class="col-md-3">
-                <a class="portfolio-item" style="background-image: url(img/portfolio-6.jpg);" href="">
+                <a class="portfolio-item" style="background-image: url(img/portfolio6.jpg);" href="">
                     <div class="details">
                         <h4>Taller</h4>
                         <span>Agile Inception</span>
@@ -291,16 +291,16 @@ Porfolio Section
             </div>
 
             <div class="col-md-3">
-                <a class="portfolio-item" style="background-image: url(img/portfolio-7.jpg);" href="">
+                <a class="portfolio-item" style="background-image: url(img/portfolio7.jpg);" href="">
                     <div class="details">
                         <h4>Taller</h4>
-                        <span>Estructuras liberadoras</span>
+                        <span>Scrum master</span>
                     </div>
                 </a>
             </div>
 
             <div class="col-md-3">
-                <a class="portfolio-item" style="background-image: url(img/portfolio-8.jpg);" href="">
+                <a class="portfolio-item" style="background-image: url(img/portfolio8.jpg);" href="">
                     <div class="details">
                         <h4>Taller</h4>
                         <span>Product owner</span>
@@ -377,7 +377,7 @@ Team Section
                 <div class="member">
                     <div class="pic"><img src="img/team-1.jpg" alt=""></div>
                     <h4>Sebastián Lopreto</h4>
-                    <span>Ing. electrónico - Scrum master - Agile coach</span>
+                    <span>Ing. Electrónico - Esp. Sistemas - Product Owner</span>
                     <div class="social">
                         <a href="https://www.linkedin.com/in/sebastian-lopreto/"><i class="fa fa-linkedin"></i></a>
                     </div>
@@ -400,7 +400,7 @@ Team Section
                 <div class="member">
                     <div class="pic"><img src="img/team-3.jpg" alt=""></div>
                     <h4>Alejandro Assan</h4>
-                    <span>Lider técnico - Scrum master - Agile coach</span>
+                    <span>Lider técnico - Scrum master</span>
                     <div class="social">
                         <a href="https://twitter.com/aleassan?lang=es"><i class="fa fa-twitter"></i></a>
                         <a href="https://www.linkedin.com/in/alejandro-assan-2b417344/"><i
@@ -454,7 +454,8 @@ Contact Section
                     <div id="errormessage"></div>
                     <form action="sender.php" method="post" role="form" class="contactForm">
                         <div class="form-group">
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Nombre o Empresa..."
+                            <input type="text" name="name" class="form-control" id="name"
+                                   placeholder="Nombre o Empresa..."
                                    data-rule="minlen:4" data-msg="Please enter at least 4 chars"/>
                             <div class="validation"></div>
                         </div>
@@ -470,7 +471,8 @@ Contact Section
                         </div>
                         <div class="form-group">
                             <textarea class="form-control" name="message" rows="5" data-rule="required"
-                                      data-msg="Please write something for us" placeholder="Deje su mensaje..."></textarea>
+                                      data-msg="Please write something for us"
+                                      placeholder="Deje su mensaje..."></textarea>
                             <div class="validation"></div>
                         </div>
                         <div class="text-center">
