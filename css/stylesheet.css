@@ -582,7 +582,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #services .service-title {
-  margin-left: 80px;
+  /*margin-left: 80px;*/
   font-weight: 700;
   margin-bottom: 15px;
   text-transform: uppercase;
@@ -593,7 +593,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #services .service-description {
-  margin-left: 80px;
+  /*margin-left: 80px;*/
   line-height: 24px;
 }
 
