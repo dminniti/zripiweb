@@ -597,6 +597,56 @@ body.mobile-nav-active #mobile-nav-toggle {
   line-height: 24px;
 }
 
+/* Workshop Section
+--------------------------------*/
+#workshops {
+  background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)) fixed center center;
+  background-size: cover;
+  padding: 80px 0 60px 0;
+}
+
+#workshops .service-item {
+  margin-bottom: 20px;
+}
+
+#workshops .service-icon {
+  float: left;
+  background: #03C4EB;
+  padding: 16px;
+  border-radius: 50%;
+  transition: 0.5s;
+  border: 1px solid #03C4EB;
+}
+
+#workshops .service-icon i {
+  color: #fff;
+  font-size: 24px;
+}
+
+#workshops .service-item:hover .service-icon {
+  background: #fff;
+}
+
+#workshops .service-item:hover .service-icon i {
+  color: #03C4EB;
+}
+
+#workshops .service-title {
+  /*margin-left: 80px;*/
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+#workshops .service-title a {
+  color: #111;
+}
+
+#workshops .service-description {
+  /*margin-left: 80px;*/
+  line-height: 24px;
+}
+
 /* Subscribe Section
 --------------------------------*/
 #subscribe {
