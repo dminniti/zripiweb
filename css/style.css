@@ -556,7 +556,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #services .service-item {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 #services .service-icon {
@@ -595,6 +595,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #services .service-description {
   /*margin-left: 80px;*/
   line-height: 24px;
+  text-align: center;
 }
 
 /* Workshop Section
@@ -694,7 +695,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 --------------------------------*/
 #portfolio {
   background: #fff;
-  padding: 80px 0;
+  padding: 80px 0 60px 0;
 }
 
 #portfolio .portfolio-item {
@@ -809,8 +810,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* Team Section
 --------------------------------*/
 #team {
-  background: #e0e7d8;
-  padding: 80px 0 60px 0;
+  background: #fff;
+  padding: 0 0 60px 0;
 }
 
 #team .member {
