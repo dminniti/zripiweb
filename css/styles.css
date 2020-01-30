@@ -943,8 +943,56 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #footer .credits {
-  padding-top: 10px;
+  padding-top: 30px;
   text-align: center;
   font-size: 13px;
   color: #ccc;
+}
+
+/*--------------------------------------------------------------
+# Social
+--------------------------------------------------------------*/
+
+.icon-bar {
+  display: inline;
+}
+
+/* Style the icon bar links */
+.icon-bar a {
+  text-align: center;
+  padding: 12px;
+  margin-left: 5px;
+  border-radius: 20px;
+  color: white;
+  font-size: 14px;
+}
+
+/* Style the social media icons with color, if you want */
+.icon-bar a:hover {
+  background-color: #e0e7d8;
+}
+
+.facebook {
+  background: #3B5998;
+  color: white;
+}
+
+.twitter {
+  background: #55ACEE;
+  color: white;
+}
+
+.instagram {
+  background: #dd4b39;
+  color: white;
+}
+
+.linkedin {
+  background: #007bb5;
+  color: white;
+}
+
+.medium {
+  background: #ffffff;
+  color: #000000 !important;
 }
