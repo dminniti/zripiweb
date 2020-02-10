@@ -1,9 +1,3 @@
-/*
-  Theme Name: Imperial
-  Theme URL: https://bootstrapmade.com/imperial-free-onepage-bootstrap-template/
-  Author: BootstrapMade
-  Author URL: https://bootstrapmade.com
-*/
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -1289,4 +1283,53 @@ body.mobile-nav-active #mobile-nav-toggle {
 .medium {
     background: #ffffff;
     color: #000000 !important;
+}
+
+/*Workshop index*/
+
+/* Team Section
+--------------------------------*/
+
+#workshops .member {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#workshops .member .pic {
+    margin-bottom: 15px;
+    overflow: hidden;
+    /*height: 260px;*/
+    height: 100%;
+}
+
+#workshops .member .pic img {
+    max-width: 65%;
+}
+
+#workshops .member h4 {
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+#workshops .member span {
+    font-style: italic;
+    display: block;
+    font-size: 13px;
+}
+
+#workshops .member .social {
+    margin-top: 15px;
+}
+
+#workshops .member .social a {
+    color: #b3b3b3;
+}
+
+#workshops .member .social a:hover {
+    color: #03C4EB;
+}
+
+#workshops .member .social i {
+    font-size: 18px;
+    margin: 0 2px;
 }
