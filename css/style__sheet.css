@@ -545,6 +545,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #about .about-text {
     line-height: 26px;
     margin-bottom: 15px;
+    text-align: justify;
 }
 
 #about .about-text:last-child {
@@ -596,6 +597,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #sm .about-text {
     line-height: 26px;
     margin-bottom: 15px;
+    text-align: justify;
 }
 
 #sm .about-text:last-child {
@@ -647,6 +649,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #sm .about-text {
     line-height: 26px;
     margin-bottom: 15px;
+    text-align: justify;
 }
 
 #po .about-text:last-child {
@@ -698,6 +701,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #custom .about-text {
     line-height: 26px;
     margin-bottom: 15px;
+    text-align: justify;
 }
 
 #custom .about-text:last-child {
