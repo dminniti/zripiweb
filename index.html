@@ -3,11 +3,12 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ZriPi</title>
+    <title>Zripi | Formación y acompañamiento en agilidad</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="zripi, scrum, agile, agilidad, scrum master, sm, product owner, po, workshop, taller, taller de scrum master, taller de producto owner, agilidad en empresas"
           name="keywords">
-    <meta content="Somos Zripi - Sembramos agilidad" name="description">
+    <meta content="Brindamos espacios de aprendizaje y reflexión para individuos, empresas y organizaciones. Transformaciones orgánicas de impacto."
+          name="description">
     <meta name="robots" content="index"/>
 
     <meta http-equiv="Expires" content="0">
@@ -46,19 +47,19 @@
     <script>
         "use strict";
 
-        !function() {
+        !function () {
             var t = window.driftt = window.drift = window.driftt || [];
             if (!t.init) {
                 if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
-                t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ],
-                    t.factory = function(e) {
-                        return function() {
+                t.invoked = !0, t.methods = ["identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on"],
+                    t.factory = function (e) {
+                        return function () {
                             var n = Array.prototype.slice.call(arguments);
                             return n.unshift(e), t.push(n), t;
                         };
-                    }, t.methods.forEach(function(e) {
+                    }, t.methods.forEach(function (e) {
                     t[e] = t.factory(e);
-                }), t.load = function(t) {
+                }), t.load = function (t) {
                     var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
                     o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
                     var i = document.getElementsByTagName("script")[0];
