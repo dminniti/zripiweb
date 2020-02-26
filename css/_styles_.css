@@ -663,10 +663,18 @@ body.mobile-nav-active #mobile-nav-toggle {
     margin-bottom: 0;
 }
 
+.section-title {
+    font-size: 32px;
+    color: rgb(247, 215, 148);
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+}
+
 #po .section-title-divider {
     width: 50px;
     height: 3px;
-    background: #111111;
+    background: rgb(247, 215, 148);
     margin: 0 auto;
     margin-bottom: 20px;
 }
@@ -1007,8 +1015,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #po-title .subscribe-btn:hover {
-    background: #03C4EB;
-    border: 2px solid #03C4EB;
+    background: rgb(247, 215, 148);
+    border: rgb(247, 215, 148);
 }
 
 /* RETRO title
@@ -1450,4 +1458,14 @@ body.mobile-nav-active #mobile-nav-toggle {
 #workshops .member .social i {
     font-size: 18px;
     margin: 0 2px;
+}
+
+.box {
+    background: rgb(247, 215, 148);
+    padding: 10px 10px 10px 10px;
+    margin: 8px;
+    border: 1px solid rgb(247, 215, 148);
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #5555553b;
+    color: #000000a8;
 }
