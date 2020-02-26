@@ -14,12 +14,12 @@ if ($_POST['email'] != "") {
     $mensaje .= "---------------------------------- \n";
     $mensaje .= "NOMBRE:   " . $_POST['name'] . "\n";
     $mensaje .= "EMAIL:    " . $_POST['email'] . "\n";
-    $mensaje .= "PHONE:    " . $_POST['phone'] . "\n";
+    $mensaje .= "WEB:    " . $_POST['phone'] . "\n";
     $mensaje .= "FECHA:    " . date("d/m/Y") . "\n";
     $mensaje .= "HORA:     " . date("h:i:s a") . "\n";
     $mensaje .= "IP:       " . $_SERVER['REMOTE_ADDR'] . "\n\n";
     $mensaje .= "---------------------------------- \n\n";
-    $mensaje .= $_POST['message'] . "\n\n";
+    $mensaje .= $_POST['comment'] . "\n\n";
     $mensaje .= "---------------------------------- \n";
 
     // headers del email

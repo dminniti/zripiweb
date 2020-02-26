@@ -611,6 +611,11 @@ body.mobile-nav-active #mobile-nav-toggle {
     padding: 80px 0;
 }
 
+#po h2 {
+    color: #111111 !important;
+    font-weight: bold;
+}
+
 #po .about-img {
     overflow: hidden;
 }
@@ -641,7 +646,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #po .about-title-workshop {
-    color: #03C4EB !important;
+    color: #111111 !important;
     font-weight: 700;
     font-size: 28px;
 }
@@ -649,11 +654,25 @@ body.mobile-nav-active #mobile-nav-toggle {
 #po .about-text {
     line-height: 26px;
     margin-bottom: 15px;
+    /*
     text-align: justify;
+    */
 }
 
 #po .about-text:last-child {
     margin-bottom: 0;
+}
+
+#po .section-title-divider {
+    width: 50px;
+    height: 3px;
+    background: #111111;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+#po .list-title {
+    margin-top: 20px;
 }
 
 /*-------------------------------*/
