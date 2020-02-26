@@ -663,7 +663,7 @@ body.mobile-nav-active #mobile-nav-toggle {
     margin-bottom: 0;
 }
 
-.section-title {
+#po .section-title {
     font-size: 32px;
     color: rgb(247, 215, 148);
     text-transform: uppercase;
