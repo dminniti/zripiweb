@@ -268,9 +268,9 @@ Contact Section
     <div class="container wow fadeInUp">
         <div class="row">
             <div class="col-md-12">
-                <h3 class="section-title">Dejanos tu mensaje</h3>
+                <h3 class="section-title">Contactanos</h3>
                 <div class="section-title-divider"></div>
-                <p class="section-description">¿Te interesaría tomar el taller u ofrecerlo en tu empresa?</p>
+                <p class="section-description">Dejanos tu mensaje y te responderemos a la brevedad</p>
             </div>
         </div>
 
@@ -297,35 +297,34 @@ Contact Section
 
             <div class="col-md-5 col-md-push-2">
                 <div class="form">
-                    <div id="sendmessage">Your message has been sent. Thank you!</div>
-                    <div id="errormessage"></div>
-                    <form action="sender.php" method="post" role="form" class="contactForm">
+
+                    <form
+                            action="https://formspree.io/xdozgbkd"
+                            method="POST">
+
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" id="name"
-                                   placeholder="Nombre o Empresa..."
-                                   data-rule="minlen:4" data-msg="Please enter at least 4 chars"/>
-                            <div class="validation"></div>
+                                   placeholder="Nombre o Empresa..." required/>
                         </div>
+
                         <div class="form-group">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Email..."
-                                   data-rule="email" data-msg="Please enter a valid email"/>
-                            <div class="validation"></div>
+                            <input type="text" name="_replyto" class="form-control"
+                                   placeholder="Nombre o Empresa..." required/>
                         </div>
+
                         <div class="form-group">
-                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto..."
-                                   data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject"/>
-                            <div class="validation"></div>
+                            <input type="text" name="subject" class="form-control"
+                                   placeholder="Asunto..." required/>
                         </div>
+
                         <div class="form-group">
-                            <textarea class="form-control" name="message" rows="5" data-rule="required"
-                                      data-msg="Please write something for us"
-                                      placeholder="Deje su mensaje..."></textarea>
-                            <div class="validation"></div>
+                            <textarea class="form-control" name="message" rows="5"
+                                      placeholder="Deje su mensaje..." required></textarea>
                         </div>
-                        <div class="text-center">
-                            <button type="submit">Enviar</button>
-                        </div>
+
+                        <button type="submit">Enviar</button>
                     </form>
+
                 </div>
             </div>
 

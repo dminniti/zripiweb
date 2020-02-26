@@ -39,15 +39,15 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-157324451-1"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
+      window.dataLayer = window.dataLayer || [];
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
+      function gtag() {
+        dataLayer.push(arguments);
+      }
 
-        gtag('js', new Date());
+      gtag('js', new Date());
 
-        gtag('config', 'UA-157324451-1');
+      gtag('config', 'UA-157324451-1');
     </script>
 
 </head>
@@ -358,20 +358,20 @@ Subscribe Section
                 <script type='text/javascript'
                         src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
                 <script type='text/javascript'>(function ($) {
-                    window.fnames = new Array();
-                    window.ftypes = new Array();
-                    fnames[0] = 'EMAIL';
-                    ftypes[0] = 'email';
-                    fnames[1] = 'FNAME';
-                    ftypes[1] = 'text';
-                    fnames[2] = 'LNAME';
-                    ftypes[2] = 'text';
-                    fnames[3] = 'ADDRESS';
-                    ftypes[3] = 'address';
-                    fnames[4] = 'PHONE';
-                    ftypes[4] = 'phone';
-                    fnames[5] = 'BIRTHDAY';
-                    ftypes[5] = 'birthday';
+                  window.fnames = new Array();
+                  window.ftypes = new Array();
+                  fnames[0] = 'EMAIL';
+                  ftypes[0] = 'email';
+                  fnames[1] = 'FNAME';
+                  ftypes[1] = 'text';
+                  fnames[2] = 'LNAME';
+                  ftypes[2] = 'text';
+                  fnames[3] = 'ADDRESS';
+                  ftypes[3] = 'address';
+                  fnames[4] = 'PHONE';
+                  ftypes[4] = 'phone';
+                  fnames[5] = 'BIRTHDAY';
+                  ftypes[5] = 'birthday';
                 }(jQuery));
                 var $mcj = jQuery.noConflict(true);</script>
                 <!--End mc_embed_signup-->
@@ -606,35 +606,34 @@ Contact Section
 
             <div class="col-md-5 col-md-push-2">
                 <div class="form">
-                    <div id="sendmessage">Your message has been sent. Thank you!</div>
-                    <div id="errormessage"></div>
-                    <form action="sender.php" method="post" role="form" class="contactForm">
+
+                    <form
+                            action="https://formspree.io/xdozgbkd"
+                            method="POST">
+
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" id="name"
-                                   placeholder="Nombre o Empresa..."
-                                   data-rule="minlen:4" data-msg="Please enter at least 4 chars"/>
-                            <div class="validation"></div>
+                                   placeholder="Nombre o Empresa..." required/>
                         </div>
+
                         <div class="form-group">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Email..."
-                                   data-rule="email" data-msg="Please enter a valid email"/>
-                            <div class="validation"></div>
+                            <input type="text" name="_replyto" class="form-control"
+                                   placeholder="Nombre o Empresa..." required/>
                         </div>
+
                         <div class="form-group">
-                            <input type="text" class="form-control" name="subject" id="subject" placeholder="Asunto..."
-                                   data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject"/>
-                            <div class="validation"></div>
+                            <input type="text" name="subject" class="form-control"
+                                   placeholder="Asunto..." required/>
                         </div>
+
                         <div class="form-group">
-                            <textarea class="form-control" name="message" rows="5" data-rule="required"
-                                      data-msg="Please write something for us"
-                                      placeholder="Deje su mensaje..."></textarea>
-                            <div class="validation"></div>
+                            <textarea class="form-control" name="message" rows="5"
+                                      placeholder="Deje su mensaje..." required></textarea>
                         </div>
-                        <div class="text-center">
-                            <button type="submit">Enviar</button>
-                        </div>
+
+                        <button type="submit">Enviar</button>
                     </form>
+
                 </div>
             </div>
 
