@@ -701,7 +701,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* SM title
 --------------------------------*/
 #sm-title {
-    background: linear-gradient(rgba(243,166,131,0.9), rgba(243,166,131,0.4)), url(../img/subscribe-bg.jpg) fixed center center;
+    background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;
     background-size: cover;
     padding: 60px 0;
 }
@@ -709,7 +709,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #sm-title .subscribe-title {
     color: #fff;
     font-size: 32px;
-    text-shadow: 0.2px 0.2px 4px grey;
+    text-shadow: 0.5px 0.5px 4px grey;
     font-weight: 700;
 }
 
@@ -738,8 +738,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #sm-title .subscribe-btn:hover {
-    background: #03C4EB;
-    border: 2px solid #03C4EB;
+    background: rgb(243, 166, 131);
+    border: 2px solid rgb(243, 166, 131);
 }
 
 /* INTRO title
@@ -753,7 +753,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #intro-title .subscribe-title {
     color: #fff;
     font-size: 32px;
-    text-shadow: 0.2px 0.2px 4px grey;
+    text-shadow: 0.5px 0.5px 4px grey;
     font-weight: 700;
 }
 
@@ -789,7 +789,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* PO title
 --------------------------------*/
 #po-title {
-    background: linear-gradient(rgba(247, 215, 148,0.9), rgba(247, 215, 148,0.4)), url(../img/subscribe-bg.jpg) fixed center center;
+    background: linear-gradient(rgba(247, 215, 148, 0.9), rgba(247, 215, 148, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;
     background-size: cover;
     padding: 60px 0;
 }
@@ -797,7 +797,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #po-title .subscribe-title {
     color: #fff;
     font-size: 32px;
-    text-shadow: 0.2px 0.2px 4px grey;
+    text-shadow: 0.5px 0.5px 4px grey;
     font-weight: 700;
 }
 
@@ -1321,11 +1321,26 @@ body.mobile-nav-active #mobile-nav-toggle {
 #sm .about-text {
     line-height: 26px;
     margin-bottom: 15px;
-    text-align: justify;
 }
 
 #sm .about-text:last-child {
     margin-bottom: 0;
+}
+
+#sm .section-title-divider {
+    width: 50px;
+    height: 3px;
+    background: rgb(243, 166, 131);
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+#po .section-title {
+    font-size: 32px;
+    color: rgb(243, 166, 131);
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
 }
 
 /*PO WORKSHOP*/
@@ -1602,6 +1617,17 @@ body.mobile-nav-active #mobile-nav-toggle {
     padding: 10px 10px 10px 10px;
     margin: 8px;
     border: 1px solid #786FA6;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #5555553b;
+    color: #000000a8;
+}
+
+.box-sm {
+    background: rgb(243, 166, 131);
+    color: white !important;
+    padding: 10px 10px 10px 10px;
+    margin: 8px;
+    border: 1px solid rgb(243, 166, 131);
     border-radius: 5px;
     box-shadow: 1px 1px 2px #5555553b;
     color: #000000a8;
