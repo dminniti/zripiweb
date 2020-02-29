@@ -870,14 +870,14 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #dt-title .subscribe-btn:hover {
-    background: rgb(120,139,235);
-    border: rgb(120,139,235);
+    background: rgb(120, 139, 235);
+    border: rgb(120, 139, 235);
 }
 
 /* Facilitator title
 --------------------------------*/
 #facilitator-title {
-    background: linear-gradient(rgba(99,205,218,0.9), rgba(99,205,218,0.4)), url(../img/subscribe-bg.jpg) fixed center center;
+    background: linear-gradient(rgba(99, 205, 218, 0.9), rgba(99, 205, 218, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;
     background-size: cover;
     padding: 60px 0;
 }
@@ -914,14 +914,14 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #facilitator-title .subscribe-btn:hover {
-    background: rgb(120,139,235);
-    border: rgb(120,139,235);
+    background: rgb(120, 139, 235);
+    border: rgb(120, 139, 235);
 }
 
 /* RETRO title
 --------------------------------*/
 #retro-title {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/subscribe-bg.jpg) fixed center center;
+    background: linear-gradient(rgba(234, 134, 133, 0.9), rgba(234, 134, 133, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;
     background-size: cover;
     padding: 80px 0;
 }
@@ -1565,7 +1565,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #dt .section-title {
     font-size: 32px;
-    color: rgb(120,139,235);
+    color: rgb(120, 139, 235);
     text-transform: uppercase;
     text-align: center;
     font-weight: 700;
@@ -1574,7 +1574,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #dt .section-title-divider {
     width: 50px;
     height: 3px;
-    background: rgb(120,139,235);
+    background: rgb(120, 139, 235);
     margin: 0 auto;
     margin-bottom: 20px;
 }
@@ -1641,7 +1641,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #facilitator .section-title {
     font-size: 32px;
-    color: rgb(99,205,218);
+    color: rgb(99, 205, 218);
     text-transform: uppercase;
     text-align: center;
     font-weight: 700;
@@ -1650,7 +1650,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #facilitator .section-title-divider {
     width: 50px;
     height: 3px;
-    background: rgb(99,205,218);
+    background: rgb(99, 205, 218);
     margin: 0 auto;
     margin-bottom: 20px;
 }
@@ -1772,7 +1772,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #retro .about-title-workshop {
-    color: #03C4EB !important;
+    color: rgb(234, 134, 133) !important;
     font-weight: 700;
     font-size: 28px;
 }
@@ -1874,20 +1874,30 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .box-dt {
-    background: rgb(120,139,235);
+    background: rgb(120, 139, 235);
     padding: 10px 10px 10px 10px;
     margin: 8px;
-    border: 1px solid rgb(120,139,235);
+    border: 1px solid rgb(120, 139, 235);
     border-radius: 5px;
     box-shadow: 1px 1px 2px #5555553b;
     color: rgb(255, 255, 255);
 }
 
 .box-facilitator {
-    background: rgb(99,205,218);
+    background: rgb(99, 205, 218);
     padding: 10px 10px 10px 10px;
     margin: 8px;
-    border: 1px solid rgb(99,205,218);
+    border: 1px solid rgb(99, 205, 218);
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #5555553b;
+    color: rgb(255, 255, 255);
+}
+
+.box-retro {
+    background: rgb(234, 134, 133);
+    padding: 10px 10px 10px 10px;
+    margin: 8px;
+    border: 1px solid rgb(234, 134, 133);
     border-radius: 5px;
     box-shadow: 1px 1px 2px #5555553b;
     color: rgb(255, 255, 255);
