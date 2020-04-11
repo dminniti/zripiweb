@@ -39,15 +39,15 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-157324451-1"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
+        window.dataLayer = window.dataLayer || [];
 
-      function gtag() {
-        dataLayer.push(arguments);
-      }
+        function gtag() {
+            dataLayer.push(arguments);
+        }
 
-      gtag('js', new Date());
+        gtag('js', new Date());
 
-      gtag('config', 'UA-157324451-1');
+        gtag('config', 'UA-157324451-1');
     </script>
 
 </head>
@@ -222,9 +222,58 @@ Workshop Section
 ============================-->
 <section id="workshops">
     <div class="container wow fadeInUp">
+
+<!--        Current Workshops-->
         <div class="row">
             <div class="col-md-12">
-                <h3 class="section-title">Nuestros talleres</h3>
+                <h3 class="section-title">Talleres - Próximas fechas</h3>
+                <div class="section-title-divider"></div>
+            </div>
+        </div>
+        <div class="row text-center">
+
+            <div class="col-md-offset-4 col-md-4">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/track_1/Badge_workshop_SM.png" alt=""></div>
+                    <h4>Scrum Master</h4>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div id="eventbrite-widget-container-102452841206"></div>
+
+                <script src="https://www.eventbrite.com.ar/static/widgets/eb_widgets.js"></script>
+
+                <script type="text/javascript">
+                    var exampleCallback = function () {
+                        console.log('Order complete!');
+                    };
+
+                    window.EBWidgets.createWidget({
+                        // Required
+                        widgetType: 'checkout',
+                        eventId: '102452841206',
+                        iframeContainerId: 'eventbrite-widget-container-102452841206',
+
+                        // Optional
+                        iframeContainerHeight: 425,  // Widget height in pixels. Defaults to a minimum of 425px if not provided
+                        onOrderComplete: exampleCallback  // Method called when an order has successfully completed
+                    });
+                </script>
+
+                <a href="https://www.eventbrite.com.ar/e/taller-de-scrum-master-by-zripi-modalidad-online-tickets-102452841206"
+                   target="_blank" class="btn btn-warning" style="margin-top: 10px;">Ver más</a>
+
+            </div>
+
+        </div>
+        <hr>
+
+<!--        All workshops-->
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="section-title" style="margin-top: 20px;" >Nuestros talleres</h3>
                 <div class="section-title-divider"></div>
             </div>
         </div>
@@ -260,7 +309,6 @@ Workshop Section
 
         </div>
 
-
         <hr>
 
         <div class="row">
@@ -279,7 +327,8 @@ Workshop Section
                     <div class="pic"><img src="img/workshops/track_2/Badge_workshop_F.png" alt=""></div>
                     <h4>Facilitación</h4>
                     <span>Taller abierto & Taller in-company</span>
-                    <a class="btn btn-warning" href="facilitator.html" target="_blank" style="margin-top: 10px;">Ver más</a>
+                    <a class="btn btn-warning" href="facilitator.html" target="_blank" style="margin-top: 10px;">Ver
+                        más</a>
                 </div>
             </div>
 
@@ -326,6 +375,7 @@ Workshop Section
             </div>
 
         </div>
+
 
     </div>
 
@@ -381,20 +431,20 @@ Subscribe Section
                 <script type='text/javascript'
                         src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
                 <script type='text/javascript'>(function ($) {
-                  window.fnames = new Array();
-                  window.ftypes = new Array();
-                  fnames[0] = 'EMAIL';
-                  ftypes[0] = 'email';
-                  fnames[1] = 'FNAME';
-                  ftypes[1] = 'text';
-                  fnames[2] = 'LNAME';
-                  ftypes[2] = 'text';
-                  fnames[3] = 'ADDRESS';
-                  ftypes[3] = 'address';
-                  fnames[4] = 'PHONE';
-                  ftypes[4] = 'phone';
-                  fnames[5] = 'BIRTHDAY';
-                  ftypes[5] = 'birthday';
+                    window.fnames = new Array();
+                    window.ftypes = new Array();
+                    fnames[0] = 'EMAIL';
+                    ftypes[0] = 'email';
+                    fnames[1] = 'FNAME';
+                    ftypes[1] = 'text';
+                    fnames[2] = 'LNAME';
+                    ftypes[2] = 'text';
+                    fnames[3] = 'ADDRESS';
+                    ftypes[3] = 'address';
+                    fnames[4] = 'PHONE';
+                    ftypes[4] = 'phone';
+                    fnames[5] = 'BIRTHDAY';
+                    ftypes[5] = 'birthday';
                 }(jQuery));
                 var $mcj = jQuery.noConflict(true);</script>
                 <!--End mc_embed_signup-->
@@ -579,11 +629,11 @@ Team Section
 
         <div class="row">
 
-            <div class="col-md-4">
+            <div class="col-md-offset-2 col-md-4">
                 <div class="member">
                     <div class="pic"><img src="img/team-1.jpg" alt=""></div>
                     <h4>Sebastián Lopreto</h4>
-                    <span>Ing. Electrónico - Esp. Sistemas - Product Owner</span>
+                    <span>Ing. Electrónico - Scrum master - Product Owner</span>
                     <div class="social">
                         <a href="https://www.linkedin.com/in/sebastian-lopreto/"><i class="fa fa-linkedin"></i></a>
                     </div>
@@ -598,20 +648,6 @@ Team Section
                     <div class="social">
                         <a href="https://www.linkedin.com/in/damianminniti/"><i class="fa fa-linkedin"></i></a>
                         <a href="https://www.instagram.com/damian.minniti/"><i class="fa fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="member">
-                    <div class="pic"><img src="img/team-3.jpg" alt=""></div>
-                    <h4>Alejandro Assan</h4>
-                    <span>Lider técnico - Scrum master</span>
-                    <div class="social">
-                        <a href="https://twitter.com/aleassan?lang=es"><i class="fa fa-twitter"></i></a>
-                        <a href="https://www.linkedin.com/in/alejandro-assan-2b417344/"><i
-                                class="fa fa-linkedin"></i></a>
-                        <a href="https://www.instagram.com/assanalito/"><i class="fa fa-instagram"></i></a>
                     </div>
                 </div>
             </div>
