@@ -701,7 +701,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* SM title
 --------------------------------*/
 #sm-title {
-    background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;
+    /*background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;*/
+    background: linear-gradient(rgba(51, 51, 51, 0.9), rgba(255, 167, 130, 0.52)), url(../img/subscribe-bg.jpg) fixed center center;
     background-size: cover;
     padding: 60px 0;
 }
@@ -789,8 +790,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* PO title
 --------------------------------*/
 #po-title {
-    background: linear-gradient(rgba(247, 215, 148, 0.9), rgba(247, 215, 148, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;
-    background-size: cover;
+    background: linear-gradient(rgba(255, 205, 97, 0.78), rgba(0, 0, 0, 0.73)), url(../img/subscribe-bg.jpg) fixed center center;    background-size: cover;
     padding: 60px 0;
 }
 
@@ -1423,6 +1423,50 @@ body.mobile-nav-active #mobile-nav-toggle {
     margin-bottom: 20px;
 }
 
+#sm .member {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#sm .member .pic {
+    margin-bottom: 15px;
+    overflow: hidden;
+    /*height: 260px;*/
+    height: 100%;
+}
+
+#sm .member .pic img {
+    max-width: 55%;
+}
+
+#sm .member h4 {
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+#sm .member span {
+    font-style: italic;
+    display: block;
+    font-size: 13px;
+}
+
+#sm .member .social {
+    margin-top: 15px;
+}
+
+#sm .member .social a {
+    color: #b3b3b3;
+}
+
+#sm .member .social a:hover {
+    color: #03C4EB;
+}
+
+#sm .member .social i {
+    font-size: 18px;
+    margin: 0 2px;
+}
+
 #po .section-title {
     font-size: 32px;
     color: rgb(243, 166, 131);
@@ -1901,4 +1945,50 @@ body.mobile-nav-active #mobile-nav-toggle {
     border-radius: 5px;
     box-shadow: 1px 1px 2px #5555553b;
     color: rgb(255, 255, 255);
+}
+
+/*General*/
+
+.member {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.member .pic {
+    margin-bottom: 15px;
+    overflow: hidden;
+    /*height: 260px;*/
+    height: 100%;
+}
+
+.member .pic img {
+    max-width: 55%;
+}
+
+.member h4 {
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.member span {
+    font-style: italic;
+    display: block;
+    font-size: 13px;
+}
+
+.member .social {
+    margin-top: 15px;
+}
+
+.member .social a {
+    color: #b3b3b3;
+}
+
+.member .social a:hover {
+    color: #03C4EB;
+}
+
+.member .social i {
+    font-size: 18px;
+    margin: 0 2px;
 }
