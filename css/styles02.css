@@ -830,6 +830,49 @@ body.mobile-nav-active #mobile-nav-toggle {
     border: rgb(247, 215, 148);
 }
 
+/* M30 title
+--------------------------------*/
+#m30-title {
+    background: linear-gradient(rgba(0, 187, 231, 0.78), rgba(0, 0, 0, 0.73)), url(../img/subscribe-bg.jpg) fixed center center;    background-size: cover;
+    padding: 60px 0;
+}
+
+#m30-title .subscribe-title {
+    color: #fff;
+    font-size: 32px;
+    text-shadow: 0.5px 0.5px 4px grey;
+    font-weight: 700;
+}
+
+#m30-title .subscribe-text {
+    color: #fff;
+}
+
+#m30-title .subscribe-btn-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#m30-title .subscribe-btn {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 2px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+#m30-title .subscribe-btn:hover {
+    background: rgb(0, 187, 231);
+    border: rgb(0, 187, 231);
+}
+
 /* DT title
 --------------------------------*/
 #dt-title {
