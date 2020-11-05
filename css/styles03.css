@@ -1295,11 +1295,12 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #footer .copyright {
+    padding-top: 30px;
     text-align: center;
 }
 
 #footer .credits {
-    padding-top: 30px;
+    padding-top: 0px;
     text-align: center;
     font-size: 13px;
     color: #ccc;
