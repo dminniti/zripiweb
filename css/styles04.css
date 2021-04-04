@@ -522,7 +522,7 @@ body.mobile-nav-active #mobile-nav-toggle {
     }
 
     #about .about-img img {
-        margin-left: 0; 
+        margin-left: 0;
     }
 }
 
@@ -702,7 +702,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 --------------------------------*/
 #sm-title {
     /*background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;*/
-    background: linear-gradient(rgba(51, 51, 51, 0.9), rgba(255, 167, 130, 0.52)), url(../img/subscribe-bg.jpg) fixed center center;
+    background: linear-gradient(rgba(51, 51, 51, 0.5), rgb(204, 2, 2)), url(../img/subscribe-bg.jpg) fixed center center;
     background-size: cover;
     padding: 60px 0;
 }
@@ -739,8 +739,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #sm-title .subscribe-btn:hover {
-    background: rgb(243, 166, 131);
-    border: 2px solid rgb(243, 166, 131);
+    background: rgb(204, 2, 2);
+    border: 2px solid rgb(204, 2, 2);
 }
 
 /* INTRO title
@@ -790,7 +790,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* PO title
 --------------------------------*/
 #po-title {
-    background: linear-gradient(rgba(255, 205, 97, 0.78), rgba(0, 0, 0, 0.73)), url(../img/subscribe-bg.jpg) fixed center center;    background-size: cover;
+    background: linear-gradient(rgba(255, 205, 97, 0.78), rgba(0, 0, 0, 0.73)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
     padding: 60px 0;
 }
 
@@ -833,7 +834,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* M30 title
 --------------------------------*/
 #m30-title {
-    background: linear-gradient(rgba(0, 187, 231, 0.78), rgba(0, 0, 0, 0.73)), url(../img/subscribe-bg.jpg) fixed center center;    background-size: cover;
+    background: linear-gradient(rgba(0, 187, 231, 0.78), rgba(0, 0, 0, 0.73)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
     padding: 60px 0;
 }
 
@@ -1007,7 +1009,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* custom title
 --------------------------------*/
 #custom-title {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../img/subscribe-bg.jpg) fixed center center;
+    background: linear-gradient(rgba(51, 51, 51, 0.5), rgb(204, 2, 2)), url(../img/subscribe-bg.jpg) fixed center center;
     background-size: cover;
     padding: 80px 0;
 }
@@ -1462,7 +1464,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #sm .section-title-divider {
     width: 50px;
     height: 3px;
-    background: rgb(243, 166, 131);
+    background: rgb(204, 2, 5);
     margin: 0 auto;
     margin-bottom: 20px;
 }
@@ -1951,11 +1953,11 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 .box-sm {
-    background: rgb(243, 166, 131);
+    background: rgb(204, 2, 5);
     color: white !important;
     padding: 10px 10px 10px 10px;
     margin: 8px;
-    border: 1px solid rgb(243, 166, 131);
+    border: 1px solid rgb(204, 2, 5);
     border-radius: 5px;
     box-shadow: 1px 1px 2px #5555553b;
     color: #000000a8;
@@ -2035,4 +2037,20 @@ body.mobile-nav-active #mobile-nav-toggle {
 .member .social i {
     font-size: 18px;
     margin: 0 2px;
+}
+
+.mercadopago-btn {
+    padding: 10px 20px 10px 20px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 0.875em;
+    line-height: 2.7142857142857144;
+    background: #009ee3;
+    border-radius: 0.2857142857142857em;
+    color: #fff;
+    cursor: pointer;
+    border: 0;
+}
+
+.mercadopago-btn:hover {
+    color: #fff;
 }
