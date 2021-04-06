@@ -2054,3 +2054,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 .mercadopago-btn:hover {
     color: #fff;
 }
+
+.btn-danger {
+    border-color: #ffffff94 !important;
+}
