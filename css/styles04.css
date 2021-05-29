@@ -743,6 +743,51 @@ body.mobile-nav-active #mobile-nav-toggle {
     border: 2px solid rgb(204, 2, 2);
 }
 
+/* KU title
+--------------------------------*/
+#ku-title {
+    /*background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;*/
+    background: linear-gradient(rgb(120, 91, 158), rgb(120 91 158 / 73%)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
+    padding: 60px 0;
+}
+
+#ku-title .subscribe-title {
+    color: #fff;
+    font-size: 32px;
+    text-shadow: 0.5px 0.5px 4px grey;
+    font-weight: 700;
+}
+
+#ku-title .subscribe-text {
+    color: #fff;
+}
+
+#ku-title .subscribe-btn-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#ku-title .subscribe-btn {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 2px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+#ku-title .subscribe-btn:hover {
+    background: rgb(120, 91, 158);
+    border: 2px solid rgb(120, 91, 158);
+}
+
 /* INTRO title
 --------------------------------*/
 #intro-title {
@@ -1047,6 +1092,49 @@ body.mobile-nav-active #mobile-nav-toggle {
 #custom-title .subscribe-btn:hover {
     background: #03C4EB;
     border: 2px solid #03C4EB;
+}
+
+/* custom title KU
+--------------------------------*/
+#custom-title-ku {
+    background: linear-gradient(rgba(120,91,158, 0.65), rgb(43 43 73)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
+    padding: 80px 0;
+}
+
+#custom-title-ku .subscribe-title {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+#custom-title-ku .subscribe-text {
+    color: #fff;
+}
+
+#custom-title-ku .subscribe-btn-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#custom-title-ku .subscribe-btn {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 2px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+#custom-title-ku .subscribe-btn:hover {
+    background: rgb(120,91,158);
+    border: 2px solid rgb(120,91,158);
 }
 
 /* Portfolio Section
@@ -1516,6 +1604,119 @@ body.mobile-nav-active #mobile-nav-toggle {
 #po .section-title {
     font-size: 32px;
     color: rgb(243, 166, 131);
+    text-transform: uppercase;
+    text-align: center;
+    font-weight: 700;
+}
+
+/*KU*/
+
+/*SM WORKSHOP*/
+
+#ku {
+    background: #fff;
+    padding: 80px 0;
+}
+
+#ku .about-img {
+    overflow: hidden;
+}
+
+#ku .about-img img {
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    #ku .about-img {
+        height: auto;
+    }
+
+    #ku .about-img img {
+        margin-left: 0;
+        padding-bottom: 30px;
+    }
+}
+
+#ku .about-content {
+    background: #fff;
+}
+
+#ku .about-title {
+    color: #333;
+    font-weight: 700;
+    font-size: 28px;
+}
+
+#ku .about-title-workshop {
+    color: #785B9E !important;
+    font-weight: 700;
+    font-size: 28px;
+}
+
+#ku .about-text {
+    line-height: 26px;
+    margin-bottom: 15px;
+}
+
+#ku .about-text:last-child {
+    margin-bottom: 0;
+}
+
+#ku .section-title-divider {
+    width: 50px;
+    height: 3px;
+    background: #785B9E;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+#ku .member {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#ku .member .pic {
+    margin-bottom: 15px;
+    overflow: hidden;
+    /*height: 260px;*/
+    height: 100%;
+}
+
+#ku .member .pic img {
+    max-width: 55%;
+}
+
+#ku .member h4 {
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+#ku .member span {
+    font-style: italic;
+    display: block;
+    font-size: 13px;
+}
+
+#ku .member .social {
+    margin-top: 15px;
+}
+
+#ku .member .social a {
+    color: #b3b3b3;
+}
+
+#ku .member .social a:hover {
+    color: #785B9E;
+}
+
+#ku .member .social i {
+    font-size: 18px;
+    margin: 0 2px;
+}
+
+#ku .section-title {
+    font-size: 32px;
+    color: #785B9E;
     text-transform: uppercase;
     text-align: center;
     font-weight: 700;
