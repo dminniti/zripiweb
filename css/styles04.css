@@ -1243,7 +1243,7 @@ body.mobile-nav-active #mobile-nav-toggle {
     font-size: 22px;
     left: -9px;
     position: relative;
-    top: -8px;
+    top: 10px;
 }
 
 #testimonials .quote small {
