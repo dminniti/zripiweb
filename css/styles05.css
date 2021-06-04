@@ -1208,10 +1208,10 @@ body.mobile-nav-active #mobile-nav-toggle {
 #testimonials .profile .pic {
     border-radius: 50%;
     border: 6px solid #fff;
-    margin-bottom: 15px;
+    margin-bottom: -40px;
     overflow: hidden;
-    height: 260px;
-    width: 260px;
+    height: 100px;
+    width: 100px;
 }
 
 #testimonials .profile .pic img {
@@ -1231,26 +1231,49 @@ body.mobile-nav-active #mobile-nav-toggle {
 #testimonials .quote {
     position: relative;
     background: #fff;
-    padding: 60px;
-    margin-top: 40px;
-    font-size: 16px;
+    padding: 20px 40px 20px 40px;
+    margin-top: 0px;
+    font-size: 14px;
     font-style: italic;
     border-radius: 5px;
+    z-index: -1;
 }
 
 #testimonials .quote b {
     display: inline-block;
     font-size: 22px;
-    left: -9px;
+    left: 0px;
     position: relative;
     top: 10px;
 }
 
 #testimonials .quote small {
     display: inline-block;
-    right: -9px;
+    right: 0px;
     position: relative;
     top: 4px;
+}
+
+#testimonials .quote h4 {
+    font-weight: 700;
+    color: #03C4EB;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+#testimonials .quote span {
+    right: 0px;
+    color: #333333;
+    text-align: center;
+}
+
+.carousel-indicators .active {
+    background-color: #999;
+}
+
+.carousel-indicators li {
+    border: 1px solid #999;
+    border-radius: 10px;
 }
 
 /* Team Section
