@@ -31,7 +31,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2 {
-    color: #fdcb6e !important;
+    color: #02C4EB!important;
     font-weight: bold;
 }
 
@@ -89,7 +89,7 @@ hr {
     display: table;
     width: 100%;
     height: 100vh;
-    background: url(../img/bg_2.jpg) top center;
+    background: url(../img/bg_5.jpg) top center;
     background-size: cover;
 }
 
