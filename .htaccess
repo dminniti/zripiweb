@@ -2,3 +2,15 @@
 RewriteCond %{HTTPS} off
 RewriteRule (.*) https://ZRIPI.COM.AR/$1 [R=301,L,QSA]
 </IfModule>
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^campus.zripi.com.ar [OR]
+RewriteCond %{HTTP_HOST} ^www.campus.zripi.com.ar$
+RewriteRule ^(.*)$ https://zripi.thinkific.com [R=301,L]
+RewriteCond %{HTTP_HOST} ^cursos.zripi.com.ar [OR]
+RewriteCond %{HTTP_HOST} ^www.cursos.zripi.com.ar$
+RewriteRule ^(.*)$ https://zripi.thinkific.com [R=301,L]
+RewriteCond %{HTTP_HOST} ^campus.zripi.com.ar [OR]
+RewriteCond %{HTTP_HOST} ^www.campus.zripi.com.ar$
+RewriteRule ^(.*)$ https://zripi.thinkific.com [R=301,L]
+
+Header set Access-Control-Allow-Origin "*"
