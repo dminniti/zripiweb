@@ -1032,18 +1032,19 @@ FOOTER
 <script>
     function payWithUala() {
 
-        const url = 'https://ppqmcr3jla.execute-api.us-east-1.amazonaws.com/prod/1/checkout';
+        //Ambiente de Prueba
+        const url = 'https://k17eojwa4k.execute-api.us-east-1.amazonaws.com/stage/1/checkout';
 
         let data = {
             "amount": "15",
             "description": "Venta",
-            "userName": "lopretosebastian",
+            "userName": "new_user_1623778617",
             "client_id": "gvjhboiv1hb5637o36",
             "callback_fail": "https://www.google.com/search?q=failed",
             "callback_success": "https://www.google.com/search?q=success"
         }
 
-       /* const options = {headers: {'content-type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers':'*'}};
+        const options = {headers: {'content-type': 'application/json'}};
 
         axios.post(url, data, options)
             .then((response) => {
@@ -1052,7 +1053,7 @@ FOOTER
                 console.log(error);
             });
 
-                const url = 'https://ppqmcr3jla.execute-api.us-east-1.amazonaws.com/prod/1/checkout';*/
+/*                const url = 'https://ppqmcr3jla.execute-api.us-east-1.amazonaws.com/prod/1/checkout';*/
 
 /*                let data = {
                     "amount": "10.9",
@@ -1063,23 +1064,40 @@ FOOTER
                     "callback_success": "https://www.google.com/search?q=success"
                 }*/
 
-                var request = new Request(url, {
+/*                var request = new Request(url, {
                     method: 'POST',
-                    /*mode: 'no-cors',*/
+                    /!*mode: 'no-cors',*!/
                     body: JSON.stringify(data),
                     headers: new Headers({'content-type': 'application/json'})
-                });
+                });*/
 
-                fetch(request)
+/*        fetch(request)
+            .then(function(serverPromise){
+                return serverPromise.json()
+                    .then(function(j) {
+                        console.log(j);
+                    })
+                    .catch(function(e){
+                        console.log(e);
+                    });
+            })
+            .catch(function(e){
+                console.log(e);
+            });*/
+
+/*                fetch(request)
                     .then(function (response) {
-                        console.log('data = ', response);
+                        return response.json();
                     })
                     .then(function (data) {
                         console.log('data = ', data);
+/!*
+                        window.location.href = data.url;
+*!/
                     })
                     .catch(function (err) {
                         console.error(err);
-                    });
+                    });*/
     }
 </script>
 
