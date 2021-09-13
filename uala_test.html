@@ -367,7 +367,7 @@ MODULO | FECHAS Y COSTOS
                 <ul class="list-group">
                     <li class="list-group-item"><strong>MÉTODOS DE PAGO</strong></li>
                     <li class="list-group-item">🇦🇷 UALA:
-                        <a onclick="payWithUala()" class="btn btn-sm btn-success"> PAGAR AHORA </a>
+                        <a onclick="payWithUala()" class="btn btn-sm btn-info"> PAGAR AHORA </a>
                     </li>
 
                     <li class="list-group-item">🇦🇷 Transferencia Bancaria
@@ -1020,7 +1020,7 @@ FOOTER
         const url = 'https://k17eojwa4k.execute-api.us-east-1.amazonaws.com/stage/1/checkout';
 
         let data = {
-            "amount": "95000",
+            "amount": "100",
             "description": "Agile Education Program by Scrum Inc",
             "userName": "new_user_1623778617",
             "client_id": "gvjhboiv1hb5637o36",
@@ -1032,10 +1032,15 @@ FOOTER
 
         axios.post(url, data, options)
             .then((response) => {
-                /*console.log(response.data.links.checkoutLink);*/
                 window.open(response.data.links.checkoutLink, '_blank');
             }, (error) => {
                 console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error en la transacción!',
+                    text: error.response.data.description,
+                    footer: ''
+                })
             });
     }
 </script>
@@ -1053,6 +1058,8 @@ FOOTER
 <script src="lib/easing/easing.js"></script>
 <!--TODO REFACTOR-->
 <script src="lib/jquery/jquery.min.js"></script>
+<!--Sweet Alert-->
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Template Specisifc Custom Javascript File -->
 <script src="js/custom.js"></script>
