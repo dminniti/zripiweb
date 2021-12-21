@@ -2283,3 +2283,48 @@ body.mobile-nav-active #mobile-nav-toggle {
 .btn-danger {
 
 }
+
+/* Cafecito
+--------------------------------*/
+
+ #cafecito-title {
+     /*background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;*/
+     background: linear-gradient(rgba(91, 61, 54, 1), rgba(91, 61, 54, 0.8)), url(../img/subscribe-bg.jpg) fixed center center;
+     background-size: cover;
+     padding: 60px 0;
+ }
+
+#cafecito-title .subscribe-title {
+    color: #fff;
+    font-size: 32px;
+    text-shadow: 0.5px 0.5px 4px grey;
+    font-weight: 700;
+}
+
+#cafecito-title .subscribe-text {
+    color: #fff;
+}
+
+#cafecito-title .subscribe-btn-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#cafecito-title .subscribe-btn {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 2px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+#cafecito-title .subscribe-btn:hover {
+    background: rgb(158, 104, 91);
+    border: 2px solid rgb(158, 104, 91);
