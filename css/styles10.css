@@ -31,7 +31,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2 {
-    color: #02C4EB!important;
+    color: #02C4EB !important;
     font-weight: bold;
 }
 
@@ -89,7 +89,7 @@ hr {
     display: table;
     width: 100%;
     height: 100vh;
-    background: url(../img/bg_5.jpg) top center;
+    background: url(../img/bg/bg_courses_blur.jpg) top center;
     background-size: cover;
 }
 
@@ -108,7 +108,14 @@ hr {
 }
 
 #hero .hero-container {
-    background: rgba(0, 0, 0, 0.2);
+    /*Option1*/
+
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 0.7637429971988796) 0%, rgba(9, 9, 121, 0.15309873949579833) 63%, rgba(0, 212, 255, 0.6124824929971988) 97%);
+
+    /*Option2*/
+    /*background: rgb(2,0,36);
+    background: radial-gradient(circle, rgba(2,0,36,0.7637429971988796) 0%, rgba(159,121,68,0.6741071428571428) 63%);*/
     display: table-cell;
     margin: 0;
     padding: 0;
@@ -1097,7 +1104,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* custom title KU
 --------------------------------*/
 #custom-title-ku {
-    background: linear-gradient(rgba(120,91,158, 0.65), rgb(43 43 73)), url(../img/subscribe-bg.jpg) fixed center center;
+    background: linear-gradient(rgba(120, 91, 158, 0.65), rgb(43 43 73)), url(../img/subscribe-bg.jpg) fixed center center;
     background-size: cover;
     padding: 80px 0;
 }
@@ -1133,8 +1140,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #custom-title-ku .subscribe-btn:hover {
-    background: rgb(120,91,158);
-    border: 2px solid rgb(120,91,158);
+    background: rgb(120, 91, 158);
+    border: 2px solid rgb(120, 91, 158);
 }
 
 /* Portfolio Section
@@ -2287,12 +2294,12 @@ body.mobile-nav-active #mobile-nav-toggle {
 /* Cafecito
 --------------------------------*/
 
- #cafecito-title {
-     /*background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;*/
-     background: linear-gradient(rgba(91, 61, 54, 1), rgba(91, 61, 54, 0.8)), url(../img/subscribe-bg.jpg) fixed center center;
-     background-size: cover;
-     padding: 60px 0;
- }
+#cafecito-title {
+    /*background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;*/
+    background: linear-gradient(rgba(91, 61, 54, 1), rgba(91, 61, 54, 0.8)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
+    padding: 60px 0;
+}
 
 #cafecito-title .subscribe-title {
     color: #fff;

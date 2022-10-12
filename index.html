@@ -35,7 +35,7 @@
     <link href="lib/animate-css/animate.min.css" rel="stylesheet">
 
     <!-- Main Stylesheet File -->
-    <link href="css/styles09.css" rel="stylesheet">
+    <link href="css/styles10.css" rel="stylesheet">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-157324451-1"></script>
@@ -66,7 +66,7 @@ Hero Section
     <div class="hero-container">
         <div class="wow fadeIn">
             <div class="hero-logo">
-                <img class="" src="img/logo.png" alt="Imperial">
+                <img class="" src="img/logo.png" alt="Zripi">
             </div>
 
             <h1>Bienvenidos a ZriPi</h1>
@@ -76,7 +76,8 @@ Hero Section
             -->
             <div class="actions">
                 <a href="#about" class="btn-get-started">Empecemos</a>
-                <a href="#workshops" class="btn-main">Talleres</a>
+                <!--                <a href="#services" class="btn-main">Servicios</a>
+                                <a href="#workshops" class="btn-main">Talleres</a>-->
             </div>
         </div>
 
@@ -135,24 +136,70 @@ Modal Section
 ============================-->
 
 <!-- Modal -->
-<!--<div class="modal fade text-center" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">-->
-<!--    <div class="modal-dialog">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="exampleModalLabel"><strong>🚨 PRÓXIMOS TALLERES ABIERTOS 🚨</strong></h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <img src="img/workshops/newWorkshops/NewWorkshopSM.jpg" class="img-responsive" alt="">-->
-<!--            </div>-->
-<!--            <div class="modal-footer" style="text-align: center;">-->
-<!--                <a href="smOpen.html" type="button" class="btn btn-warning">Más info</a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="modal fade text-center" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><strong>Contactanos</strong></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+<!--
+                INSERT BODY HERE
+-->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p class="section-description">Dejanos tu mensaje y te responderemos a la brevedad</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form">
+
+                                    <form
+                                            action="https://formspree.io/xdozgbkd"
+                                            method="POST">
+
+                                        <div class="form-group">
+                                            <input type="text" name="name" class="form-control" id="name"
+                                                   placeholder="Nombre o Empresa..." required/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="_replyto" class="form-control"
+                                                   placeholder="Email.." required/>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="text" name="subject" class="form-control"
+                                                   placeholder="Asunto..." id="modalData" required/>
+                                        </div>
+
+                                        <div class="form-group">
+                            <textarea class="form-control" name="message" rows="5"
+                                      placeholder="Deja tu mensaje..." required></textarea>
+                                        </div>
+
+                                        <button type="submit">Enviar</button>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+            </div>
+<!--            <div class="modal-footer" style="text-align: center;">
+                <a href="smOpen.html" type="button" class="btn btn-warning">Más info</a>
+            </div>-->
+        </div>
+    </div>
+</div>
 
 <!--==========================
 About Section
@@ -208,34 +255,44 @@ Services Section
             <div class="col-md-12">
                 <h3 class="section-title">Nuestros servicios</h3>
                 <div class="section-title-divider"></div>
-                <p class="section-description">Capacitación + Acompañamiento = Excelentes resultados</p>
+                <p class="section-description">Formación + Acompañamiento = Excelentes resultados</p>
             </div>
         </div>
 
         <div class="row text-center">
-            <div class="col-md-4 service-item">
+            <div class="col-md-3 service-item">
                 <!--<div class="service-icon"><i class="fa fa-area-chart"></i></div>-->
-                <h4 class="service-title"><a href="">👨‍🏫 Talleres Abiertos 👨‍🏫</a></h4>
+                <h4 class="service-title"><a href="">🎓 Talleres</a></h4><br>
                 <p class="service-description">Estamos convencidos que la mejor manera de aprender es viviendo
                     experiencias. Generamos espacios de aprendizaje y reflexión, simulando y experimentando situaciones
-                    reales, donde las personas y las interacciones hacen que cada evento sea único.
+                    reales, donde las personas y las interacciones hacen que cada evento sea único. <br> (Tallers
+                    abiertos | In-company | e-learning)
                 </p>
             </div>
-            <div class="col-md-4 service-item">
+            <div class="col-md-3 service-item">
                 <!--<div class="service-icon"><i class="fa fa-road"></i></div>-->
-                <h4 class="service-title"><a href="">📈 Talleres In Company 📈</a></h4>
+                <h4 class="service-title"><a href="">📈 Acompañamiento</a></h4><br>
                 <p class="service-description">Acompañamos a las organizaciones y a sus equipos en plena transformación.
-                    Entendiendo el contexto propio de cada compañía, personalizamos contenido y experiencias
+                    Entendiendo el contexto propio de cada compañía, personalizamos experiencias
                     haciendo foco en maximizar la entrega de valor, cumplir los objetivos y atender las necesidades
                     puntuales.
                 </p>
             </div>
-            <div class="col-md-4 service-item">
+            <div class="col-md-3 service-item">
                 <!--<div class="service-icon"><i class="fa fa-paper-plane"></i></div>-->
-                <h4 class="service-title"><a href="">🤓 Charlas 🤓</a></h4>
-                <p class="service-description">Nos encanta intercambiar ideas y fomentar la inteligencia colectiva.
-                    Estamos presentes en universidades, escuelas y empresas. Algunos de los temas que nos apasionan:
-                    sociocracia, organizaciones horizontales, estructuras liberadoras, agilidad, y muchos más.
+                <h4 class="service-title"><a href="">🧩 Visibilidad y Trazabilidad</a></h4>
+                <p class="service-description">Impulsamos tu negocio a través de la correcta configuración de diferentes
+                    herramientas de gestión de trabajo haciendo foco en lo operativo, la coordinación y la estrategia.
+                    Logramos que haya una trazabilidad completa con el nivel de información necesario para
+                    poder tomar decisiones basadas en datos.
+                </p>
+            </div>
+            <div class="col-md-3 service-item">
+                <!--<div class="service-icon"><i class="fa fa-paper-plane"></i></div>-->
+                <h4 class="service-title"><a href="">➕ Otros Servicios</a></h4><br>
+                <p class="service-description">Consultanos también por: Escuela de Agilidad para empresas - Building
+                    Capabilities para potenciales Scrum Masters y Product Owners - Plataforma de onboarding Agile -
+                    Radares de madurez - Mentoría One on One
                 </p>
             </div>
         </div>
@@ -248,117 +305,32 @@ Workshop Section
 <section id="workshops">
     <div class="container wow fadeInUp">
 
-        <div class="row">
-            <div class="col-md-12">
-                <h3 class="section-title">Cursos <strong style="color: #EE0001">Scrum Inc™</strong></h3>
-                <div class="section-title-divider"></div>
-            </div>
-        </div>
-
-        <div class="row">
-
-            <div class="col-md-offset-4 col-md-4">
-                <div class="member">
-                    <div class="pic"><img src="img/workshops/track_1/AEP_Badge.png" alt=""></div>
-                    <span class="label label-danger" style="display: inline-block;">AGILE EDUCATION PROGRAM</span>
-                    <br><br>
-                    <span><strong>Registered Scrum Master™ + Registered Product Owner™</strong></span>
-                    <span>¡Comienza el 11 de Octubre!</span>
-
-                    <!--PRECIO EARLY BIRD-->
-                    <span style="color: #388bee;">120.000 ARS | 750 USD</span>
-                    <span style="color: #ef3939; text-decoration:line-through;">136.000 ARS | 850 USD</span>
-
-                    <a href="agileEducationProgram.html" target="_blank" class="btn btn-warning"
-                       style="margin-top: 10px;">Ver más</a>
-                </div>
-            </div>
-
-            <!--          <div class="col-md-4">
-                          <div class="member">
-                              <div class="pic"><img src="img/workshops/track_1/AEP_SM.png" alt=""></div>
-                              <span class="label label-danger" style="display: inline-block;">SCRUM MASTER</span> <br><br>
-                              <span><strong>Registered Scrum Master™</strong></span>
-                              <span>A confirmar</span>
-
-                              &lt;!&ndash;PRECIO EARLY BIRD&ndash;&gt;
-                              <span style="color: #388bee;">76.320 ARS | 520 USD</span>
-                              <span style="color: #ef3939; text-decoration:line-through;">86.800 ARS | 630 USD</span>
-
-                              &lt;!&ndash;PRECIO REGULAR&ndash;&gt;
-                              &lt;!&ndash;<span style="color: #388bee; ">86.800 ARS | 630 USD</span>
-                              <span style="color: #ef3939; text-decoration:line-through;">76.320 ARS | 520 USD</span>&ndash;&gt;
-
-                              <a href="scrumMaster.html" target="_blank" class="btn btn-warning"
-                                 style="margin-top: 10px;">Ver más</a>
-                          </div>
-                      </div>
-
-                      <div class="col-md-4">
-                          <div class="member">
-                              <div class="pic"><img src="img/workshops/track_1/AEP_PO.png" alt=""></div>
-                              <span class="label label-danger" style="display: inline-block;">PRODUCT OWNER</span> <br><br>
-                              <span><strong>Registered Product Owner™</strong></span>
-                              <span>A confirmar</span>
-
-                              &lt;!&ndash;PRECIO EARLY BIRD&ndash;&gt;
-                              <span style="color: #388bee;">76.320 ARS | 520 USD</span>
-                              <span style="color: #ef3939; text-decoration:line-through;">86.800 ARS | 630 USD</span>
-
-                              &lt;!&ndash;PRECIO REGULAR&ndash;&gt;
-                              &lt;!&ndash;<span style="color: #388bee; ">86.800 ARS | 630 USD</span>
-                              <span style="color: #ef3939; text-decoration:line-through;">76.320 ARS | 520 USD</span>&ndash;&gt;
-
-                              <a href="productOwner.html" target="_blank" class="btn btn-warning"
-                                 style="margin-top: 10px; border-color: grey;">Ver más</a>
-                          </div>
-                      </div>-->
-
-        </div>
 
         <div class="row" style="margin-top: 40px;">
             <div class="col-md-12">
-                <h3 class="section-title">Cursos <strong style="color: #8F6BAB;">Kanban
-                    University</strong></h3>
+                <h3 class="section-title">PRÓXIMOS <strong style="color: #EE0001">CURSOS</strong></h3>
                 <div class="section-title-divider"></div>
+                <p class="section-description">Próximas fechas disponibles 🎖️</p>
             </div>
         </div>
 
-        <!--<div class="row">
+        <div class="row">
 
-            &lt;!&ndash;KSI&ndash;&gt;
-            <div class="col-md-4">
-                <div class="member">
-                    <div class="pic"><img src="img/ku/badges/KMP.png" alt=""></div>
-                    <span class="label label-warning" style="display: inline-block;">KANBAN SYSTEMS IMPROVEMENT</span>
-                    <br><br>
-                    <span><strong>KMP II | Kanban University</strong></span>
-                    <span>¡Comienza el 21 de Junio!</span>
-                    <span style="color: #388bee;">91.800 ARS | 459 USD</span>
-                    <span style="color: #ef3939; text-decoration:line-through;">118.000 ARS | 590 USD</span>
-                    <a href="ksi.html" target="_blank" class="btn btn-warning"
-                       style="margin-top: 10px; border-color: grey;">Ver más</a>
-                </div>
-            </div>
-
-            &lt;!&ndash;TKP&ndash;&gt;
-            <div class="col-md-4">
+            <!--TKP-->
+            <!--<div class="col-md-3">
                 <div class="member">
                     <div class="pic"><img src="img/ku/badges/TKP.png" alt=""></div>
                     <span class="label label-warning" style="display: inline-block;">TEAM KANBAN PRACTITIONER</span>
                     <br><br>
                     <span><strong>TKP | Kanban University</strong></span>
+                    <br>
                     <span>¡Comienza el 1 de Julio!</span>
                     <span style="color: #388bee;">59.900 ARS | 300 USD</span>
                     <span style="color: #ef3939; text-decoration:line-through;">69.900 ARS | 350 USD</span>
                     <a href="tkp.html" target="_blank" class="btn btn-warning"
                        style="margin-top: 10px;">Ver más</a>
                 </div>
-            </div>
-
-        </div>-->
-
-        <div class="row">
+            </div>-->
 
             <!--FULL KMP-->
             <div class="col-md-4">
@@ -367,9 +339,9 @@ Workshop Section
                     <span class="label label-info" style="display: inline-block;">FULL KMP | 20% OFF</span>
                     <br><br>
                     <span><strong>KMP I + KMP II | Kanban University</strong></span>
-                    <span>¡Comienza el 16 de Agosto!</span>
-                    <span style="color: #388bee;">156.000 ARS | 800 USD</span>
-                    <span style="color: #ef3939; text-decoration:line-through;">195.000 ARS | 1.000 USD</span>
+                    <span>¡Comienza el 7 de Noviembre!</span>
+<!--                    <span style="color: #388bee;">188.800 ARS | 800 USD</span>
+                    <span style="color: #ef3939; text-decoration:line-through;">236.000 ARS | 1.180 USD</span>-->
                     <a href="fullKMP.html" target="_blank" class="btn btn-warning"
                        style="margin-top: 10px;">Ver más</a>
                 </div>
@@ -382,9 +354,9 @@ Workshop Section
                     <span class="label label-warning" style="display: inline-block;">KANBAN SYSTEM DESIGN</span>
                     <br><br>
                     <span><strong>KMP I | Kanban University</strong></span>
-                    <span>¡Comienza el 16 de Agosto!</span>
-                    <span style="color: #388bee;">91.800 ARS | 459 USD</span>
-                    <span style="color: #ef3939; text-decoration:line-through;">118.000 ARS | 590 USD</span>
+                    <span>¡Comienza el 7 de Noviembre!</span>
+<!--                    <span style="color: #388bee;">91.800 ARS | 459 USD</span>
+                    <span style="color: #ef3939; text-decoration:line-through;">118.000 ARS | 590 USD</span>-->
                     <a href="ksd.html" target="_blank" class="btn btn-warning"
                        style="margin-top: 10px;">Ver más</a>
                 </div>
@@ -397,15 +369,167 @@ Workshop Section
                     <span class="label label-warning" style="display: inline-block;">KANBAN SYSTEMS IMPROVEMENT</span>
                     <br><br>
                     <span><strong>KMP II | Kanban University</strong></span>
-                    <span>¡Comienza el 6 de Septiembre!</span>
-                    <span style="color: #388bee;">91.800 ARS | 459 USD</span>
-                    <span style="color: #ef3939; text-decoration:line-through;">118.000 ARS | 590 USD</span>
-                    <a href="ksi2.html" target="_blank" class="btn btn-warning"
+                    <span>¡Comienza el 16 de Enero!</span>
+<!--                    <span style="color: #388bee;">91.800 ARS | 459 USD</span>
+                    <span style="color: #ef3939; text-decoration:line-through;">118.000 ARS | 590 USD</span>-->
+                    <a href="ksi.html" target="_blank" class="btn btn-warning"
                        style="margin-top: 10px; border-color: grey;">Ver más</a>
                 </div>
             </div>
 
         </div>
+
+        <hr>
+
+        <div class="row">
+
+            <!--AEP-->
+            <div class="col-md-offset-4 col-md-4">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/track_1/AEP_Badge.png" alt=""></div>
+                    <span class="label label-danger" style="display: inline-block;">AGILE EDUCATION PROGRAM</span>
+                    <br><br>
+                    <span><strong>Registered Scrum Master™ + Registered Product Owner™</strong></span>
+                    <span>¡A definir!</span>
+
+                    <!--PRECIO EARLY BIRD-->
+                   <!-- <span style="color: #388bee;">120.000 ARS | 750 USD</span>
+                    <span style="color: #ef3939; text-decoration:line-through;">136.000 ARS | 850 USD</span>-->
+
+                    <a href="agileEducationProgram.html" target="_blank" class="btn btn-warning"
+                       style="margin-top: 10px;">Ver más</a>
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="row" style="margin-top: 40px;">
+            <div class="col-md-12">
+                <h3 class="section-title">ZRIPI <strong style="color: #9F7944;">EXPERIENCE</strong></h3>
+                <div class="section-title-divider"></div>
+                <p class="section-description">Elije tu propia aventura 💪</p>
+            </div>
+        </div>
+
+        <div class="row">
+
+            <!--Kanban Experience-->
+            <div class="col-md-4">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/experiences/Kanban%20Experience%20Logo.png" alt=""></div>
+                    <span class="label label-info" style="display: inline-block; background-color: #9F7944">KANBAN EXPERIENCE | 25% OFF</span>
+                    <br><br>
+                    <span><strong>Full KMP by Kanban University + Mentoring Individual + Plataforma E-learning (Full Version)</strong></span>
+                    <!--
+                                        <span>¡Comienza el xx de yyy!</span>
+                    -->
+                    <a class="btn btn-warning" id="KanbanExperience"  onclick="modalZripi(this.id)"
+                       style="margin-top: 10px;">¡Quiero recibir información!</a>
+                </div>
+            </div>
+
+            <!--Scrum Experience-->
+            <div class="col-md-4">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/experiences/Scrum%20Experience%20Logo.png" alt=""></div>
+                    <span class="label label-info" style="display: inline-block; background-color: #9F7944">SCRUM EXPERIENCE | 25% OFF</span>
+                    <br><br>
+                    <span><strong>Agile Education Program by Scrum Inc + Mentoring Individual + Plataforma E-learning (Full Version)</strong></span>
+                    <!--
+                                        <span>¡Comienza el xx de yyy!</span>
+                    -->
+                    <a class="btn btn-warning" id="ScrumExperience"  onclick="modalZripi(this.id)"
+                       style="margin-top: 10px;">¡Quiero recibir información!</a>
+                </div>
+            </div>
+
+            <!--Full Experience-->
+            <div class="col-md-4">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/experiences/Full%20Experience%20Logo.png" alt=""></div>
+                    <span class="label label-info" style="display: inline-block; background-color: #9F7944">FULL EXPERIENCE | 30% OFF</span>
+                    <br><br>
+                    <span><strong>Scrum Experience & Kanban Experience</strong></span><br>
+                    <!--
+                                        <span>¡Comienza el xx de yyy!</span>
+                    -->
+                    <a class="btn btn-warning" id="FullExperience"  onclick="modalZripi(this.id)"
+                       style="margin-top: 10px;">¡Quiero recibir información!</a>
+                </div>
+            </div>
+
+        </div>
+
+<!--        <hr>
+
+        <div class="row" style="margin-top: 40px;">
+            <div class="col-md-12">
+                <h3 class="section-title">E-<strong style="color: #EE0001">LEARNING</strong></h3>
+                <div class="section-title-divider"></div>
+                <p class="section-description">A tu ritmo 🌎️</p>
+            </div>
+        </div>
+
+        <div class="row">
+
+            &lt;!&ndash;Jira&ndash;&gt;
+            <div class="col-md-3">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/e-learning/e-jira.png" alt=""></div>
+                    <span><strong>Jira Fundamentals</strong></span>
+                    &lt;!&ndash;
+                                        <span style="color: #388bee;">10.000 ARS | 50 USD</span>
+                    &ndash;&gt;
+                    <a class="btn btn-warning" id="E-Jira"  onclick="modalZripi(this.id)"
+                       style="margin-top: 10px;">¡Quiero recibir información!</a>
+                </div>
+            </div>
+
+            &lt;!&ndash;Metrics&ndash;&gt;
+            <div class="col-md-3">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/e-learning/e-metrics.png" alt=""></div>
+                    <span><strong>Métricas para equipos</strong></span>
+                    &lt;!&ndash;
+                                        <span style="color: #388bee;">59.900 ARS | 300 USD</span>
+                    &ndash;&gt;
+                    <a class="btn btn-warning" id="e-metrics"  onclick="modalZripi(this.id)"
+                       style="margin-top: 10px;">¡Quiero recibir información!</a>
+                </div>
+            </div>
+
+            &lt;!&ndash;KF&ndash;&gt;
+            <div class="col-md-3">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/e-learning/e-kanban.png" alt=""></div>
+                    <span><strong>Kanban Fundamentals</strong></span>
+                    &lt;!&ndash;
+                                        <span style="color: #388bee;">15.000 ARS | 75 USD</span>
+                    &ndash;&gt;
+                    <a class="btn btn-warning" id="e-kanban"  onclick="modalZripi(this.id)"
+                       style="margin-top: 10px;">¡Quiero recibir información!</a>
+                </div>
+            </div>
+
+            &lt;!&ndash;SF&ndash;&gt;
+            <div class="col-md-3">
+                <div class="member">
+                    <div class="pic"><img src="img/workshops/e-learning/e-scrum.png" alt=""></div>
+                    <span><strong>Scrum Fundamentals</strong></span>
+                    &lt;!&ndash;
+                                        <span style="color: #388bee;">15.000 ARS | 75 USD</span>
+                    &ndash;&gt;
+                    <a class="btn btn-warning" id="e-scrum"  onclick="modalZripi(this.id)"
+                       style="margin-top: 10px;">¡Quiero recibir información!</a>
+                </div>
+            </div>
+
+        </div>-->
+
+
+    </div>
 
     </div>
 
@@ -952,9 +1076,14 @@ Footer
 
 <!--Modal scripts-->
 <script type="text/javascript">
-    $(window).load(function () {
+
+    function modalZripi(id){
         $('#myModal').modal('show')
-    });
+        document.getElementById("modalData").value = id
+    }
+/*    $(window).load(function () {
+        $('#myModal').modal('show')
+    });*/
 </script>
 
 
