@@ -2335,3 +2335,24 @@ body.mobile-nav-active #mobile-nav-toggle {
 #cafecito-title .subscribe-btn:hover {
     background: rgb(158, 104, 91);
     border: 2px solid rgb(158, 104, 91);
+}
+
+/* WA floating button CSS */
+.floating {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: #25d366;
+    color: #fff;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 100;
+}
+
+.fab-icon {
+    margin-top: 16px;
+}
