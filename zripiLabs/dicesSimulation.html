@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Zripi Labs | Dados</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        .dice {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+            background-color: white;
+            border: 1px solid black;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            font-weight: bold;
+            animation: spin 1s ease-out;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container text-center">
+    <h1 style="margin-top: 40px;">Zripi Labs | Dados</h1>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="num-dice">Cantidad de dados:</label>
+                <input type="number" class="form-control" id="num-dice" value="1">
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="num-sides">Cantidad de lados:</label>
+                <input type="number" class="form-control" id="num-sides" value="6">
+            </div>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <button type="button" class="btn btn-primary" onclick="rollDice()">Tirar dados</button>
+    <div id="dice-container"></div>
+    <div id="sum-container"></div>
+</div>
+
+<script>
+    function rollDice() {
+        var numDice = document.getElementById("num-dice").value;
+        var numSides = document.getElementById("num-sides").value;
+        var sum = 0;
+        var diceContainer = document.getElementById("dice-container");
+        diceContainer.innerHTML = "";
+
+        for (var i = 0; i < numDice; i++) {
+            var roll = Math.floor(Math.random() * numSides) + 1;
+            var diceDiv = document.createElement("div");
+            diceDiv.className = "dice";
+            diceDiv.innerHTML = roll;
+            diceContainer.appendChild(diceDiv);
+            sum += roll;
+        }
+
+        var sumContainer = document.getElementById("sum-container");
+        sumContainer.innerHTML = "Total: " + sum;
+    }
+</script>
+</body>
+</html>

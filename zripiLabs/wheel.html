@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ruleta de premios</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- Winwheel.js CSS -->
+    <link rel="stylesheet" href="https://davidwalsh.name/demo/winwheel.js/winwheel.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center">Ruleta de premios</h1>
+            <div id="myDiv"></div>
+            <div class="form-group">
+                <label for="nameInput">Nombre:</label>
+                <input type="text" class="form-control" id="nameInput" placeholder="Ingresa un nombre">
+            </div>
+            <button class="btn btn-primary" id="addNameBtn">Agregar nombre</button>
+            <div class="form-group mt-3">
+                <label for="numWinnersInput">Cantidad de ganadores:</label>
+                <input type="number" class="form-control" id="numWinnersInput" value="1">
+            </div>
+            <div class="form-group">
+                <label for="spinSpeedInput">Velocidad de giro:</label>
+                <input type="number" class="form-control" id="spinSpeedInput" value="3">
+            </div>
+            <button class="btn btn-success" id="spinBtn">Girar la ruleta</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de ganadores -->
+<div class="modal fade" id="winnersModal" tabindex="-1" role="dialog" aria-labelledby="winnersModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="winnersModalLabel">Ganadores</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Confetti canvas -->
+<canvas id="confetti-canvas"></canvas>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- Winwheel.js -->
+<script src="https://davidwalsh.name/demo/winwheel.js/winwheel.js"></script>
+<script src="js/wheel.js"></script>
+
+</body>
+</html>

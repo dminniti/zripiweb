@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zripi Labs</title>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- cargar la biblioteca Chart.js -->
+    <!-- Agregar los enlaces a los archivos CSS y JS de Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<div class="container text-center">
+    <h1><strong>Zripi Labs</strong></h1>
+    <h2 class="text-center my-4">Lanzamiento de 2 dados de 6 caras</h2>
+    <p>El resultado más probable al tirar dos dados de seis caras es obtener un total de 7. Esto se debe a que hay seis
+        formas de obtener un 7: (1, 6), (2, 5), (3, 4), (4, 3), (5, 2) y (6, 1). Mientras que hay cinco formas de
+        obtener un
+        6 o un 8, cuatro formas de obtener un 5 o un 9, tres formas de obtener un 4 o un 10, dos formas de obtener un 3
+        o un
+        11 y solo una forma de obtener un 2 o un 12. <br> <br>
+
+        Para calcular la probabilidad de obtener un total de 7, podemos usar la regla de adición de probabilidades. La
+        probabilidad de obtener un 7 en una tirada de dos dados de seis caras es la suma de las probabilidades de
+        obtener
+        cada una de las seis combinaciones que suman 7:<br> <br>
+
+        P(7) = P(1,6) + P(2,5) + P(3,4) + P(4,3) + P(5,2) + P(6,1)<br> <br>
+
+        Donde P(1,6) representa la probabilidad de obtener un 1 en el primer dado y un 6 en el segundo dado, y así
+        sucesivamente.<br> <br>
+
+        La probabilidad de obtener cualquier combinación particular de dos dados es 1/6 x 1/6 = 1/36. Por lo tanto, la
+        probabilidad de obtener un 7 es:<br> <br>
+
+        P(7) = 1/36 + 1/36 + 1/36 + 1/36 + 1/36 + 1/36 = 6/36 = 1/6<br> <br>
+
+        Esto significa que hay un 16.67% de probabilidad de obtener un total de 7 en una tirada de dos dados de seis
+        caras.<br> <br>
+
+        Para demostrarlo, podemos simular una gran cantidad de tiradas de dos dados y contar cuántas veces obtenemos
+        cada
+        resultado. Si la cantidad de veces que obtenemos un 7 es mayor que la cantidad de veces que obtenemos cualquier
+        otro
+        resultado, entonces esto confirma que 7 es el resultado más probable. Por ejemplo, podemos simular 10,000
+        tiradas de
+        dos dados <strong>apretando el botón que aparece a continuación</strong>:<br> <br>
+
+    </p>
+
+    <button class="btn btn-primary" onclick="tirarDados()">Tirar los dados</button>
+
+    <div class="row">
+        <canvas id="grafico"></canvas>
+        <script>
+
+
+            function tirarDados() {
+                const resultados = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // inicializar el contador de resultados
+                const numTiradas = 10000; // número de tiradas que queremos simular
+
+                for (let i = 0; i < numTiradas; i++) {
+                    // generar dos números aleatorios entre 1 y 6
+                    const dado1 = Math.floor(Math.random() * 6) + 1;
+                    const dado2 = Math.floor(Math.random() * 6) + 1;
+                    const resultado = dado1 + dado2;
+                    resultados[resultado]++; // incrementar el contador para el resultado correspondiente
+                }
+
+                // mostrar los resultados en un gráfico de barras
+                const etiquetas = []; // etiquetas para el eje x del gráfico
+                const datos = []; // datos para el eje y del gráfico
+                for (let i = 2; i <= 12; i++) {
+                    etiquetas.push(i);
+                    datos.push(resultados[i] / numTiradas * 100); // calcular la probabilidad en porcentaje
+                }
+                const ctx = document.getElementById("grafico").getContext("2d");
+                const grafico = new Chart(ctx, {
+                    type: "bar",
+                    data: {
+                        labels: etiquetas,
+                        datasets: [{
+                            label: "Probabilidad (%)",
+                            data: datos,
+                            backgroundColor: "#69e19a" // color de las barras del gráfico
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    callback: function (value) {
+                                        return value + "%";
+                                    } // agregar el símbolo de porcentaje a los valores del eje y
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+        </script>
+    </div>
+</div>
+</body>
+</html>
