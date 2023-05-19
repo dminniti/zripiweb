@@ -1066,6 +1066,12 @@ body.mobile-nav-active #mobile-nav-toggle {
     padding: 80px 0;
 }
 
+#custom-title-cyan {
+    background: linear-gradient(rgba(70, 218, 248, 0.65), rgb(43 43 73)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
+    padding: 80px 0;
+}
+
 #custom-title .subscribe-title {
     color: #fff;
     font-size: 28px;
