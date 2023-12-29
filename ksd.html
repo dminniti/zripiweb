@@ -333,11 +333,11 @@ MODULO | FECHAS Y COSTOS
                 <p class="about-text text-center">
 
                 <ul class="list-group">
-                    <li class="list-group-item">🐤 Primeros 5 inscriptos:
-                        <strong>321.300 ARS | 459 USD</strong></li>
+                    <li id="promo" value="459" class="list-group-item">🐤 Primeros 5 inscriptos:
+                        <strong>459 USD</strong> <strong id="precioPromo"></strong></li>
 
-                    <li class="list-group-item ">💲 Precio regular:
-                        <strong>402.000 ARS | 575 USD</strong>
+                    <li id="regular" value="575" class="list-group-item ">💲 Precio regular:
+                        <strong>575 USD</strong> <strong id="precioRegular"></strong>
                     </li>
 
                     <li class="list-group-item">ℹ️ Consultanos por descuentos grupales!</li>
@@ -943,7 +943,7 @@ FOOTER
                     </div>
                 </div>
                 <div class="copyright">
-                    <strong>&copy; ZriPi, 2023. Todos los derechos reservados.</strong>
+                    <strong>&copy; Zripi, 2024. Todos los derechos reservados.</strong>
                     <div style="margin-top: 10px;">
                         <a href="terminos.html" target="_blank">Términos de Licencia</a>
                     </div>
@@ -961,6 +961,7 @@ FOOTER
 
 <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
+<script src="./js/cotizacion.js"></script>
 <!-- Required JavaScript Libraries -->
 <script src="lib/jquery/jquery.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
