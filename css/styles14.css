@@ -2393,6 +2393,14 @@ body.mobile-nav-active #mobile-nav-toggle {
     color: rgb(255, 255, 255);
 }
 
+.box-text {
+    padding: 20px;
+    border: 1px solid rgb(187, 187, 187);
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px #5555553b;
+    height: 100%;
+}
+
 /*General*/
 
 .member {
