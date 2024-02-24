@@ -317,42 +317,51 @@ MODULO | FECHAS Y COSTOS
 
         <div class="row" style="margin-top: 40px;">
 
-<!--            <div class="col-md-6">
 
-                <h2 class="section-title" style="color: #ffae00 !important;">🗓️ Calendario</h2>
-                <div class="section-title-divider" style="background: #ffae00 !important;"></div>
+            <div class="col-md-6">
+
+                <h2 class="section-title" style="color: #CC0205 !important;">🗓️ Calendario</h2>
+                <div class="section-title-divider" style="background: #CC0205 !important;"></div>
 
                 <p class="about-text text-center">
 
                 <ul class="list-group">
-                    <li class="list-group-item">Duración 24 hs <strong>(Clases en vivo + Material asincrónico)</strong>
+                    <li class="list-group-item">Duración 21 hs <strong>(Clases en vivo + Material asincrónico)</strong>
                     </li>
-                    <li class="list-group-item">Lunes 9 de Octubre de 18:00 Hs a 21:00 Hs (UTC-3)</li>
-                    <li class="list-group-item">Miércoles 11 de Octubre de 18:00 Hs a 21:00 Hs (UTC-3)</li>
-                    <li class="list-group-item">Lunes 16 de Octubre de 18:00 Hs a 21:00 Hs (UTC-3)</li>
-                    <li class="list-group-item">Miércoles 18 de Octubre de 18:00 Hs a 21:00 Hs (UTC-3)</li>
-                    <li class="list-group-item">Lunes 23 de Octubre de 18:00 Hs a 21:00 Hs (UTC-3)</li>
+                    <li class="list-group-item">Lunes 15 de Abril de 18:30 Hs a 21:00 Hs (UTC-3)</li>
+                    <li class="list-group-item">Miércoles 17 de Abril de 18:30 Hs a 21:00 Hs (UTC-3)</li>
+                    <li class="list-group-item">Lunes 21 de Abril de 18:30 Hs a 21:00 Hs (UTC-3)</li>
+                    <li class="list-group-item">Miércoles 24 de Abril de 18:30 Hs a 21:00 Hs (UTC-3)</li>
+                    <li class="list-group-item">Lunes 29 de Abril de 18:30 Hs a 21:00 Hs (UTC-3)</li>
                 </ul>
 
                 </p>
-            </div>-->
+            </div>
 
-            <!--<div class="col-md-offset-3 col-md-6">
+            <!--PRECIO EARLY BIRD-->
+            <div class="col-md-6">
 
-                <h2 class="section-title" style="color: #f8a800 !important;">💳 Inversión</h2>
-                <div class="section-title-divider" style="background: #ffae00 !important;"></div>
+                <h2 class="section-title" style="color: #CC0205 !important;">💳 Inversión</h2>
+                <div class="section-title-divider" style="background: #CC0205 !important;"></div>
 
                 <p class="about-text text-center">
 
                 <ul class="list-group">
-                    <li class="list-group-item">🐤 Primeros 5 inscriptos:
-                        <strong>128.000 ARS | 160 USD</strong></li>
+                    <li id="promo" value="185" class="list-group-item">🐤 Primeros 5 inscriptos:
+                        <strong>185 USD</strong> <strong id="precioPromo"></strong></li>
 
-                    <li class="list-group-item ">💲 Precio regular:
-                        <strong>160.000 ARS | 200 USD</strong>
+                    <li id="regular" value="220" class="list-group-item ">💲 Precio regular:
+                        <strong>220 USD</strong> <strong id="precioRegular"></strong>
                     </li>
 
-                    <li class="list-group-item">ℹ️ Consultanos por descuentos grupales!</li>
+                    <li class="list-group-item">💬 Facilidades de pago | <a
+                            href="https://wa.me/5491155010351?text=Hola%20Zripi!"
+                            target="_blank"><strong>CONSULTAR</strong></a>
+                    </li>
+
+                    <li class="list-group-item">💬 Descuentos grupales | <a
+                            href="https://wa.me/5491154650775?text=Hola%20Zripi!"
+                            target="_blank"><strong>CONSULTAR</strong></a></li>
                 </ul>
 
                 <ul class="list-group">
@@ -361,25 +370,22 @@ MODULO | FECHAS Y COSTOS
                     </li>
                     <li class="list-group-item">🇦🇷 Mercado Pago <strong>(Hasta en 3 cuotas sin interés</strong>)
                     </li>
-                    <li class="list-group-item">🌏 PayPal&lt;!&ndash;:
-                        <a class="mercadopago-btn" href="https://www.paypal.com/paypalme/drminniti" target="_blank">Pagar</a>&ndash;&gt;
-                    </li>
-                    <li class="list-group-item">ℹ️ <strong> Consultanos por facilidades de pago </strong>
+                    <li class="list-group-item">🌏 PayPal | Wise | Payoneer
                     </li>
                 </ul>
 
                 </p>
-            </div>-->
+            </div>
 
         </div>
 
     </div>
 </section>
 
-<!--==========================
+==========================
 DIVIDER | INSCRIPCIÓN
-============================-->
-<!--<section id="custom-title-ss">
+============================
+<section id="custom-title-ss">
     <div class="container wow fadeInUp">
         <div class="row text-center">
             <div class="col-md-offset-2 col-md-8">
@@ -389,7 +395,7 @@ DIVIDER | INSCRIPCIÓN
             </div>
         </div>
     </div>
-</section>-->
+</section>
 
 <!--==========================
 MODULE | FACILITADORES & IMAGENES
@@ -732,6 +738,8 @@ FOOTER
 </a>
 
 <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+<script src="js/cotizacionOtros.js"></script>
 
 <!-- Required JavaScript Libraries -->
 <script src="lib/jquery/jquery.min.js"></script>
