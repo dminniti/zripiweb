@@ -840,6 +840,52 @@ body.mobile-nav-active #mobile-nav-toggle {
     border: 2px solid rgb(120, 91, 158);
 }
 
+
+/* sswb title
+--------------------------------*/
+#sswb-title {
+    /*background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;*/
+    background: linear-gradient(rgba(26, 26, 25, 0.5), rgb(255, 255, 255)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
+    padding: 60px 0;
+}
+
+#sswb-title .subscribe-title {
+    color: #fff;
+    font-size: 32px;
+    text-shadow: 0.5px 0.5px 4px grey;
+    font-weight: 700;
+}
+
+#sswb-title .subscribe-text {
+    color: #fff;
+}
+
+#sswb-title .subscribe-btn-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#sswb-title .subscribe-btn {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 2px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+#sswb-title .subscribe-btn:hover {
+    background: rgb(120, 91, 158);
+    border: 2px solid rgb(120, 91, 158);
+}
+
 /* INTRO title
 --------------------------------*/
 #intro-title {
@@ -1236,6 +1282,49 @@ body.mobile-nav-active #mobile-nav-toggle {
 #custom-title-ss .subscribe-btn:hover {
     background: rgb(255, 174, 0);
     border: 2px solid rgb(255, 174, 0);
+}
+
+/* custom title sswb
+--------------------------------*/
+#custom-title-sswb {
+    background: linear-gradient(rgba(42, 42, 42,1), rgba(42, 42, 42, 0.9)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
+    padding: 80px 0;
+}
+
+#custom-title-sswb .subscribe-title {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+#custom-title-sswb .subscribe-text {
+    color: #fff;
+}
+
+#custom-title-sswb .subscribe-btn-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#custom-title-sswb .subscribe-btn {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 2px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+#custom-title-sswb .subscribe-btn:hover {
+    background: rgb(255, 255, 255);
+    border: 2px solid rgb(42, 42, 42);
 }
 
 /* Portfolio Section
