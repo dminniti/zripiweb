@@ -4,6 +4,15 @@
 <head>
     <meta charset="utf-8">
     <title>Zripi | Formación y acompañamiento en agilidad</title>
+    <style>
+        #countdown {
+            font-size: 16px;
+            text-align: left;
+            margin-top: 10px;
+            color: #d32424;
+        }
+    </style>
+
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="zripi, scrum, agile, agilidad, scrum master, sm, product owner, po, workshop, taller, taller de scrum master, taller de producto owner, agilidad en empresas"
           name="keywords">
@@ -369,15 +378,15 @@ MODULO | FECHAS Y COSTOS
 
             <div class="col-md-6">
 
-                <h2 class="section-title" style="color: #2a2a2a !important;"> 🔜 PRÓXIMAMENTE</h2>
-                <div class="section-title-divider" style="background: #2a2a2a !important;"></div>
+                <!-- <h2 class="section-title" style="color: #2a2a2a !important;"> 🔜 PRÓXIMAMENTE</h2>
+                 <div class="section-title-divider" style="background: #2a2a2a !important;"></div>
 
-                <p class="about-text text-center">
-                    🚨 ¡Falta muy poquito para que este curso este diponible!
-                </p>
+                 <p class="about-text text-center">
+                     🚨 ¡Falta muy poquito para que este curso este diponible!
+                 </p>-->
 
 
-                <!--<h2 class="section-title" style="color: #2a2a2a !important;">⚙️ 3 Simples Pasos</h2>
+                <h2 class="section-title" style="color: #2a2a2a !important;">⚙️ 3 Simples Pasos</h2>
                 <div class="section-title-divider" style="background: #2a2a2a !important;"></div>
 
                 <p class="about-text text-center">
@@ -402,25 +411,50 @@ MODULO | FECHAS Y COSTOS
                 <p class="about-text text-center">
 
                 <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>
+                        <div id="countdown"></div>
+                    </strong></li>
                     <li class="list-group-item">💲 Inversión:
-                        <strong>50 USD | 50.000 ARS</strong></li>
-                    <li class="list-group-item">🌏 Abonar por PayPal: &nbsp; <a class="btn btn-success text-right"
+                        <strong style="text-decoration: line-through; color: darkred">50 USD | 50.000 ARS</strong></li>
+
+                    <li class="list-group-item">💲🚀 Inversión Lanzamiento:
+                        <strong style="color: green">50 USD | 50.000 ARS</strong></li>
+
+
+                    <!--REGULAR-->
+                    <!--<li class="list-group-item">🌏 Abonar por PayPal: &nbsp; <a class="btn btn-success text-right"
                                                                                href="https://paypal.me/drminniti/50"
                                                                                target="_blank">
                         PAGAR </a>
+                    </li>-->
+
+                    <!--PROMO-->
+                    <li class="list-group-item">🌏 Abonar por PayPal: &nbsp; <a class="btn btn-success text-right"
+                                                                               href="https://paypal.me/drminniti/25"
+                                                                               target="_blank">
+                        PAGAR </a>
                     </li>
+
+                    <!--REGULAR-->
+                    <!--<li class="list-group-item">🇦🇷 Abonar por Mercado Pago: &nbsp; <a class="btn btn-success"
+                                                                                      href="https://mpago.la/1Zpma9k"
+                                                                                      target="_blank">-->
+
+                    <!--PROMO-->
                     <li class="list-group-item">🇦🇷 Abonar por Mercado Pago: &nbsp; <a class="btn btn-success"
                                                                                       href="https://mpago.la/1Zpma9k"
                                                                                       target="_blank">
                         PAGAR </a></li>
-                    <li class="list-group-item">ℹ️ Consultanos por otros medios de pago: &nbsp; <a class="btn btn-info"
-                                                                                                   href="https://api.whatsapp.com/send?phone=5491154650775&text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20otros%20medio%20de%20pago%20para%20el%20curso%20Lean%20Six%20Sigma%20|%20White%20Belt"
-                                                                                                   target="_blank">
+                    <li class="list-group-item">ℹ️ Consultanos por otros medios de pago: &nbsp; <a
+                            class="btn btn-info"
+                            href="https://api.whatsapp.com/send?phone=5491154650775&text=Hola,%20quiero%20informaci%C3%B3n%20sobre%20otros%20medio%20de%20pago%20para%20el%20curso%20Lean%20Six%20Sigma%20|%20White%20Belt"
+                            target="_blank">
                         Click Aquí </a>
                     </li>
                 </ul>
 
-                </p>-->
+                </p>
 
 
             </div>
@@ -696,6 +730,9 @@ FOOTER
 </a>
 
 <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+
+<!--COUNTDOWN-->
+<script src="./js/countdown.js"></script>
 
 <!-- Required JavaScript Libraries -->
 <script src="lib/jquery/jquery.min.js"></script>
