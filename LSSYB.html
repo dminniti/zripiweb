@@ -4,6 +4,21 @@
 <head>
     <meta charset="utf-8">
     <title>Zripi | Formación y acompañamiento en agilidad</title>
+    <style>
+        #countdown {
+            font-size: 16px;
+            text-align: left;
+            margin-top: 10px;
+            color: #d32424;
+        }
+
+        #plus {
+            font-size: 16px;
+            text-align: left;
+            margin-top: 10px;
+            color: #d32424;
+        }
+    </style>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="zripi, scrum, agile, agilidad, scrum master, sm, product owner, po, workshop, taller, taller de scrum master, taller de producto owner, agilidad en empresas"
           name="keywords">
@@ -364,12 +379,30 @@ MODULO | FECHAS Y COSTOS
                 <p class="about-text text-center">
 
                 <ul class="list-group">
-                    <li id="promo" value="185" class="list-group-item">🐤 Primeros 5 inscriptos:
+                    <li class="list-group-item">
+                        <strong>
+                            <div id="countdown"></div>
+                        </strong></li>
+                    <li id="promo" value="185" class="list-group-item"
+                        style="text-decoration: line-through; color: darkred">🐤 Primeros 5 inscriptos:
                         <strong>185 USD | 185.000 ARS</strong> <strong id="precioPromo"></strong></li>
 
-                    <li id="regular" value="220" class="list-group-item ">💲 Precio regular:
+                    <li class="list-group-item">💲🚀 Inversión Lanzamiento:
+                        <strong style="color: green">138 USD | 138.000 ARS</strong></li>
+
+                    <li id="regular" value="220" class="list-group-item "
+                        style="text-decoration: line-through; color: darkred">💲 Precio regular:
                         <strong>220 USD | 220.000 ARS</strong> <strong id="precioRegular"></strong>
                     </li>
+
+                    <!--<li class="list-group-item">💬 Facilidades de pago | <a
+                            href="https://wa.me/5491155010351?text=Hola%20Zripi!"
+                            target="_blank"><strong>CONSULTAR</strong></a>
+                    </li>
+
+                    <li class="list-group-item">💬 Descuentos grupales | <a
+                            href="https://wa.me/5491154650775?text=Hola%20Zripi!"
+                            target="_blank"><strong>CONSULTAR</strong></a></li>-->
 
                     <li class="list-group-item">💬 Facilidades de pago | <a
                             href="https://wa.me/5491155010351?text=Hola%20Zripi!"
@@ -377,17 +410,24 @@ MODULO | FECHAS Y COSTOS
                     </li>
 
                     <li class="list-group-item">💬 Descuentos grupales | <a
-                            href="https://wa.me/5491154650775?text=Hola%20Zripi!"
+                            href="https://wa.me/5491155010351?text=Hola%20Zripi!"
                             target="_blank"><strong>CONSULTAR</strong></a></li>
+
                 </ul>
 
                 <ul class="list-group">
                     <li class="list-group-item"><strong>MÉTODOS DE PAGO</strong></li>
+                    <li class="list-group-item">
+                        <strong>
+                            <div id="plus">💣 ¡Acumulable con promo lanzamiento!</div>
+                        </strong></li>
                     <li class="list-group-item">🇦🇷 Transferencia Bancaria <strong>(20% off)</strong>
+                    </li>
+                    <li class="list-group-item">🌏 Wise | Payoneer <strong>(20% off)</strong>
                     </li>
                     <li class="list-group-item">🇦🇷 Mercado Pago <strong>(Hasta en 3 cuotas sin interés</strong>)
                     </li>
-                    <li class="list-group-item">🌏 PayPal | Wise | Payoneer
+                    <li class="list-group-item">🌏 PayPal
                     </li>
                 </ul>
 
@@ -457,10 +497,16 @@ DIVIDER | FAQ
                         class="fa fa-calendar"> </i> ¿COORDINAMOS UNA CALL?</a></h3>
 
                 <!--WHATSAPP DAMI-->
-                <h3 style="color: white;"><a class="btn btn-danger"
-                                             href="https://api.whatsapp.com/send?phone=5491154650775&text=Hola,%20quiero%20info%20sobre%20KSD"
+                <!--<h3 style="color: white;"><a class="btn btn-danger"
+                                             href="https://api.whatsapp.com/send?phone=5491154650775&text=Hola,%20Zripi!"
                                              target="_blank">
-                    <i class="fa fa-whatsapp"></i> ESCRIBINOS POR WHATSAPP</a></h3>
+                    <i class="fa fa-whatsapp"></i> ESCRIBINOS POR WHATSAPP</a></h3>-->
+
+                <!--WHATSAPP SEBAS-->
+                <h3 style="color: white;"><a class="btn btn-danger"
+                                             href="https://api.whatsapp.com/send?phone=5491155010351&text=Hola,%20Zripi!"
+                                             target="_blank">
+                    <i class="fa fa-whatsapp"></i> ESCRÍBENOS POR WHATSAPP</a></h3>
 
                 <!--WHATSAPP SEBAS-->
                 <!--<h3 style="color: white;"><a class="btn btn-danger"
@@ -749,14 +795,21 @@ FOOTER
 </footer>
 <!-- #footer -->
 
-<!-- render the button and direct it to wa.me -->
-<a href="https://wa.me/5491154650775?text=Hola%20Zripi!" class="floating" target="_blank">
+<!-- WHATSAPP DAMI-->
+<!--<a href="https://wa.me/5491154650775?text=Hola%20Zripi!" class="floating" target="_blank">
+    <i class="fab fa-whatsapp fab-icon"></i>
+</a>-->
+
+<a href="https://wa.me/5491155010351?text=Hola%20Zripi!" class="floating" target="_blank">
     <i class="fab fa-whatsapp fab-icon"></i>
 </a>
 
 <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 
 <!--<script src="js/cotizacionOtros.js"></script>-->
+
+<!--COUNTDOWN-->
+<script src="./js/countdownYB.js"></script>
 
 <!-- Required JavaScript Libraries -->
 <script src="lib/jquery/jquery.min.js"></script>
