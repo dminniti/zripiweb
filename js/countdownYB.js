@@ -16,7 +16,7 @@ function updateCountdown() {
 
     // Mostrar el resultado en el elemento con el id "countdown"
     document.getElementById("countdown").innerHTML = `
-      ⏰️ Faltan ${hours} hs ${minutes} min ${seconds} seg que finalice la promo ⏰ ️
+      ⏰️ Quedan ${hours} hs ${minutes} min ${seconds} seg para que finalice la promo ⏰ ️
     `;
 
     // Si ya pasó la fecha objetivo, ocultar el contador
