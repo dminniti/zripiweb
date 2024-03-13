@@ -1,7 +1,7 @@
 // Función para actualizar el contador
 function updateCountdown() {
     // Fecha objetivo: 6 de marzo de 2024 a las 15:00 horas, hora de Argentina
-    const targetDate = new Date("March 12, 2024 23:59:59 GMT-0300");
+    const targetDate = new Date("March 15, 2024 23:59:59 GMT-0300");
 
     // Fecha actual
     const now = new Date();
