@@ -840,6 +840,51 @@ body.mobile-nav-active #mobile-nav-toggle {
     border: 2px solid rgb(120, 91, 158);
 }
 
+/* okr title
+--------------------------------*/
+#okr-title {
+    /*background: linear-gradient(rgba(243, 166, 131, 0.9), rgba(243, 166, 131, 0.4)), url(../img/subscribe-bg.jpg) fixed center center;*/
+    background: linear-gradient(rgba(26, 26, 25, 0.5), rgb(0, 20, 57)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
+    padding: 60px 0;
+}
+
+#okr-title .subscribe-title {
+    color: #fff;
+    font-size: 32px;
+    text-shadow: 0.5px 0.5px 4px grey;
+    font-weight: 700;
+}
+
+#okr-title .subscribe-text {
+    color: #fff;
+}
+
+#okr-title .subscribe-btn-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#okr-title .subscribe-btn {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 2px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+#okr-title .subscribe-btn:hover {
+    background: rgb(120, 91, 158);
+    border: 2px solid rgb(120, 91, 158);
+}
+
 
 /* sswb title
 --------------------------------*/
@@ -1280,8 +1325,51 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #custom-title-ss .subscribe-btn:hover {
-    background: rgb(255, 174, 0);
-    border: 2px solid rgb(255, 174, 0);
+    background: rgb(0, 20, 57);
+    border: 2px solid rgb(0, 20, 57);
+}
+
+/* custom title OKR
+--------------------------------*/
+#custom-title-okr {
+    background: linear-gradient(rgba(59, 56, 56, 0.9), rgb(0, 20, 57)), url(../img/subscribe-bg.jpg) fixed center center;
+    background-size: cover;
+    padding: 80px 0;
+}
+
+#custom-title-okr .subscribe-title {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+#custom-title-okr .subscribe-text {
+    color: #fff;
+}
+
+#custom-title-okr .subscribe-btn-container {
+    text-align: center;
+    padding-top: 20px;
+}
+
+#custom-title-okr .subscribe-btn {
+    font-family: "Raleway", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 2px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+#custom-title-okr .subscribe-btn:hover {
+    background: rgb(66, 187, 129);
+    border: 2px solid rgb(66, 187, 129);
 }
 
 /* custom title sswb
