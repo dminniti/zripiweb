@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chrono Z</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <style>
+    /* Estilos CSS */
+    body {
+      font-family: 'Orbitron', monospace;
+      background: linear-gradient(135deg, #141E30, #243B55);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    header {
+      position: absolute;
+      top: 20px;
+      text-align: center;
+    }
+    header img {
+      width: 150px;
+    }
+    .timer-container {
+      text-align: center;
+      padding: 30px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      max-width: 500px;
+      width: 100%;
+    }
+    h1 {
+      margin: 10px 0;
+      font-size: 2.5rem;
+    }
+    .input-field {
+      margin: 20px 0;
+    }
+    #timeInput {
+      font-size: 1.5rem;
+      padding: 10px;
+      width: 80%;
+      text-align: center;
+      border: 2px solid #00e676;
+      border-radius: 5px;
+      background: transparent;
+      color: #ffffff;
+    }
+    #startButton {
+      font-size: 1.2rem;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #f50057, #ab003c);
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s;
+      margin-bottom: 20px;
+    }
+    #startButton:hover {
+      transform: scale(1.1);
+      background: linear-gradient(135deg, #ff4081, #d81b60);
+    }
+    .preset-buttons button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: linear-gradient(135deg, #2196f3, #1769aa);
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s;
+    }
+    .preset-buttons button:hover {
+      transform: scale(1.1);
+    }
+    .full-screen {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #000000, #1e1e1e);
+      color: #00e676;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .full-screen.active {
+      display: flex;
+    }
+    .full-screen #fullscreenCountdown {
+      font-size: 15vw;
+      margin-bottom: 20px;
+    }
+    .action-buttons button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background: linear-gradient(135deg, #00e676, #02a655);
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.3s;
+    }
+    .action-buttons button:hover {
+      transform: scale(1.1);
+    }
+    #returnButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background: linear-gradient(135deg, #d32f2f, #b71c1c);
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #returnButton:hover {
+      background: linear-gradient(135deg, #f44336, #d32f2f);
+    }
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 20px;
+      background: #d32f2f;
+      color: white;
+      border-radius: 5px;
+      display: none;
+      animation: fadein 0.5s, fadeout 0.5s 3.5s;
+    }
+
+    #fullscreenCountdown {
+      font-size: 10vw;
+      font-weight: bold;
+      color: #ffffff;
+      font-family: 'Courier New', Courier, monospace; /* Fixed-width font */
+      text-shadow: 0 0 20px #1cda8a, 0 0 30px #1cda8a;
+    }
+
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeout {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <!--    <img src="https://via.placeholder.com/150x50.png?text=Chrono+Z" alt="Chrono Z Logo">-->
+  <h1>🧪️</h1>
+  <h1>Zripi Labs</h1>
+</header>
+
+<div class="timer-container">
+  <h1>CHRONO-Z</h1>
+  <h2>Ingrese el tiempo en minutos</h2>
+
+  <div class="input-field">
+    <input id="timeInput" type="number" min="1" max="1440" placeholder="Escriba aquí...">
+  </div>
+
+  <button id="startButton">Empezar</button>
+
+  <div class="preset-buttons">
+    <button class="preset" data-minutes="5">5 min</button>
+    <button class="preset" data-minutes="10">10 min</button>
+    <button class="preset" data-minutes="15">15 min</button>
+    <button class="preset" data-minutes="30">30 min</button>
+    <button class="preset" data-minutes="60">60 min</button>
+  </div>
+</div>
+
+<div id="fullscreenTimer" class="full-screen">
+  <div id="fullscreenCountdown">00:00</div>
+  <div class="action-buttons">
+    <button id="playButton" disabled>Play</button>
+    <button id="pauseButton">Pausa</button>
+    <button id="restartButton">Reiniciar</button>
+  </div>
+  <button id="returnButton">Regresar</button>
+</div>
+
+<div id="toast">Por favor, introduce un tiempo válido.</div>
+
+<audio id="endSound1" src="https://actions.google.com/sounds/v1/sci-fi/retro_flyby.ogg" preload="auto"></audio>
+<audio id="endSound2" src="https://actions.google.com/sounds/v1/sci-fi/air_woosh.ogg" preload="auto"></audio>
+<audio id="endSound3" src="https://actions.google.com/sounds/v1/sci-fi/spaceship_door.ogg" preload="auto"></audio>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const timeInput = document.getElementById("timeInput");
+    const startButton = document.getElementById("startButton");
+    const fullscreenTimer = document.getElementById("fullscreenTimer");
+    const fullscreenCountdown = document.getElementById("fullscreenCountdown");
+    const playButton = document.getElementById("playButton");
+    const pauseButton = document.getElementById("pauseButton");
+    const restartButton = document.getElementById("restartButton");
+    const returnButton = document.getElementById("returnButton");
+    const presetButtons = document.querySelectorAll(".preset");
+    const toast = document.getElementById("toast");
+    const sounds = [
+      document.getElementById("endSound1"),
+      document.getElementById("endSound2"),
+      document.getElementById("endSound3"),
+    ];
+
+    let countdownInterval = null;
+    let remainingTime = 0;
+    let originalTime = 0;
+    let isRunning = false;
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.style.display = "block";
+      setTimeout(() => {
+        toast.style.display = "none";
+      }, 4000);
+    }
+
+    function startCountdown(minutes) {
+      if (isNaN(minutes) || minutes < 1 || minutes > 1440) {
+        showToast("Por favor, introduce un tiempo válido entre 1 y 1440 minutos.");
+        return;
+      }
+      originalTime = minutes * 60;
+      remainingTime = originalTime;
+      updateCountdownDisplay();
+      toggleFullscreen(true);
+      runTimer();
+    }
+
+    function runTimer() {
+      if (countdownInterval) clearInterval(countdownInterval);
+      isRunning = true;
+      playButton.disabled = true;
+      countdownInterval = setInterval(() => {
+        if (remainingTime > 0) {
+          remainingTime--;
+          updateCountdownDisplay();
+        } else {
+          clearInterval(countdownInterval);
+          finishCountdown();
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      clearInterval(countdownInterval);
+      isRunning = false;
+      playButton.disabled = false;
+    }
+
+    function resetTimer() {
+      clearInterval(countdownInterval);
+      remainingTime = originalTime;
+      updateCountdownDisplay();
+      playButton.disabled = false;
+      isRunning = false;
+    }
+
+    function finishCountdown() {
+      const randomSound = sounds[Math.floor(Math.random() * sounds.length)];
+      randomSound.play();
+      fullscreenCountdown.classList.add("animate__animated", "animate__flash");
+      setTimeout(() => {
+        fullscreenCountdown.classList.remove("animate__animated", "animate__flash");
+      }, 2000);
+      isRunning = false;
+      playButton.disabled = false;
+    }
+
+    function updateCountdownDisplay() {
+      const minutes = Math.floor(remainingTime / 60).toString().padStart(2, "0");
+      const seconds = (remainingTime % 60).toString().padStart(2, "0");
+      fullscreenCountdown.textContent = `${minutes}:${seconds}`;
+    }
+
+    function toggleFullscreen(show) {
+      fullscreenTimer.classList.toggle("active", show);
+    }
+
+    startButton.addEventListener("click", () => {
+      const minutes = parseInt(timeInput.value, 10);
+      startCountdown(minutes);
+    });
+
+    presetButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const minutes = parseInt(button.dataset.minutes, 10);
+        startCountdown(minutes);
+      });
+    });
+
+    playButton.addEventListener("click", runTimer);
+    pauseButton.addEventListener("click", pauseTimer);
+    restartButton.addEventListener("click", () => {
+      resetTimer();
+      runTimer();
+    });
+
+    returnButton.addEventListener("click", () => {
+      toggleFullscreen(false);
+      resetTimer();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden" && isRunning) {
+        clearInterval(countdownInterval);
+      } else if (document.visibilityState === "visible" && isRunning) {
+        runTimer();
+      }
+    });
+  });
+</script>
+</body>
+</html>
