@@ -425,7 +425,7 @@
         body.timer-maximized .app-container {
             max-width: 100%;
             height: 100vh;
-            padding: 3rem; /* Increased padding */
+            padding: 3rem;
             box-sizing: border-box;
             justify-content: center;
         }
@@ -440,14 +440,14 @@
         }
 
         body.timer-maximized .timer-title-display {
-            display: block; /* Show title in maximized mode */
+            display: block;
             font-size: clamp(2rem, 5vw, 4rem);
             margin-bottom: 1rem;
             flex-shrink: 0;
         }
 
         body.timer-maximized .timer-title-display:empty {
-            display: none; /* Hide if empty, collapsing space */
+            display: none;
         }
 
         body.timer-maximized .timer-display-wrapper {
@@ -467,7 +467,7 @@
         .app-footer {
             text-align: center;
             padding-top: 1rem;
-            margin-top: -1rem; /* Adjust spacing */
+            margin-top: -1rem;
             font-size: 0.9rem;
             opacity: 0.7;
         }
@@ -480,6 +480,42 @@
 
         .app-footer a:hover {
             text-decoration: underline;
+        }
+
+        /* --- MOBILE OPTIMIZATION --- */
+        @media (max-height: 700px), (max-width: 480px) {
+            html, body {
+                height: 100%;
+                overflow: hidden;
+            }
+            .app-container {
+                height: 100%;
+                padding: 1rem;
+                gap: 1rem;
+                justify-content: space-between;
+            }
+            .timer-section {
+                flex-grow: 1;
+                justify-content: center;
+                display: flex;
+                flex-direction: column;
+            }
+            .timer-title-input {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+            }
+            #timer-display {
+                font-size: clamp(3rem, 20vw, 7rem);
+            }
+            .controls-wrapper {
+                gap: 1rem;
+            }
+            .main-controls {
+                transform: scale(0.9);
+            }
+            .app-footer {
+                padding-bottom: 0.5rem;
+            }
         }
 
     </style>
