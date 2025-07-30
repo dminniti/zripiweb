@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Flow - Temporizador para Facilitadores</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-family-sans: 'Inter', sans-serif;
+            --font-family-mono: 'Roboto Mono', monospace;
+            --transition-speed: 0.3s;
+        }
+
+        /* --- COLOR PALETTES --- */
+        [data-theme="calma"] {
+            --bg-color: #eef2f3;
+            --text-color: #3a506b;
+            --primary-color: #4c86a8;
+            --accent-color: #6fffe9;
+            --progress-bg: #dbe2e3;
+        }
+
+        [data-theme="energia"] {
+            --bg-color: #fffbeb;
+            --text-color: #78350f;
+            --primary-color: #f59e0b;
+            --accent-color: #ef4444;
+            --progress-bg: #fef3c7;
+        }
+
+        [data-theme="foco"] {
+            --bg-color: #111827;
+            --text-color: #e5e7eb;
+            --primary-color: #38bdf8;
+            --accent-color: #fefefe;
+            --progress-bg: #374151;
+        }
+
+        [data-theme="creatividad"] {
+            --bg-color: #f5f3ff;
+            --text-color: #4c1d95;
+            --primary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --progress-bg: #e9e6f9;
+        }
+
+        [data-theme="rosa"] {
+            --bg-color: #fff0f5;
+            --text-color: #c72c6c;
+            --primary-color: #ff69b4;
+            --accent-color: #ffb6c1;
+            --progress-bg: #ffe4e1;
+        }
+
+        [data-theme="bosque"] {
+            --bg-color: #f0fff0;
+            --text-color: #006400;
+            --primary-color: #2e8b57;
+            --accent-color: #98fb98;
+            --progress-bg: #e0eee0;
+        }
+
+        /* --- GENERAL STYLES --- */
+        html {
+            font-size: 16px;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-family-sans);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body.finished {
+            animation: finished-pulse 1s ease-in-out;
+        }
+
+        @keyframes finished-pulse {
+            0% { background-color: var(--bg-color); }
+            50% { background-color: var(--accent-color); }
+            100% { background-color: var(--bg-color); }
+        }
+
+
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* --- HEADER --- */
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .theme-dot {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--progress-bg);
+            transition: transform var(--transition-speed);
+        }
+        .theme-dot:hover {
+            transform: scale(1.1);
+        }
+        #calma { background-color: #4c86a8; }
+        #energia { background-color: #f59e0b; }
+        #foco { background-color: #38bdf8; }
+        #creatividad { background-color: #8b5cf6; }
+        #rosa { background-color: #ff69b4; }
+        #bosque { background-color: #2e8b57; }
+
+        .settings-icons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity var(--transition-speed);
+            padding: 0;
+            line-height: 1;
+        }
+        .icon-btn:hover {
+            opacity: 1;
+        }
+        .icon-btn.muted {
+            opacity: 0.3;
+        }
+
+
+        /* --- TIMER SECTION --- */
+        .timer-section {
+            text-align: center;
+        }
+
+        .timer-title-input {
+            width: 80%;
+            background: none;
+            border: none;
+            border-bottom: 2px solid var(--progress-bg);
+            color: var(--text-color);
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            font-family: var(--font-family-sans);
+        }
+        .timer-title-input::placeholder {
+            color: var(--text-color);
+            opacity: 0.5;
+        }
+        .timer-title-input:focus {
+            outline: none;
+            border-bottom-color: var(--primary-color);
+        }
+
+        .timer-title-display {
+            display: none; /* Hide by default */
+            font-weight: 700;
+            color: var(--text-color);
+            transition: all var(--transition-speed);
+            word-wrap: break-word;
+        }
+
+        .timer-display-wrapper {
+            position: relative;
+            width: 100%;
+            background-color: var(--progress-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            padding: 1rem 0;
+            transition: background-color var(--transition-speed);
+        }
+
+        #timer-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%; /* Updated with JS */
+            background-color: var(--primary-color);
+            transition: width 0.5s linear, background-color var(--transition-speed);
+        }
+
+        #timer-display {
+            position: relative;
+            font-family: var(--font-family-mono);
+            font-size: clamp(3rem, 18vw, 9rem);
+            font-weight: 700;
+            line-height: 1;
+            color: var(--text-color);
+            transition: color var(--transition-speed);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* --- CONTROLS --- */
+        .controls-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .timer-type-selector {
+            display: flex;
+            background-color: var(--progress-bg);
+            border-radius: 10px;
+            padding: 0.3rem;
+            transition: background-color var(--transition-speed);
+        }
+
+        .mode-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            border-radius: 7px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+        .mode-btn.active {
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        #countdown-controls {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+        }
+        #countdown-controls.active {
+            display: flex;
+        }
+
+        .presets {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+        }
+
+        .preset-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: 2px solid var(--progress-bg);
+            background-color: transparent;
+            color: var(--text-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+        .preset-btn:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+
+        .manual-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .manual-input input {
+            width: 60px;
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 1rem;
+            border: 2px solid var(--progress-bg);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border-radius: 5px;
+            transition: all var(--transition-speed);
+        }
+        .manual-input input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        #set-time-btn {
+            padding: 0.6rem 1rem;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background-color var(--transition-speed);
+        }
+        #set-time-btn:hover {
+            opacity: 0.9;
+        }
+
+        .main-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .control-btn {
+            padding: 0.8rem 2rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .control-btn.start {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+        }
+        .control-btn.pause {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+        .control-btn.reset {
+            background-color: var(--progress-bg);
+            color: var(--text-color);
+        }
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* --- EXTRA TIME CONTROLS --- */
+        #extra-time-controls {
+            display: none; /* Hidden by default */
+        }
+        .extra-time-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all var(--transition-speed);
+        }
+        .extra-time-btn:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        /* --- MAXIMIZED TIMER MODE --- */
+        #close-maximized-btn {
+            display: none;
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 1000;
+            font-size: 2.5rem;
+            opacity: 0.5;
+        }
+        #close-maximized-btn:hover {
+            opacity: 1;
+        }
+
+        body.timer-maximized .app-header,
+        body.timer-maximized .controls-wrapper,
+        body.timer-maximized .timer-title-input,
+        body.timer-maximized .app-footer {
+            display: none;
+        }
+
+        body.timer-maximized #close-maximized-btn {
+            display: block;
+        }
+
+        body.timer-maximized .app-container {
+            max-width: 100%;
+            height: 100vh;
+            padding: 3rem; /* Increased padding */
+            box-sizing: border-box;
+            justify-content: center;
+        }
+
+        body.timer-maximized .timer-section {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.timer-maximized .timer-title-display {
+            display: block; /* Show title in maximized mode */
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            flex-shrink: 0;
+        }
+
+        body.timer-maximized .timer-title-display:empty {
+            display: none; /* Hide if empty, collapsing space */
+        }
+
+        body.timer-maximized .timer-display-wrapper {
+            width: 100%;
+            height: auto;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.timer-maximized #timer-display {
+            font-size: clamp(5rem, 30vw, 25rem);
+        }
+
+        /* --- FOOTER --- */
+        .app-footer {
+            text-align: center;
+            padding-top: 1rem;
+            margin-top: -1rem; /* Adjust spacing */
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .app-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .app-footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body data-theme="calma">
+
+<div class="app-container">
+
+    <header class="app-header">
+        <div class="theme-selector">
+            <div class="theme-dot" id="calma" onclick="changeTheme('calma')"></div>
+            <div class="theme-dot" id="energia" onclick="changeTheme('energia')"></div>
+            <div class="theme-dot" id="foco" onclick="changeTheme('foco')"></div>
+            <div class="theme-dot" id="creatividad" onclick="changeTheme('creatividad')"></div>
+            <div class="theme-dot" id="rosa" onclick="changeTheme('rosa')"></div>
+            <div class="theme-dot" id="bosque" onclick="changeTheme('bosque')"></div>
+        </div>
+        <div class="settings-icons">
+            <button id="maximize-timer-btn" class="icon-btn">↗</button>
+            <button id="sound-toggle-btn" class="icon-btn">🔊</button>
+        </div>
+    </header>
+
+    <main class="timer-section">
+        <input type="text" id="timer-title-input" class="timer-title-input" placeholder="Escribe un título para el temporizador...">
+        <h2 id="display-title" class="timer-title-display"></h2>
+        <div class="timer-display-wrapper">
+            <div id="timer-progress"></div>
+            <div id="timer-display">00:00</div>
+        </div>
+    </main>
+
+    <div class="controls-wrapper">
+        <div class="timer-type-selector">
+            <button id="countdown-mode-btn" class="mode-btn active">Cuenta Regresiva</button>
+            <button id="stopwatch-mode-btn" class="mode-btn">Cronómetro</button>
+        </div>
+
+        <!-- Countdown Controls -->
+        <div id="countdown-controls" class="controls active">
+            <div class="presets">
+                <button class="preset-btn" data-time="60">1 min</button>
+                <button class="preset-btn" data-time="120">2 min</button>
+                <button class="preset-btn" data-time="300">5 min</button>
+                <button class="preset-btn" data-time="600">10 min</button>
+                <button class="preset-btn" data-time="900">15 min</button>
+            </div>
+            <div class="manual-input">
+                <input type="number" id="minutes-input" placeholder="min" min="0">
+                <input type="number" id="seconds-input" placeholder="seg" min="0" max="59">
+                <button id="set-time-btn">Fijar</button>
+            </div>
+        </div>
+
+        <!-- Main Controls (Start/Pause/Reset) -->
+        <div class="main-controls">
+            <button id="start-btn" class="control-btn start">▶ Iniciar</button>
+            <button id="pause-btn" class="control-btn pause" style="display: none;">❚❚ Pausar</button>
+            <div id="extra-time-controls">
+                <button class="extra-time-btn" data-time="60">+ 1 min</button>
+            </div>
+            <button id="reset-btn" class="control-btn reset">⟲ Reiniciar</button>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        Creado por <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer">zripi.com.ar</a>
+    </footer>
+
+</div>
+
+<button id="close-maximized-btn" class="icon-btn">×</button>
+
+<!-- Alert Sound -->
+<audio id="alert-sound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- DOM ELEMENTS ---
+        const timerDisplay = document.getElementById('timer-display');
+        const timerProgress = document.getElementById('timer-progress');
+        const startBtn = document.getElementById('start-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const presetBtns = document.querySelectorAll('.preset-btn');
+        const countdownModeBtn = document.getElementById('countdown-mode-btn');
+        const stopwatchModeBtn = document.getElementById('stopwatch-mode-btn');
+        const countdownControls = document.getElementById('countdown-controls');
+        const setTimeBtn = document.getElementById('set-time-btn');
+        const minutesInput = document.getElementById('minutes-input');
+        const secondsInput = document.getElementById('seconds-input');
+        const soundToggleBtn = document.getElementById('sound-toggle-btn');
+        const alertSound = document.getElementById('alert-sound');
+        const extraTimeControls = document.getElementById('extra-time-controls');
+        const extraTimeBtn = extraTimeControls.querySelector('.extra-time-btn');
+        const maximizeTimerBtn = document.getElementById('maximize-timer-btn');
+        const closeMaximizedBtn = document.getElementById('close-maximized-btn');
+        const timerTitleInput = document.getElementById('timer-title-input');
+        const displayTitle = document.getElementById('display-title');
+
+
+        // --- APP STATE ---
+        let timerInterval = null;
+        let mode = 'countdown'; // 'countdown' or 'stopwatch'
+        let totalSeconds = 0;
+        let initialTime = 0;
+        let isRunning = false;
+        let isSoundOn = true;
+
+        // --- TIMER FUNCTIONS ---
+
+        const formatTime = (seconds) => {
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = seconds % 60;
+            if (h > 0) {
+                return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        };
+
+        const updateDisplay = () => {
+            timerDisplay.textContent = formatTime(totalSeconds);
+            if (mode === 'countdown' && initialTime > 0) {
+                const progressPercentage = ((initialTime - totalSeconds) / initialTime) * 100;
+                timerProgress.style.width = `${progressPercentage}%`;
+            } else {
+                timerProgress.style.width = '0%';
+            }
+        };
+
+        const startTimer = () => {
+            if (isRunning || (mode === 'countdown' && totalSeconds <= 0)) return;
+
+            isRunning = true;
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = 'inline-block';
+            if (mode === 'countdown') {
+                extraTimeControls.style.display = 'block';
+            }
+
+            timerInterval = setInterval(() => {
+                if (mode === 'countdown') {
+                    totalSeconds--;
+                    if (totalSeconds < 0) {
+                        clearInterval(timerInterval);
+                        isRunning = false;
+                        totalSeconds = 0;
+                        if(isSoundOn) alertSound.play();
+                        timerProgress.style.width = '100%';
+                        document.body.classList.add('finished');
+                        extraTimeControls.style.display = 'none';
+                        setTimeout(() => {
+                            document.body.classList.remove('finished');
+                            resetTimer();
+                        }, 1500);
+                    }
+                } else { // Stopwatch
+                    totalSeconds++;
+                }
+                updateDisplay();
+            }, 1000);
+        };
+
+        const pauseTimer = () => {
+            isRunning = false;
+            clearInterval(timerInterval);
+            startBtn.style.display = 'inline-block';
+            pauseBtn.style.display = 'none';
+            extraTimeControls.style.display = 'none';
+        };
+
+        const resetTimer = () => {
+            pauseTimer();
+            if (mode === 'countdown') {
+                totalSeconds = initialTime;
+            } else {
+                totalSeconds = 0;
+                initialTime = 0;
+            }
+            updateDisplay();
+        };
+
+        const setCountdownTime = (seconds) => {
+            pauseTimer();
+            initialTime = seconds;
+            totalSeconds = initialTime;
+            updateDisplay();
+        };
+
+        const addExtraTime = (seconds) => {
+            if (isRunning && mode === 'countdown') {
+                totalSeconds += seconds;
+                initialTime += seconds; // Adjust initial time to keep progress bar accurate
+                updateDisplay();
+            }
+        };
+
+        // --- EVENT HANDLERS ---
+
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+
+        // Title handler
+        timerTitleInput.addEventListener('input', () => {
+            displayTitle.textContent = timerTitleInput.value;
+        });
+
+        // Mode switcher
+        countdownModeBtn.addEventListener('click', () => {
+            mode = 'countdown';
+            countdownModeBtn.classList.add('active');
+            stopwatchModeBtn.classList.remove('active');
+            countdownControls.classList.add('active');
+            resetTimer();
+            updateDisplay();
+        });
+
+        stopwatchModeBtn.addEventListener('click', () => {
+            mode = 'stopwatch';
+            stopwatchModeBtn.classList.add('active');
+            countdownModeBtn.classList.remove('active');
+            countdownControls.classList.remove('active');
+            resetTimer();
+            updateDisplay();
+        });
+
+        // Time presets
+        presetBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const time = parseInt(btn.dataset.time, 10);
+                setCountdownTime(time);
+            });
+        });
+
+        // Manual input
+        setTimeBtn.addEventListener('click', () => {
+            const minutes = parseInt(minutesInput.value, 10) || 0;
+            const seconds = parseInt(secondsInput.value, 10) || 0;
+            setCountdownTime((minutes * 60) + seconds);
+            minutesInput.value = '';
+            secondsInput.value = '';
+        });
+
+        // Extra time button
+        extraTimeBtn.addEventListener('click', () => {
+            const time = parseInt(extraTimeBtn.dataset.time, 10);
+            addExtraTime(time);
+        });
+
+        // Sound and fullscreen controls
+        soundToggleBtn.addEventListener('click', () => {
+            isSoundOn = !isSoundOn;
+            soundToggleBtn.classList.toggle('muted', !isSoundOn);
+            soundToggleBtn.textContent = isSoundOn ? '🔊' : '🔇';
+        });
+
+        // Maximize timer control
+        const toggleMaximize = () => document.body.classList.toggle('timer-maximized');
+        maximizeTimerBtn.addEventListener('click', toggleMaximize);
+        closeMaximizedBtn.addEventListener('click', toggleMaximize);
+
+
+        // Keyboard shortcuts
+        window.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT') return;
+
+            if (e.code === 'Space') {
+                e.preventDefault();
+                isRunning ? pauseTimer() : startTimer();
+            }
+            if (e.code === 'KeyR') {
+                resetTimer();
+            }
+            if (e.code === 'Escape' && document.body.classList.contains('timer-maximized')) {
+                toggleMaximize();
+            }
+        });
+
+        // --- CUSTOMIZATION FUNCTIONS ---
+        window.changeTheme = (themeName) => {
+            document.body.dataset.theme = themeName;
+        };
+
+        // --- INITIALIZATION ---
+        updateDisplay();
+    });
+</script>
+</body>
+</html>
