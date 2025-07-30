@@ -483,38 +483,31 @@
         }
 
         /* --- MOBILE OPTIMIZATION --- */
-        @media (max-height: 700px), (max-width: 480px) {
-            html, body {
-                height: 100%;
-                overflow: hidden;
+        @media (max-width: 480px) {
+            body {
+                /* Allow scrolling on small devices if content overflows */
+                min-height: 100%;
+                height: auto;
             }
             .app-container {
-                height: 100%;
                 padding: 1rem;
-                gap: 1rem;
-                justify-content: space-between;
-            }
-            .timer-section {
-                flex-grow: 1;
-                justify-content: center;
-                display: flex;
-                flex-direction: column;
+                gap: 1.5rem;
+                min-height: calc(100vh - 2rem); /* Ensure it tries to fill the screen */
             }
             .timer-title-input {
                 font-size: 1.2rem;
-                margin-bottom: 0.5rem;
             }
             #timer-display {
-                font-size: clamp(3rem, 20vw, 7rem);
+                font-size: clamp(3.5rem, 20vw, 7rem);
             }
             .controls-wrapper {
                 gap: 1rem;
             }
             .main-controls {
-                transform: scale(0.9);
+                transform: scale(0.95);
             }
             .app-footer {
-                padding-bottom: 0.5rem;
+                padding-bottom: 1rem;
             }
         }
 
