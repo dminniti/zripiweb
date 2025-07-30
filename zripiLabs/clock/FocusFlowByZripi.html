@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Focus Flow - Temporizador para Facilitadores</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10C27.9086 10 10 27.9086 10 50C10 72.0914 27.9086 90 50 90' stroke='%234c86a8' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M50 90C72.0914 90 90 72.0914 90 50C90 27.9086 72.0914 10 50 10' stroke='%234c86a8' stroke-width='12' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='2 18'/%3E%3Cpath d='M50 30V50H70' stroke='%234c86a8' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
@@ -108,6 +109,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 1rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            width: 32px;
+            height: 32px;
+            color: var(--primary-color);
+            transition: color var(--transition-speed);
         }
 
         .theme-selector {
@@ -474,13 +489,22 @@
 <div class="app-container">
 
     <header class="app-header">
-        <div class="theme-selector">
-            <div class="theme-dot" id="calma" onclick="changeTheme('calma')"></div>
-            <div class="theme-dot" id="energia" onclick="changeTheme('energia')"></div>
-            <div class="theme-dot" id="foco" onclick="changeTheme('foco')"></div>
-            <div class="theme-dot" id="creatividad" onclick="changeTheme('creatividad')"></div>
-            <div class="theme-dot" id="rosa" onclick="changeTheme('rosa')"></div>
-            <div class="theme-dot" id="bosque" onclick="changeTheme('bosque')"></div>
+        <div class="header-left">
+            <div class="logo">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 10C27.9086 10 10 27.9086 10 50C10 72.0914 27.9086 90 50 90" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M50 90C72.0914 90 90 72.0914 90 50C90 27.9086 72.0914 10 50 10" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 18"/>
+                    <path d="M50 30V50H70" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="theme-selector">
+                <div class="theme-dot" id="calma" onclick="changeTheme('calma')"></div>
+                <div class="theme-dot" id="energia" onclick="changeTheme('energia')"></div>
+                <div class="theme-dot" id="foco" onclick="changeTheme('foco')"></div>
+                <div class="theme-dot" id="creatividad" onclick="changeTheme('creatividad')"></div>
+                <div class="theme-dot" id="rosa" onclick="changeTheme('rosa')"></div>
+                <div class="theme-dot" id="bosque" onclick="changeTheme('bosque')"></div>
+            </div>
         </div>
         <div class="settings-icons">
             <button id="maximize-timer-btn" class="icon-btn">↗</button>
