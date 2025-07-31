@@ -336,6 +336,19 @@
 
     animationModal.style.display = 'flex';
 
+    // Pre-calculate positions to avoid reflow in the loop
+    const nameElements = grid.querySelectorAll('.spotlight-name');
+    const gridPos = grid.getBoundingClientRect();
+    const positions = Array.from(nameElements).map(el => {
+      const pos = el.getBoundingClientRect();
+      return {
+        left: pos.left - gridPos.left,
+        top: pos.top - gridPos.top,
+        width: pos.width,
+        height: pos.height,
+      };
+    });
+
     let duration = 5000;
     let interval = 100;
     let startTime = Date.now();
@@ -349,12 +362,11 @@
         const winnerEl = document.getElementById(`spotlight-name-${winnerIndex}`);
 
         if(winnerEl) {
-          const pos = winnerEl.getBoundingClientRect();
-          const gridPos = grid.getBoundingClientRect();
-          spotlight.style.left = `${pos.left - gridPos.left}px`;
-          spotlight.style.top = `${pos.top - gridPos.top}px`;
-          spotlight.style.width = `${pos.width}px`;
-          spotlight.style.height = `${pos.height}px`;
+          const finalPos = positions[winnerIndex];
+          spotlight.style.left = `${finalPos.left}px`;
+          spotlight.style.top = `${finalPos.top}px`;
+          spotlight.style.width = `${finalPos.width}px`;
+          spotlight.style.height = `${finalPos.height}px`;
 
           document.querySelectorAll('.spotlight-name').forEach(el => el.classList.add('is-loser'));
           winnerEl.classList.remove('is-loser');
@@ -370,15 +382,13 @@
         return;
       }
 
-      const randomIndex = Math.floor(Math.random() * participants.length);
-      const randomEl = document.getElementById(`spotlight-name-${randomIndex}`);
-      if (randomEl) {
-        const pos = randomEl.getBoundingClientRect();
-        const gridPos = grid.getBoundingClientRect();
-        spotlight.style.left = `${pos.left - gridPos.left}px`;
-        spotlight.style.top = `${pos.top - gridPos.top}px`;
-        spotlight.style.width = `${pos.width}px`;
-        spotlight.style.height = `${pos.height}px`;
+      const randomIndex = Math.floor(Math.random() * positions.length);
+      const randomPos = positions[randomIndex];
+      if (randomPos) {
+        spotlight.style.left = `${randomPos.left}px`;
+        spotlight.style.top = `${randomPos.top}px`;
+        spotlight.style.width = `${randomPos.width}px`;
+        spotlight.style.height = `${randomPos.height}px`;
         tickSound.triggerAttackRelease('C5', '8n');
       }
 
