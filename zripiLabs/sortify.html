@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sortify by Zripi</title>
+
+  <!-- Favicon SVG -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='28' height='40' x='10' y='30' fill='%234b5563' rx='4'/%3E%3Crect width='28' height='40' x='62' y='30' fill='%234b5563' rx='4'/%3E%3Crect width='28' height='40' x='36' y='25' fill='var(--color-primary)' rx='4'/%3E%3C/svg%3E">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Librería para el efecto de confeti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Librería para generar sonido -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
+  <style>
+    /* --- Definición de Temas con Variables CSS --- */
+    :root { /* Tema Default (Sortify) */
+      --color-bg: #111827;
+      --color-surface: #1f2937;
+      --color-surface-light: #374151;
+      --color-primary: #22d3ee;
+      --color-primary-hover: #06b6d4;
+      --color-secondary: #fde047;
+      --color-text: #f9fafb;
+      --color-text-muted: #9ca3af;
+      --color-border: #4b5563;
+      --color-primary-text-inverted: #111827;
+    }
+
+    .theme-corporate {
+      --color-bg: #f3f4f6;
+      --color-surface: #ffffff;
+      --color-surface-light: #e5e7eb;
+      --color-primary: #3b82f6;
+      --color-primary-hover: #2563eb;
+      --color-secondary: #f59e0b;
+      --color-text: #1f2937;
+      --color-text-muted: #6b7280;
+      --color-border: #d1d5db;
+      --color-primary-text-inverted: #ffffff;
+    }
+
+    .theme-playful {
+      --color-bg: #1e1b4b;
+      --color-surface: #312e81;
+      --color-surface-light: #4338ca;
+      --color-primary: #f472b6;
+      --color-primary-hover: #ec4899;
+      --color-secondary: #a78bfa;
+      --color-text: #f0f9ff;
+      --color-text-muted: #a5b4fc;
+      --color-border: #4f46e5;
+      --color-primary-text-inverted: #1e1b4b;
+    }
+
+    .theme-night {
+      --color-bg: #0d1117;
+      --color-surface: #161b22;
+      --color-surface-light: #21262d;
+      --color-primary: #238636;
+      --color-primary-hover: #2ea043;
+      --color-secondary: #e3b341;
+      --color-text: #c9d1d9;
+      --color-text-muted: #8b949e;
+      --color-border: #30363d;
+      --color-primary-text-inverted: #ffffff;
+    }
+
+    .theme-day {
+      --color-bg: #fdfbf6;
+      --color-surface: #ffffff;
+      --color-surface-light: #f5f5f5;
+      --color-primary: #ff7f50;
+      --color-primary-hover: #ff6347;
+      --color-secondary: #20b2aa;
+      --color-text: #2a2a2a;
+      --color-text-muted: #757575;
+      --color-border: #e0e0e0;
+      --color-primary-text-inverted: #ffffff;
+    }
+
+    /* --- Aplicación de Variables --- */
+    html, body {
+      height: 100%;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .main-container { background-color: var(--color-surface); }
+    .primary-text { color: var(--color-primary); }
+    .secondary-text { color: var(--color-secondary); }
+    .muted-text { color: var(--color-text-muted); }
+    .main-border { border-color: var(--color-border); }
+    .surface-light { background-color: var(--color-surface-light); }
+    .primary-bg { background-color: var(--color-primary); color: var(--color-primary-text-inverted); }
+    .primary-bg:hover { background-color: var(--color-primary-hover); }
+    .mode-btn-active { color: var(--color-primary); border-bottom: 2px solid var(--color-primary); }
+    .mode-btn-inactive { color: var(--color-text-muted); border-bottom: 2px solid transparent; }
+    .peer:checked + label { background-color: var(--color-primary); color: var(--color-primary-text-inverted); }
+    .peer + label { background-color: var(--color-surface-light); }
+    .focus-ring:focus { ring-color: var(--color-primary); border-color: var(--color-primary); }
+    .checkbox-style { color: var(--color-primary); background-color: var(--color-surface-light); border-color: var(--color-border); }
+    .spotlight { background-color: var(--color-primary); box-shadow: 0 0 25px 10px var(--color-primary); opacity: 0.5; }
+    .spotlight-name.is-winner { background-color: var(--color-primary); color: var(--color-primary-text-inverted); }
+    .team-slot-title { color: var(--color-primary); }
+
+    /* --- Estilos Adicionales --- */
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    .modal-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    .spotlight-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; position: relative; max-width: 600px; }
+    .spotlight-name { background-color: var(--color-surface-light); padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1.125rem; font-weight: 500; transition: all 0.3s ease; }
+    .spotlight { position: absolute; width: 120px; height: 60px; border-radius: 9999px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
+    .spotlight-name.is-winner { transform: scale(1.1); }
+    .spotlight-name.is-loser { opacity: 0.3; }
+    .team-slots-container { display: grid; gap: 1rem; width: 100%; max-width: 600px; }
+    .team-slot { background: var(--color-surface); border: 2px solid var(--color-border); border-radius: 0.5rem; padding: 0.75rem; min-height: 100px; display: flex; flex-direction: column; }
+    .team-slot-title { border-bottom: 1px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 0.5rem; flex-shrink: 0; font-size: 1.125rem; font-weight: bold; }
+    .team-slot-members { flex-grow: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+    .team-slot-member { background: var(--color-surface-light); color: var(--color-text); border-radius: 0.25rem; padding: 0.25rem 0.5rem; font-size: 1rem; animation: fadeIn 0.5s; }
+  </style>
+</head>
+<body class="flex items-center justify-center p-4">
+
+<div class="w-full max-w-2xl main-container rounded-2xl shadow-2xl overflow-hidden">
+
+  <div class="p-6 md:p-8 relative">
+    <!-- Theme Switcher -->
+    <div id="theme-switcher" class="absolute top-4 right-4 flex space-x-2">
+      <button data-theme="theme-default" class="w-6 h-6 bg-[#22d3ee] rounded-full border-2 border-white/50" title="Tema Sortify"></button>
+      <button data-theme="theme-corporate" class="w-6 h-6 bg-[#3b82f6] rounded-full border-2 border-white/50" title="Tema Corporativo"></button>
+      <button data-theme="theme-playful" class="w-6 h-6 bg-[#f472b6] rounded-full border-2 border-white/50" title="Tema Divertido"></button>
+      <button data-theme="theme-night" class="w-6 h-6 bg-[#238636] rounded-full border-2 border-white/50" title="Tema Night"></button>
+      <button data-theme="theme-day" class="w-6 h-6 bg-[#ff7f50] rounded-full border-2 border-black/20" title="Tema Day"></button>
+    </div>
+
+    <div class="text-center pt-8">
+      <div class="flex justify-center mb-4">
+        <svg class="w-16 h-16" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="40" x="10" y="30" fill="var(--color-border)" rx="4"/>
+          <rect width="28" height="40" x="62" y="30" fill="var(--color-border)" rx="4"/>
+          <rect width="28" height="40" x="36" y="25" fill="var(--color-primary)" rx="4"/>
+        </svg>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold primary-text">Sortify</h1>
+      <p class="muted-text mt-2">Sorteos rápidos y equipos al instante.</p>
+    </div>
+  </div>
+
+  <div class="flex border-b main-border">
+    <button id="mode-draw-btn" class="flex-1 py-3 text-lg font-medium mode-btn-active transition-colors duration-200">Sorteo Simple</button>
+    <button id="mode-teams-btn" class="flex-1 py-3 text-lg font-medium mode-btn-inactive transition-colors duration-200">Generador de Equipos</button>
+  </div>
+
+  <div class="p-6 md:p-8 space-y-6">
+    <div class="space-y-4">
+      <label for="participants" class="block text-lg font-medium">Participantes</label>
+      <textarea id="participants" rows="8" class="w-full p-4 surface-light main-border border-2 rounded-lg focus-ring transition-colors duration-200" placeholder="Escribe un nombre por línea o sepáralos por comas..."></textarea>
+      <div class="flex justify-end">
+        <button id="clear-button" class="px-4 py-2 surface-light hover:opacity-80 rounded-lg text-sm font-medium transition-opacity duration-200">Limpiar Lista</button>
+      </div>
+    </div>
+
+    <div id="config-draw" class="space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 surface-light/50 p-4 rounded-lg">
+        <div>
+          <label for="winner-count" class="block text-lg font-medium">Número de Ganadores</label>
+          <input type="number" id="winner-count" value="1" min="1" class="w-full mt-2 p-3 surface-light main-border border rounded-lg focus-ring">
+        </div>
+        <div class="flex items-center justify-center md:justify-start md:pt-8">
+          <div class="flex items-center h-full">
+            <input id="remove-winner" type="checkbox" class="h-5 w-5 rounded checkbox-style focus-ring">
+            <label for="remove-winner" class="ml-3">Eliminar ganador de la lista</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="config-teams" class="hidden space-y-4 surface-light/50 p-4 rounded-lg">
+      <label class="block text-lg font-medium">Método de Agrupación</label>
+      <div class="flex space-x-4">
+        <div class="flex-1">
+          <input type="radio" id="by-team-count" name="team-method" value="team-count" checked class="hidden peer">
+          <label for="by-team-count" class="block p-3 text-center rounded-lg cursor-pointer font-bold transition-colors duration-200">Por N° de Equipos</label>
+        </div>
+        <div class="flex-1">
+          <input type="radio" id="by-member-count" name="team-method" value="member-count" class="hidden peer">
+          <label for="by-member-count" class="block p-3 text-center rounded-lg cursor-pointer font-bold transition-colors duration-200">Por N° de Miembros</label>
+        </div>
+      </div>
+      <input type="number" id="team-value" value="2" min="2" class="w-full mt-2 p-3 surface-light main-border border rounded-lg focus-ring">
+    </div>
+
+    <div>
+      <button id="main-button" class="w-full py-4 px-6 primary-bg text-xl font-bold rounded-lg shadow-lg transform hover:scale-105 transition-all duration-300">
+        ¡SORTEAR!
+      </button>
+      <div id="error-message" class="text-red-400 text-center mt-3 font-medium"></div>
+    </div>
+  </div>
+
+  <footer class="text-center p-4 border-t main-border">
+    <p class="text-sm muted-text">Creado por <a href="https://zripi.com.ar" target="_blank" class="font-semibold primary-text hover:underline">zripi.com.ar</a></p>
+  </footer>
+</div>
+
+<!-- Modal de Animación -->
+<div id="animation-modal" class="fixed inset-0 bg-black bg-opacity-75 flex-col items-center justify-center p-4 hidden z-50">
+  <h3 id="animation-title" class="text-3xl font-bold text-white mb-6"></h3>
+  <div id="animation-content" class="w-full flex justify-center"></div>
+</div>
+
+<!-- Modal de Resultados -->
+<div id="results-modal" class="hidden fixed inset-0 bg-black bg-opacity-75 items-center justify-center p-4 z-50">
+  <div id="modal-content" class="main-container rounded-2xl shadow-2xl p-8 max-w-lg w-full text-center space-y-6 modal-fade-in relative max-h-[90vh] overflow-y-auto">
+    <canvas id="confetti-canvas" class="absolute top-0 left-0 w-full h-full pointer-events-none"></canvas>
+    <h2 id="modal-title" class="text-4xl font-extrabold secondary-text"></h2>
+    <p id="modal-subtitle" class="muted-text text-lg"></p>
+    <div id="results-container"></div>
+    <button id="close-modal" class="mt-6 px-6 py-3 primary-bg font-bold rounded-lg transition-colors duration-200">Cerrar</button>
+  </div>
+</div>
+
+<script>
+  // --- Elementos del DOM ---
+  const participantsTextarea = document.getElementById('participants');
+  const clearButton = document.getElementById('clear-button');
+  const mainButton = document.getElementById('main-button');
+  const errorMessage = document.getElementById('error-message');
+  const modeDrawBtn = document.getElementById('mode-draw-btn');
+  const modeTeamsBtn = document.getElementById('mode-teams-btn');
+  const configDraw = document.getElementById('config-draw');
+  const configTeams = document.getElementById('config-teams');
+  const winnerCountInput = document.getElementById('winner-count');
+  const removeWinnerCheckbox = document.getElementById('remove-winner');
+  const teamMethodRadios = document.querySelectorAll('input[name="team-method"]');
+  const teamValueInput = document.getElementById('team-value');
+  const animationModal = document.getElementById('animation-modal');
+  const animationTitle = document.getElementById('animation-title');
+  const animationContent = document.getElementById('animation-content');
+  const resultsModal = document.getElementById('results-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalSubtitle = document.getElementById('modal-subtitle');
+  const resultsContainer = document.getElementById('results-container');
+  const closeModalButton = document.getElementById('close-modal');
+  const confettiCanvas = document.getElementById('confetti-canvas');
+  const themeSwitcher = document.getElementById('theme-switcher');
+
+  let currentMode = 'draw';
+  let audioInitialized = false;
+  const celebrationSynth = new Tone.PolySynth(Tone.Synth, {
+    oscillator: { type: 'fatsawtooth' },
+    envelope: { attack: 0.01, decay: 0.4, sustain: 0.2, release: 0.4 }
+  }).toDestination();
+  const tickSound = new Tone.Synth({
+    oscillator: { type: 'sine' },
+    envelope: { attack: 0.005, decay: 0.1, sustain: 0, release: 0.1 }
+  }).toDestination();
+  tickSound.volume.value = -10;
+
+  // --- Lógica de Temas ---
+  function applyTheme(theme) {
+    document.documentElement.className = theme;
+    localStorage.setItem('sortify-theme', theme);
+    // Actualizar favicon dinámicamente
+    setTimeout(() => {
+      const favicon = document.querySelector("link[rel*='icon']");
+      const newFaviconSVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='28' height='40' x='10' y='30' fill='${getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim()}' rx='4'/><rect width='28' height='40' x='62' y='30' fill='${getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim()}' rx='4'/><rect width='28' height='40' x='36' y='25' fill='${getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim()}' rx='4'/></svg>`;
+      favicon.href = `data:image/svg+xml,${encodeURIComponent(newFaviconSVG)}`;
+    }, 50);
+  }
+
+  themeSwitcher.addEventListener('click', (e) => {
+    if (e.target.tagName === 'BUTTON') {
+      applyTheme(e.target.dataset.theme);
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('sortify-theme') || 'theme-default';
+    applyTheme(savedTheme);
+  });
+
+
+  async function initializeAudio() {
+    if (!audioInitialized) {
+      await Tone.start();
+      audioInitialized = true;
+    }
+  }
+
+  function switchMode(mode) {
+    currentMode = mode;
+    modeDrawBtn.classList.toggle('mode-btn-active', mode === 'draw');
+    modeDrawBtn.classList.toggle('mode-btn-inactive', mode !== 'draw');
+    modeTeamsBtn.classList.toggle('mode-btn-active', mode === 'teams');
+    modeTeamsBtn.classList.toggle('mode-btn-inactive', mode !== 'teams');
+    configDraw.classList.toggle('hidden', mode !== 'draw');
+    configTeams.classList.toggle('hidden', mode === 'draw');
+    mainButton.textContent = mode === 'draw' ? '¡SORTEAR!' : '¡GENERAR EQUIPOS!';
+    errorMessage.textContent = '';
+  }
+
+  function getParticipants() {
+    return participantsTextarea.value.split(/[\n,]/).map(p => p.trim()).filter(p => p.length > 0);
+  }
+
+  function runSpotlightAnimation(participants, finalResults, onAnimationEnd) {
+    animationTitle.textContent = 'Buscando al ganador...';
+    animationContent.innerHTML = `<div class="spotlight-grid"></div>`;
+    const grid = animationContent.querySelector('.spotlight-grid');
+
+    participants.forEach((name, index) => {
+      const nameEl = document.createElement('div');
+      nameEl.className = 'spotlight-name';
+      nameEl.id = `spotlight-name-${index}`;
+      nameEl.textContent = name;
+      grid.appendChild(nameEl);
+    });
+
+    const spotlight = document.createElement('div');
+    spotlight.className = 'spotlight';
+    grid.appendChild(spotlight);
+
+    animationModal.style.display = 'flex';
+
+    let duration = 5000;
+    let interval = 100;
+    let startTime = Date.now();
+    let animationFrame;
+
+    function cycle() {
+      const elapsedTime = Date.now() - startTime;
+      if (elapsedTime >= duration) {
+        const winnerName = finalResults.data[0];
+        const winnerIndex = participants.indexOf(winnerName);
+        const winnerEl = document.getElementById(`spotlight-name-${winnerIndex}`);
+
+        if(winnerEl) {
+          const pos = winnerEl.getBoundingClientRect();
+          const gridPos = grid.getBoundingClientRect();
+          spotlight.style.left = `${pos.left - gridPos.left}px`;
+          spotlight.style.top = `${pos.top - gridPos.top}px`;
+          spotlight.style.width = `${pos.width}px`;
+          spotlight.style.height = `${pos.height}px`;
+
+          document.querySelectorAll('.spotlight-name').forEach(el => el.classList.add('is-loser'));
+          winnerEl.classList.remove('is-loser');
+          winnerEl.classList.add('is-winner');
+          tickSound.triggerAttackRelease('C6', '8n');
+        }
+
+        cancelAnimationFrame(animationFrame);
+        setTimeout(() => {
+          animationModal.style.display = 'none';
+          onAnimationEnd();
+        }, 1500);
+        return;
+      }
+
+      const randomIndex = Math.floor(Math.random() * participants.length);
+      const randomEl = document.getElementById(`spotlight-name-${randomIndex}`);
+      if (randomEl) {
+        const pos = randomEl.getBoundingClientRect();
+        const gridPos = grid.getBoundingClientRect();
+        spotlight.style.left = `${pos.left - gridPos.left}px`;
+        spotlight.style.top = `${pos.top - gridPos.top}px`;
+        spotlight.style.width = `${pos.width}px`;
+        spotlight.style.height = `${pos.height}px`;
+        tickSound.triggerAttackRelease('C5', '8n');
+      }
+
+      const progress = elapsedTime / duration;
+      interval = 100 + (progress * progress * 300);
+
+      setTimeout(() => {
+        animationFrame = requestAnimationFrame(cycle);
+      }, interval);
+    }
+    cycle();
+  }
+
+  function runTeamAnimation(participants, finalResults, onAnimationEnd) {
+    animationTitle.textContent = 'Formando Equipos...';
+    const teams = finalResults.data;
+    const numTeams = teams.length;
+    const gridCols = numTeams <= 2 ? numTeams : (numTeams <= 4 ? 2 : 3);
+    animationContent.innerHTML = `<div class="team-slots-container grid-cols-1 sm:grid-cols-${gridCols}"></div>`;
+    const container = animationContent.querySelector('.team-slots-container');
+
+    for (let i = 0; i < numTeams; i++) {
+      container.innerHTML += `
+                    <div id="team-slot-${i}" class="team-slot">
+                        <div class="team-slot-title">Equipo ${i + 1}</div>
+                        <div class="team-slot-members" id="team-members-${i}"></div>
+                    </div>
+                `;
+    }
+    animationModal.style.display = 'flex';
+
+    const participantsToAnimate = [];
+    const maxTeamLength = Math.max(...teams.map(t => t.length));
+    for(let i = 0; i < maxTeamLength; i++) {
+      for(let j = 0; j < numTeams; j++) {
+        if(teams[j][i]) {
+          participantsToAnimate.push({ name: teams[j][i], teamIndex: j });
+        }
+      }
+    }
+
+    let participantIndex = 0;
+    function addMember() {
+      if (participantIndex >= participantsToAnimate.length) {
+        setTimeout(() => {
+          animationModal.style.display = 'none';
+          onAnimationEnd();
+        }, 1000);
+        return;
+      }
+
+      const participant = participantsToAnimate[participantIndex];
+      const teamMembersContainer = document.getElementById(`team-members-${participant.teamIndex}`);
+
+      const memberDiv = document.createElement('div');
+      memberDiv.className = 'team-slot-member';
+      memberDiv.textContent = participant.name;
+      teamMembersContainer.appendChild(memberDiv);
+
+      tickSound.triggerAttackRelease('C5', '8n');
+
+      participantIndex++;
+      setTimeout(addMember, 200);
+    }
+    addMember();
+  }
+
+  function handleMainButtonClick() {
+    initializeAudio();
+    const participants = getParticipants();
+    if (participants.length === 0) {
+      errorMessage.textContent = 'La lista de participantes está vacía.';
+      return;
+    }
+    errorMessage.textContent = '';
+
+    let results;
+    if (currentMode === 'draw') {
+      const winnerCount = parseInt(winnerCountInput.value, 10);
+      if (winnerCount <= 0 || winnerCount > participants.length) {
+        errorMessage.textContent = 'Número de ganadores inválido.';
+        return;
+      }
+      let shuffled = [...participants].sort(() => 0.5 - Math.random());
+      const winners = shuffled.slice(0, winnerCount);
+      results = { mode: 'draw', data: winners };
+      if (removeWinnerCheckbox.checked) {
+        const remaining = participants.filter(p => !winners.includes(p));
+        participantsTextarea.value = remaining.join('\n');
+      }
+      runSpotlightAnimation(participants, results, () => displayResults(results));
+
+    } else {
+      const method = document.querySelector('input[name="team-method"]:checked').value;
+      const value = parseInt(teamValueInput.value, 10);
+      if (value < 2) {
+        errorMessage.textContent = 'El valor debe ser al menos 2.';
+        return;
+      }
+      let teams = [];
+      let shuffled = [...participants].sort(() => 0.5 - Math.random());
+      if (method === 'team-count') {
+        if (value > participants.length) {
+          errorMessage.textContent = 'No puedes tener más equipos que participantes.';
+          return;
+        }
+        for (let i = 0; i < value; i++) teams.push([]);
+        shuffled.forEach((p, i) => teams[i % value].push(p));
+      } else {
+        while(shuffled.length > 0) teams.push(shuffled.splice(0, value));
+      }
+      results = { mode: 'teams', data: teams };
+      runTeamAnimation(participants, results, () => displayResults(results));
+    }
+  }
+
+  function displayResults({ mode, data }) {
+    resultsContainer.innerHTML = '';
+    if (mode === 'draw') {
+      resultsContainer.className = 'text-2xl md:text-3xl font-bold p-6 rounded-lg surface-light/50 main-border border-2';
+      modalTitle.textContent = '¡Felicidades!';
+      modalSubtitle.textContent = 'El/los ganador(es) del sorteo son:';
+      data.forEach(winner => {
+        const el = document.createElement('div');
+        el.textContent = winner;
+        resultsContainer.appendChild(el);
+      });
+    } else {
+      resultsContainer.className = 'text-left space-y-4 max-h-[50vh] overflow-y-auto p-4 surface-light/50 rounded-lg main-border border-2';
+      modalTitle.textContent = '¡Equipos Formados!';
+      modalSubtitle.textContent = 'Los equipos han sido distribuidos de la siguiente manera:';
+      data.forEach((team, index) => {
+        if (team.length === 0) return;
+        const teamDiv = document.createElement('div');
+        const teamTitle = document.createElement('h4');
+        teamTitle.className = 'text-xl font-bold primary-text mb-2';
+        teamTitle.textContent = `Equipo ${index + 1}`;
+        teamDiv.appendChild(teamTitle);
+        const memberList = document.createElement('div');
+        memberList.className = 'text-lg surface-light p-3 rounded-md';
+        memberList.textContent = team.join(', ');
+        teamDiv.appendChild(memberList);
+        resultsContainer.appendChild(teamDiv);
+      });
+    }
+
+    resultsModal.style.display = 'flex';
+
+    const now = Tone.now();
+    celebrationSynth.triggerAttackRelease(['C4', 'E4', 'G4', 'C5'], '0.8', now);
+    confetti.create(confettiCanvas, { resize: true, useWorker: true })({
+      particleCount: 150, spread: 180, origin: { y: 0.6 }
+    });
+  }
+
+  modeDrawBtn.addEventListener('click', () => switchMode('draw'));
+  modeTeamsBtn.addEventListener('click', () => switchMode('teams'));
+  mainButton.addEventListener('click', handleMainButtonClick);
+  clearButton.addEventListener('click', () => { participantsTextarea.value = ''; errorMessage.textContent = ''; });
+  closeModalButton.addEventListener('click', () => { resultsModal.style.display = 'none'; });
+  resultsModal.addEventListener('click', (e) => { if (e.target === resultsModal) resultsModal.style.display = 'none'; });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && resultsModal.style.display === 'flex') resultsModal.style.display = 'none'; });
+
+</script>
+</body>
+</html>

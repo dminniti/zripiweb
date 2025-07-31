@@ -8,6 +8,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M8MMVGDH51"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-M8MMVGDH51');
+    </script>
+
     <style>
         :root {
             --font-family-sans: 'Inter', sans-serif;
@@ -414,7 +425,8 @@
         body.timer-maximized .app-header,
         body.timer-maximized .controls-wrapper,
         body.timer-maximized .timer-title-input,
-        body.timer-maximized .app-footer {
+        body.timer-maximized .app-footer,
+        body.timer-maximized .feedback-fab {
             display: none;
         }
 
@@ -472,6 +484,10 @@
             opacity: 0.7;
         }
 
+        .app-footer p {
+            margin: 0;
+        }
+
         .app-footer a {
             color: var(--primary-color);
             text-decoration: none;
@@ -482,32 +498,126 @@
             text-decoration: underline;
         }
 
+        /* --- FEEDBACK --- */
+        .feedback-fab {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 56px;
+            height: 56px;
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 999;
+            transition: all 0.3s;
+        }
+        .feedback-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+        }
+
+        .feedback-link-mobile {
+            display: none;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--bg-color);
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: scale(0.9);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        #feedback-textarea {
+            width: 100%;
+            min-height: 120px;
+            margin: 1rem 0;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            border: 2px solid var(--progress-bg);
+            border-radius: 8px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family-sans);
+            resize: vertical;
+        }
+        #feedback-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
         /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 480px) {
-            body {
-                /* Allow scrolling on small devices if content overflows */
-                min-height: 100%;
-                height: auto;
-            }
             .app-container {
-                padding: 1rem;
+                padding: 1.5rem 1rem;
                 gap: 1.5rem;
-                min-height: calc(100vh - 2rem); /* Ensure it tries to fill the screen */
             }
-            .timer-title-input {
-                font-size: 1.2rem;
+            .feedback-fab {
+                display: none;
             }
-            #timer-display {
-                font-size: clamp(3.5rem, 20vw, 7rem);
+            .feedback-link-mobile {
+                display: block;
+                background: none;
+                border: none;
+                font-family: inherit;
+                font-size: 0.9rem;
+                cursor: pointer;
+                padding: 0;
+                color: var(--text-color);
+                opacity: 0.7;
+                margin-top: 0.5rem;
+                margin-left: auto;
+                margin-right: auto;
             }
-            .controls-wrapper {
-                gap: 1rem;
-            }
-            .main-controls {
-                transform: scale(0.95);
-            }
-            .app-footer {
-                padding-bottom: 1rem;
+            .feedback-link-mobile:hover {
+                opacity: 1;
             }
         }
 
@@ -584,9 +694,24 @@
     </div>
 
     <footer class="app-footer">
-        Creado por <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer">zripi.com.ar</a>
+        <p>Creado por <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer">zripi.com.ar</a></p>
+        <button id="open-feedback-modal-btn-mobile" class="feedback-link-mobile">Sugerencias 💡</button>
     </footer>
 
+</div>
+
+<button id="open-feedback-modal-btn" class="feedback-fab" title="Enviar sugerencia">💡</button>
+
+<div id="feedback-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Enviar Sugerencia</h2>
+        <p>Nos encantaría saber tu opinión para mejorar Focus Flow.</p>
+        <textarea id="feedback-textarea" placeholder="Escribe tu idea o sugerencia aquí..." rows="5"></textarea>
+        <div class="modal-actions">
+            <button id="cancel-feedback-btn" class="control-btn reset">Cancelar</button>
+            <button id="send-feedback-btn" class="control-btn start">Enviar</button>
+        </div>
+    </div>
 </div>
 
 <button id="close-maximized-btn" class="icon-btn">×</button>
@@ -617,18 +742,23 @@
         const closeMaximizedBtn = document.getElementById('close-maximized-btn');
         const timerTitleInput = document.getElementById('timer-title-input');
         const displayTitle = document.getElementById('display-title');
-
+        const feedbackModal = document.getElementById('feedback-modal');
+        const openFeedbackBtn = document.getElementById('open-feedback-modal-btn');
+        const openFeedbackBtnMobile = document.getElementById('open-feedback-modal-btn-mobile');
+        const cancelFeedbackBtn = document.getElementById('cancel-feedback-btn');
+        const sendFeedbackBtn = document.getElementById('send-feedback-btn');
+        const feedbackTextarea = document.getElementById('feedback-textarea');
 
         // --- APP STATE ---
         let timerInterval = null;
-        let mode = 'countdown'; // 'countdown' or 'stopwatch'
+        let mode = 'countdown';
         let totalSeconds = 0;
         let initialTime = 0;
         let isRunning = false;
         let isSoundOn = true;
+        let targetTime = 0; // For robust background timing
 
         // --- TIMER FUNCTIONS ---
-
         const formatTime = (seconds) => {
             const h = Math.floor(seconds / 3600);
             const m = Math.floor((seconds % 3600) / 60);
@@ -649,6 +779,39 @@
             }
         };
 
+        const tick = () => {
+            if (!isRunning) return;
+
+            let newTotalSeconds;
+            if (mode === 'countdown') {
+                const remaining = targetTime - Date.now();
+                if (remaining <= 0) {
+                    newTotalSeconds = 0;
+                    clearInterval(timerInterval);
+                    isRunning = false;
+
+                    if(isSoundOn) alertSound.play();
+                    timerProgress.style.width = '100%';
+                    document.body.classList.add('finished');
+                    extraTimeControls.style.display = 'none';
+                    setTimeout(() => {
+                        document.body.classList.remove('finished');
+                        resetTimer();
+                    }, 1500);
+                } else {
+                    newTotalSeconds = Math.round(remaining / 1000);
+                }
+            } else { // Stopwatch
+                const elapsed = Date.now() - targetTime;
+                newTotalSeconds = Math.floor(elapsed / 1000);
+            }
+
+            if (newTotalSeconds !== totalSeconds) {
+                totalSeconds = newTotalSeconds;
+                updateDisplay();
+            }
+        };
+
         const startTimer = () => {
             if (isRunning || (mode === 'countdown' && totalSeconds <= 0)) return;
 
@@ -657,29 +820,13 @@
             pauseBtn.style.display = 'inline-block';
             if (mode === 'countdown') {
                 extraTimeControls.style.display = 'block';
+                targetTime = Date.now() + totalSeconds * 1000;
+            } else { // Stopwatch
+                targetTime = Date.now() - totalSeconds * 1000;
             }
 
-            timerInterval = setInterval(() => {
-                if (mode === 'countdown') {
-                    totalSeconds--;
-                    if (totalSeconds < 0) {
-                        clearInterval(timerInterval);
-                        isRunning = false;
-                        totalSeconds = 0;
-                        if(isSoundOn) alertSound.play();
-                        timerProgress.style.width = '100%';
-                        document.body.classList.add('finished');
-                        extraTimeControls.style.display = 'none';
-                        setTimeout(() => {
-                            document.body.classList.remove('finished');
-                            resetTimer();
-                        }, 1500);
-                    }
-                } else { // Stopwatch
-                    totalSeconds++;
-                }
-                updateDisplay();
-            }, 1000);
+            clearInterval(timerInterval);
+            timerInterval = setInterval(tick, 250);
         };
 
         const pauseTimer = () => {
@@ -710,31 +857,29 @@
 
         const addExtraTime = (seconds) => {
             if (isRunning && mode === 'countdown') {
-                totalSeconds += seconds;
-                initialTime += seconds; // Adjust initial time to keep progress bar accurate
-                updateDisplay();
+                targetTime += seconds * 1000;
+                if (initialTime > 0) {
+                    initialTime += seconds;
+                }
+                tick(); // Update immediately
             }
         };
 
         // --- EVENT HANDLERS ---
-
         startBtn.addEventListener('click', startTimer);
         pauseBtn.addEventListener('click', pauseTimer);
         resetBtn.addEventListener('click', resetTimer);
 
-        // Title handler
         timerTitleInput.addEventListener('input', () => {
             displayTitle.textContent = timerTitleInput.value;
         });
 
-        // Mode switcher
         countdownModeBtn.addEventListener('click', () => {
             mode = 'countdown';
             countdownModeBtn.classList.add('active');
             stopwatchModeBtn.classList.remove('active');
             countdownControls.classList.add('active');
             resetTimer();
-            updateDisplay();
         });
 
         stopwatchModeBtn.addEventListener('click', () => {
@@ -743,10 +888,8 @@
             countdownModeBtn.classList.remove('active');
             countdownControls.classList.remove('active');
             resetTimer();
-            updateDisplay();
         });
 
-        // Time presets
         presetBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 const time = parseInt(btn.dataset.time, 10);
@@ -754,7 +897,6 @@
             });
         });
 
-        // Manual input
         setTimeBtn.addEventListener('click', () => {
             const minutes = parseInt(minutesInput.value, 10) || 0;
             const seconds = parseInt(secondsInput.value, 10) || 0;
@@ -763,28 +905,47 @@
             secondsInput.value = '';
         });
 
-        // Extra time button
         extraTimeBtn.addEventListener('click', () => {
             const time = parseInt(extraTimeBtn.dataset.time, 10);
             addExtraTime(time);
         });
 
-        // Sound and fullscreen controls
         soundToggleBtn.addEventListener('click', () => {
             isSoundOn = !isSoundOn;
             soundToggleBtn.classList.toggle('muted', !isSoundOn);
             soundToggleBtn.textContent = isSoundOn ? '🔊' : '🔇';
         });
 
-        // Maximize timer control
-        const toggleMaximize = () => document.body.classList.toggle('timer-maximized');
+        const toggleMaximize = async () => {
+            const isMobile = window.matchMedia("(max-width: 480px)").matches;
+            const isMaximized = document.body.classList.contains('timer-maximized');
+
+            if (!isMaximized && isMobile) {
+                try {
+                    if (screen.orientation && screen.orientation.lock) {
+                        await screen.orientation.lock('landscape');
+                    }
+                } catch (err) {
+                    console.warn("No se pudo girar la pantalla:", err);
+                }
+            } else if (isMaximized && isMobile) {
+                try {
+                    if (screen.orientation && screen.orientation.unlock) {
+                        screen.orientation.unlock();
+                    }
+                } catch (err) {
+                    console.warn("No se pudo desbloquear el giro:", err);
+                }
+            }
+            document.body.classList.toggle('timer-maximized');
+        };
         maximizeTimerBtn.addEventListener('click', toggleMaximize);
         closeMaximizedBtn.addEventListener('click', toggleMaximize);
 
 
-        // Keyboard shortcuts
         window.addEventListener('keydown', (e) => {
-            if (e.target.tagName === 'INPUT') return;
+            // If typing in an input/textarea or the modal is open, do nothing.
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || feedbackModal.classList.contains('visible')) return;
 
             if (e.code === 'Space') {
                 e.preventDefault();
@@ -798,12 +959,34 @@
             }
         });
 
-        // --- CUSTOMIZATION FUNCTIONS ---
+        // --- FEEDBACK MODAL LOGIC ---
+        const openModal = () => feedbackModal.classList.add('visible');
+        const closeModal = () => feedbackModal.classList.remove('visible');
+
+        openFeedbackBtn.addEventListener('click', openModal);
+        openFeedbackBtnMobile.addEventListener('click', openModal);
+        cancelFeedbackBtn.addEventListener('click', closeModal);
+        feedbackModal.addEventListener('click', (e) => {
+            if (e.target === feedbackModal) {
+                closeModal();
+            }
+        });
+
+        sendFeedbackBtn.addEventListener('click', () => {
+            const feedbackText = feedbackTextarea.value.trim();
+            if (feedbackText) {
+                const subject = 'Sugerencia para Focus Flow';
+                const body = encodeURIComponent(feedbackText);
+                window.location.href = `mailto:info@zripi.com.ar?subject=${subject}&body=${body}`;
+                feedbackTextarea.value = '';
+                closeModal();
+            }
+        });
+
         window.changeTheme = (themeName) => {
             document.body.dataset.theme = themeName;
         };
 
-        // --- INITIALIZATION ---
         updateDisplay();
     });
 </script>
