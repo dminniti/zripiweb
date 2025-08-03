@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaceloQR by Zripi</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='4' width='6' height='6' rx='1'/%3E%3Crect x='14' y='4' width='6' height='6' rx='1'/%3E%3Crect x='4' y='14' width='6' height='6' rx='1'/%3E%3Ccircle cx='17' cy='17' r='3'/%3E%3C/svg%3E">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Librería para generar y estilizar los códigos QR -->
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+
+    <!-- Iconos para la interfaz -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Definición de variables de color para los temas */
+        :root, .theme-light {
+            --bg-primary: #f1f5f9; /* slate-100 */
+            --bg-secondary: #ffffff; /* white */
+            --text-primary: #1e293b; /* slate-800 */
+            --text-secondary: #475569; /* slate-600 */
+            --text-accent: #4f46e5; /* indigo-600 */
+            --border-color: #cbd5e1; /* slate-300 */
+            --accent-primary: #4f46e5; /* indigo-600 */
+            --accent-primary-hover: #4338ca; /* indigo-700 */
+            --accent-secondary: #334155; /* slate-700 */
+            --accent-secondary-hover: #1e293b; /* slate-800 */
+            --tab-bg: #e2e8f0; /* slate-200 */
+            --tab-bg-hover: #cbd5e1; /* slate-300 */
+            --tab-bg-active: var(--accent-primary);
+            --ring-color: var(--accent-primary);
+            --theme-switcher-bg: #e2e8f0;
+            --theme-icon-color: #64748b;
+            --theme-icon-active-bg: var(--bg-secondary);
+            --theme-icon-active-color: var(--text-accent);
+        }
+
+        .theme-dark {
+            --bg-primary: #0f172a; /* slate-900 */
+            --bg-secondary: #1e293b; /* slate-800 */
+            --text-primary: #f1f5f9; /* slate-100 */
+            --text-secondary: #94a3b8; /* slate-400 */
+            --text-accent: #818cf8; /* indigo-400 */
+            --border-color: #475569; /* slate-600 */
+            --accent-primary: #6366f1; /* indigo-500 */
+            --accent-primary-hover: #4f46e5; /* indigo-600 */
+            --accent-secondary: #475569; /* slate-600 */
+            --accent-secondary-hover: #64748b; /* slate-500 */
+            --tab-bg: #334155; /* slate-700 */
+            --tab-bg-hover: #475569; /* slate-600 */
+            --tab-bg-active: var(--accent-primary);
+            --ring-color: var(--accent-primary);
+            --theme-switcher-bg: #334155;
+            --theme-icon-color: #94a3b8;
+            --theme-icon-active-bg: var(--bg-primary);
+            --theme-icon-active-color: var(--text-accent);
+        }
+
+        .theme-ocean {
+            --bg-primary: #f0f9ff; /* sky-50 */
+            --bg-secondary: #ffffff; /* white */
+            --text-primary: #0c4a6e; /* sky-900 */
+            --text-secondary: #38bdf8; /* sky-400 */
+            --text-accent: #0369a1; /* sky-700 */
+            --border-color: #bae6fd; /* sky-200 */
+            --accent-primary: #0ea5e9; /* sky-500 */
+            --accent-primary-hover: #0284c7; /* sky-600 */
+            --accent-secondary: #0891b2; /* cyan-600 */
+            --accent-secondary-hover: #0e7490; /* cyan-700 */
+            --tab-bg: #e0f2fe; /* sky-100 */
+            --tab-bg-hover: #bae6fd; /* sky-200 */
+            --tab-bg-active: var(--accent-primary);
+            --ring-color: var(--accent-primary);
+            --theme-switcher-bg: #e0f2fe;
+            --theme-icon-color: #7dd3fc;
+            --theme-icon-active-bg: var(--bg-secondary);
+            --theme-icon-active-color: var(--text-accent);
+        }
+
+        /* Aplicación de variables a la UI */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        main { flex-grow: 1; }
+        .panel { background-color: var(--bg-secondary); }
+        .text-secondary { color: var(--text-secondary); }
+        .text-accent { color: var(--text-accent); }
+        .border-color { border-color: var(--border-color); }
+        .input-field { background-color: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary); }
+        .input-field:focus { --tw-ring-color: var(--ring-color); border-color: var(--ring-color); }
+        .tab-button { background-color: var(--tab-bg); }
+        .tab-button:hover { background-color: var(--tab-bg-hover); }
+        .tab-button.active { background-color: var(--tab-bg-active); color: white; }
+        .btn-primary { background-color: var(--accent-primary); color: white; }
+        .btn-primary:hover { background-color: var(--accent-primary-hover); }
+        .btn-secondary { background-color: var(--accent-secondary); color: white; }
+        .btn-secondary:hover { background-color: var(--accent-secondary-hover); }
+        .btn-tertiary { background-color: var(--tab-bg); color: var(--text-primary); }
+        .btn-tertiary:hover { background-color: var(--tab-bg-hover); }
+        .file-input::file-selector {
+            background-color: var(--tab-bg);
+            color: var(--text-accent);
+        }
+        .file-input:hover::file-selector {
+            background-color: var(--tab-bg-hover);
+        }
+        .header-logo { color: var(--text-primary); }
+        .footer-link { color: var(--text-accent); }
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+
+        #theme-switcher { background-color: var(--theme-switcher-bg); }
+        .theme-button { color: var(--theme-icon-color); }
+        .theme-button.active {
+            background-color: var(--theme-icon-active-bg);
+            color: var(--theme-icon-active-color);
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+
+        .modal-backdrop, #notification {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .history-item:hover {
+            background-color: var(--tab-bg);
+        }
+    </style>
+</head>
+<body class="theme-light">
+
+<div class="container mx-auto p-4 sm:p-6 md:p-8">
+
+    <header class="mb-8">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex flex-col items-center sm:items-start">
+                <div class="flex items-center gap-3">
+                    <svg class="header-logo w-10 h-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="4" width="6" height="6" rx="1"/>
+                        <rect x="14" y="4" width="6" height="6" rx="1"/>
+                        <rect x="4" y="14" width="6" height="6" rx="1"/>
+                        <circle cx="17" cy="17" r="3"/>
+                    </svg>
+                    <h1 class="text-3xl md:text-4xl font-bold">HaceloQR</h1>
+                </div>
+                <p class="text-secondary mt-1">Tu generador de códigos QR, simple y gratuito.</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div id="auth-container" class="hidden">
+                    <button id="reset-session-btn" class="btn-secondary text-sm px-3 py-2 rounded-full flex items-center gap-2">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        <span>Borrar mis datos</span>
+                    </button>
+                </div>
+                <div id="theme-switcher" class="flex gap-1 p-1 rounded-full">
+                    <button data-theme="light" title="Tema Claro" class="theme-button p-2 rounded-full transition-colors"><i data-lucide="sun" class="pointer-events-none w-4 h-4"></i></button>
+                    <button data-theme="dark" title="Tema Oscuro" class="theme-button p-2 rounded-full transition-colors"><i data-lucide="moon" class="pointer-events-none w-4 h-4"></i></button>
+                    <button data-theme="ocean" title="Tema Océano" class="theme-button p-2 rounded-full transition-colors"><i data-lucide="waves" class="pointer-events-none w-4 h-4"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="stats-container" class="panel grid grid-cols-3 gap-4 text-center p-4 rounded-2xl shadow-lg mb-8">
+        <div>
+            <p class="text-2xl font-bold text-accent" id="stats-sessions">0</p>
+            <p class="text-sm text-secondary">Visitas</p>
+        </div>
+        <div>
+            <p class="text-2xl font-bold text-accent" id="stats-downloads">0</p>
+            <p class="text-sm text-secondary">QRs Descargados</p>
+        </div>
+        <div>
+            <p class="text-2xl font-bold text-accent" id="stats-shares">0</p>
+            <p class="text-sm text-secondary">QRs Compartidos</p>
+        </div>
+    </div>
+
+    <main class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+        <div class="panel lg:col-span-3 p-6 rounded-2xl shadow-lg space-y-8">
+
+            <div class="space-y-4">
+                <h2 class="text-xl font-semibold">1. Elige el tipo de contenido</h2>
+                <div id="tabs-container" class="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                    <button data-tab="url" class="tab-button flex items-center justify-center gap-2 p-3 rounded-lg transition-colors duration-200 active"><i data-lucide="link" class="w-4 h-4"></i><span>URL</span></button>
+                    <button data-tab="wifi" class="tab-button flex items-center justify-center gap-2 p-3 rounded-lg transition-colors duration-200"><i data-lucide="wifi" class="w-4 h-4"></i><span>Wi-Fi</span></button>
+                    <button data-tab="vcard" class="tab-button flex items-center justify-center gap-2 p-3 rounded-lg transition-colors duration-200"><i data-lucide="contact" class="w-4 h-4"></i><span>vCard</span></button>
+                    <button data-tab="text" class="tab-button flex items-center justify-center gap-2 p-3 rounded-lg transition-colors duration-200"><i data-lucide="pilcrow" class="w-4 h-4"></i><span>Texto</span></button>
+                    <button data-tab="history" id="history-tab" class="tab-button hidden items-center justify-center gap-2 p-3 rounded-lg transition-colors duration-200"><i data-lucide="history" class="w-4 h-4"></i><span>Historial</span></button>
+                </div>
+            </div>
+
+            <div id="forms-container">
+                <div id="form-url" class="form-section active"><label for="url-input" class="block font-medium mb-2">Introduce la URL</label><input type="url" id="url-input" placeholder="https://ejemplo.com" class="input-field w-full p-2 border rounded-lg focus:ring-2"></div>
+                <div id="form-wifi" class="form-section space-y-4">
+                    <div><label for="wifi-ssid" class="block font-medium mb-2">Nombre de la Red (SSID)</label><input type="text" id="wifi-ssid" placeholder="NombreDeMiWiFi" class="input-field w-full p-2 border rounded-lg"></div>
+                    <div><label for="wifi-password" class="block font-medium mb-2">Contraseña</label><input type="password" id="wifi-password" placeholder="TuContraseña" class="input-field w-full p-2 border rounded-lg"></div>
+                    <div><label for="wifi-encryption" class="block font-medium mb-2">Tipo de Cifrado</label><select id="wifi-encryption" class="input-field w-full p-2 border rounded-lg"><option value="WPA" selected>WPA/WPA2</option><option value="WEP">WEP</option><option value="nopass">Sin contraseña</option></select></div>
+                </div>
+                <div id="form-vcard" class="form-section space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label for="vcard-name" class="block font-medium mb-2">Nombre Completo</label><input type="text" id="vcard-name" placeholder="Juan Pérez" class="input-field w-full p-2 border rounded-lg"></div>
+                        <div><label for="vcard-phone" class="block font-medium mb-2">Teléfono</label><input type="tel" id="vcard-phone" placeholder="+54 9 11 1234 5678" class="input-field w-full p-2 border rounded-lg"></div>
+                        <div><label for="vcard-email" class="block font-medium mb-2">Email</label><input type="email" id="vcard-email" placeholder="juan.perez@correo.com" class="input-field w-full p-2 border rounded-lg"></div>
+                        <div><label for="vcard-website" class="block font-medium mb-2">Sitio Web</label><input type="url" id="vcard-website" placeholder="https://sitiodejuan.com" class="input-field w-full p-2 border rounded-lg"></div>
+                    </div>
+                </div>
+                <div id="form-text" class="form-section">
+                    <label for="text-input" class="block font-medium mb-2">Introduce el texto</label>
+                    <textarea id="text-input" placeholder="Escribe tu texto aquí..." rows="5" class="input-field w-full p-2 border rounded-lg focus:ring-2"></textarea>
+                </div>
+                <div id="form-history" class="form-section">
+                    <h3 class="text-lg font-semibold mb-4">Mis QRs Guardados</h3>
+                    <div id="history-list" class="space-y-2 max-h-96 overflow-y-auto">
+                        <!-- El historial se cargará aquí -->
+                        <p class="text-secondary">No tienes QRs guardados todavía.</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-color">
+
+            <div class="space-y-6">
+                <h2 class="text-xl font-semibold">2. Personaliza el QR</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    <div class="space-y-4"><h3 class="font-semibold">Colores</h3><div class="flex items-center justify-between"><label for="color-dark" class="text-sm">Código</label><input type="color" id="color-dark" value="#000000" class="p-1 h-8 w-8 block bg-white border border-gray-200 cursor-pointer rounded-lg"></div><div class="flex items-center justify-between"><label for="color-light" class="text-sm">Fondo</label><input type="color" id="color-light" value="#ffffff" class="p-1 h-8 w-8 block bg-white border border-gray-200 cursor-pointer rounded-lg"></div></div>
+                    <div class="space-y-4"><h3 class="font-semibold">Estilos</h3><select id="dots-style" class="input-field w-full p-2 border rounded-lg"><option value="square" selected>Puntos: Cuadrados</option><option value="dots">Puntos: Puntos</option><option value="rounded">Puntos: Redondeados</option></select><select id="corners-style" class="input-field w-full p-2 border rounded-lg"><option value="square" selected>Esquinas: Cuadrado</option><option value="dot">Esquinas: Punto</option><option value="extra-rounded">Esquinas: Redondeado</option></select></div>
+                    <div class="md:col-span-2 space-y-2"><h3 class="font-semibold">Logo</h3><input type="file" id="logo-input" accept="image/png, image/jpeg, image/svg+xml" class="file-input block w-full text-sm text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold"><button id="remove-logo-btn" class="text-sm text-red-600 hover:underline hidden">Quitar logo</button></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel lg:col-span-2 p-6 rounded-2xl shadow-lg flex flex-col items-center justify-center sticky top-8 h-fit">
+            <h2 class="text-2xl font-bold mb-4">Previsualización</h2>
+            <div id="qr-code-container" class="w-full max-w-[256px] h-[256px] mb-6 rounded-lg overflow-hidden flex items-center justify-center bg-slate-200 dark:bg-slate-700"></div>
+            <div class="w-full max-w-xs space-y-3">
+                <button id="save-history-btn" class="btn-primary w-full font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 hidden"><i data-lucide="save" class="w-4 h-4"></i><span>Guardar en mi historial</span></button>
+                <select id="download-size" class="input-field w-full p-2 border rounded-lg"><option value="256" selected>Tamaño: 256x256 px</option><option value="512">Tamaño: 512x512 px</option><option value="1024">Tamaño: 1024x1024 px</option></select>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="download-png-btn" class="btn-primary w-full font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"><i data-lucide="image" class="w-4 h-4"></i><span>PNG</span></button>
+                    <button id="download-svg-btn" class="btn-secondary w-full font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"><i data-lucide="figma" class="w-4 h-4"></i><span>SVG</span></button>
+                </div>
+                <button id="share-btn" class="btn-tertiary w-full font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"><i data-lucide="share-2" class="w-4 h-4"></i><span id="share-btn-text">Compartir</span></button>
+            </div>
+        </div>
+    </main>
+</div>
+
+<footer class="text-center p-4 text-secondary text-sm mt-auto">
+    <div class="flex flex-col sm:flex-row justify-center items-center gap-x-4 gap-y-2">
+        <span>✍️ Creado por <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer" class="footer-link font-semibold hover:underline">zripi.com.ar</a></span>
+        <span class="text-gray-400 hidden sm:inline">|</span>
+        <button id="open-support-modal" class="footer-link font-semibold hover:underline">❤️ Apoyar el proyecto</button>
+        <span class="text-gray-400 hidden sm:inline">|</span>
+        <button id="open-suggestion-modal" class="footer-link font-semibold hover:underline">💡 Sugerir una función</button>
+    </div>
+</footer>
+
+<div id="suggestion-modal" class="modal fixed inset-0 z-50 hidden items-center justify-center">
+    <div class="modal-backdrop fixed inset-0 bg-black/50"></div>
+    <div class="panel relative w-full max-w-md p-6 rounded-2xl shadow-xl m-4">
+        <h3 class="text-xl font-bold mb-2">Proponer una nueva funcionalidad</h3>
+        <p class="text-secondary mb-4">¡Nos encanta escuchar tus ideas! Describe la función que te gustaría ver en HaceloQR.</p>
+        <textarea id="suggestion-textarea" rows="4" placeholder="Por ejemplo: Me gustaría poder crear QRs para eventos de calendario..." class="input-field w-full p-2 border rounded-lg focus:ring-2 mb-4"></textarea>
+        <div class="flex justify-end gap-3">
+            <button class="btn-secondary px-4 py-2 rounded-lg close-modal-btn">Cancelar</button>
+            <a id="send-suggestion-btn" class="btn-primary px-4 py-2 rounded-lg flex items-center gap-2" href="#">
+                <i data-lucide="send" class="w-4 h-4"></i>
+                <span>Enviar sugerencia</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="support-modal" class="modal fixed inset-0 z-50 hidden items-center justify-center">
+    <div class="modal-backdrop fixed inset-0 bg-black/50"></div>
+    <div class="panel relative w-full max-w-md p-6 rounded-2xl shadow-xl m-4 text-center">
+        <i data-lucide="coffee" class="w-12 h-12 text-accent mx-auto mb-4"></i>
+        <h3 class="text-xl font-bold mb-2">¡Gracias por usar HaceloQR!</h3>
+        <p class="text-secondary mb-4">Esta es una herramienta gratuita, sin anuncios y sin límites. Tu apoyo ayuda a cubrir los costos y a desarrollar nuevas funcionalidades. ¡Cualquier aporte es bienvenido!</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a href="https://link.mercadopago.com.ar/cursoszripi" target="_blank" class="btn-primary px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                <i data-lucide="dollar-sign" class="w-4 h-4"></i><span>Mercado Pago</span>
+            </a>
+            <a href="https://paypal.me/drminniti" target="_blank" class="btn-primary px-4 py-2 rounded-lg flex items-center justify-center gap-2" style="background-color: #0070ba;">
+                <i data-lucide="credit-card" class="w-4 h-4"></i><span>PayPal</span>
+            </a>
+        </div>
+        <button class="close-modal-btn mt-4 text-sm text-secondary hover:underline">Cerrar</button>
+    </div>
+</div>
+
+<div id="alert-modal" class="modal fixed inset-0 z-50 hidden items-center justify-center">
+    <div class="modal-backdrop fixed inset-0 bg-black/50"></div>
+    <div class="panel relative w-full max-w-md p-6 rounded-2xl shadow-xl m-4">
+        <h3 id="alert-modal-title" class="text-xl font-bold mb-2">Título del Modal</h3>
+        <p id="alert-modal-message" class="text-secondary mb-4">Mensaje del modal.</p>
+        <div id="alert-modal-buttons" class="flex justify-end gap-3"></div>
+    </div>
+</div>
+
+<div id="notification" class="fixed bottom-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transition-opacity duration-300">
+    ¡Copiado al portapapeles!
+</div>
+
+<!-- Firebase -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, doc, getDoc, deleteDoc, serverTimestamp, query, orderBy, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD30m0rHKbtvudDgIS066jLf9WlrEQy1qE",
+        authDomain: "holaqr-b9221.firebaseapp.com",
+        projectId: "holaqr-b9221",
+        storageBucket: "holaqr-b9221.appspot.com",
+        messagingSenderId: "936756606350",
+        appId: "1:936756606350:web:d9a3efed5fe5fce99060df",
+        measurementId: "G-Q4069VZ7E0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const authContainer = document.getElementById('auth-container');
+    const resetSessionBtn = document.getElementById('reset-session-btn');
+    const historyTab = document.getElementById('history-tab');
+    const saveHistoryBtn = document.getElementById('save-history-btn');
+    const historyList = document.getElementById('history-list');
+
+    let currentUser = null;
+    let unsubscribeHistory = null;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            authContainer.classList.remove('hidden');
+            saveHistoryBtn.classList.remove('hidden');
+
+            if (!sessionStorage.getItem('sessionCounted')) {
+                window.updateMetric('sessionsStarted');
+                sessionStorage.setItem('sessionCounted', 'true');
+            }
+
+            listenForHistory();
+        } else {
+            currentUser = null;
+            authContainer.classList.add('hidden');
+            historyTab.classList.add('hidden');
+            historyTab.classList.remove('flex');
+            saveHistoryBtn.classList.add('hidden');
+            if (unsubscribeHistory) unsubscribeHistory();
+            historyList.innerHTML = '<p class="text-secondary">Inicia sesión para ver tu historial.</p>';
+            signInAnonymously(auth).catch((error) => console.error("Anonymous sign-in failed:", error));
+        }
+    });
+
+    resetSessionBtn.addEventListener('click', () => {
+        window.showModal(
+            '¿Borrar todos tus datos?',
+            'Esto borrará tu historial de QRs guardados y creará una nueva sesión anónima. Esta acción no se puede deshacer.',
+            [
+                { text: 'Cancelar', class: 'btn-secondary' },
+                { text: 'Sí, borrar todo', class: 'btn-primary bg-red-500 hover:bg-red-600', callback: () => signOut(auth) }
+            ]
+        );
+    });
+
+    function listenForHistory() {
+        if (!currentUser) return;
+        const historyCollection = collection(db, 'users', currentUser.uid, 'history');
+        const q = query(historyCollection, orderBy('createdAt', 'desc'));
+
+        unsubscribeHistory = onSnapshot(q, (snapshot) => {
+            resetSessionBtn.style.display = snapshot.empty ? 'none' : 'flex';
+            historyTab.style.display = snapshot.empty ? 'none' : 'flex';
+
+            if (snapshot.empty) {
+                historyList.innerHTML = '<p class="text-secondary">No tienes QRs guardados todavía.</p>';
+                return;
+            }
+            historyList.innerHTML = '';
+            snapshot.forEach(doc => {
+                const item = doc.data();
+                const div = document.createElement('div');
+                div.className = 'history-item flex items-center justify-between p-2 rounded-lg';
+                div.innerHTML = `
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            <i data-lucide="${item.icon || 'link'}" class="w-5 h-5 text-secondary flex-shrink-0"></i>
+                            <span class="font-medium truncate">${item.name || 'Sin Título'}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button data-id="${doc.id}" title="Reutilizar" class="reuse-btn btn-tertiary p-1.5 rounded-md"><i data-lucide="copy" class="w-4 h-4 pointer-events-none"></i></button>
+                            <button data-id="${doc.id}" title="Borrar" class="delete-btn text-red-500 p-1.5 rounded-md hover:bg-red-100 dark:hover:bg-red-900/50"><i data-lucide="trash-2" class="w-4 h-4 pointer-events-none"></i></button>
+                        </div>
+                    `;
+                historyList.appendChild(div);
+            });
+            lucide.createIcons();
+        });
+    }
+
+    historyList.addEventListener('click', async e => {
+        const reuseBtn = e.target.closest('.reuse-btn');
+        const deleteBtn = e.target.closest('.delete-btn');
+
+        if (reuseBtn) {
+            const docRef = doc(db, 'users', currentUser.uid, 'history', reuseBtn.dataset.id);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                window.dispatchEvent(new CustomEvent('reuseQR', { detail: docSnap.data() }));
+            }
+        }
+        if (deleteBtn) {
+            window.showModal(
+                '¿Borrar este QR?',
+                'Esta acción borrará el QR de tu historial de forma permanente.',
+                [
+                    { text: 'Cancelar', class: 'btn-secondary' },
+                    { text: 'Borrar', class: 'btn-primary bg-red-500 hover:bg-red-600', callback: async () => {
+                            await deleteDoc(doc(db, 'users', currentUser.uid, 'history', deleteBtn.dataset.id));
+                        }}
+                ]
+            );
+        }
+    });
+
+    window.saveQRToHistory = async (qrData) => {
+        if (!currentUser) return;
+        try {
+            await addDoc(collection(db, 'users', currentUser.uid, 'history'), {
+                ...qrData,
+                createdAt: serverTimestamp()
+            });
+            window.showModal('¡Éxito!', 'Tu código QR se ha guardado en el historial.', [{text: 'Aceptar', class: 'btn-primary'}]);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            window.showModal('Error', 'No se pudo guardar el QR. Inténtalo de nuevo.', [{text: 'Cerrar', class: 'btn-secondary'}]);
+        }
+    };
+
+    const statsRef = doc(db, 'public_metrics', 'stats');
+
+    window.updateMetric = (field, amount = 1) => {
+        updateDoc(statsRef, { [field]: increment(amount) }).catch(err => console.error("Error updating metric:", err));
+    };
+
+    onSnapshot(statsRef, (doc) => {
+        if (doc.exists()) {
+            const data = doc.data();
+            document.getElementById('stats-sessions').textContent = data.sessionsStarted || 0;
+            document.getElementById('stats-downloads').textContent = data.totalDownloads || 0;
+            document.getElementById('stats-shares').textContent = data.totalShares || 0;
+        } else {
+            setDoc(statsRef, { sessionsStarted: 0, totalDownloads: 0, totalShares: 0 });
+        }
+    });
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+
+        const PREVIEW_SIZE = 256;
+        const qrCode = new QRCodeStyling({
+            width: PREVIEW_SIZE,
+            height: PREVIEW_SIZE,
+            type: 'svg',
+            data: 'https://zripi.com.ar',
+            image: '',
+            dotsOptions: { color: '#000000', type: 'square' },
+            backgroundOptions: { color: '#ffffff' },
+            cornersSquareOptions: { type: 'square' },
+            imageOptions: { crossOrigin: 'anonymous', margin: 10 }
+        });
+        qrCode.append(document.getElementById('qr-code-container'));
+
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const body = document.body;
+
+        const applyTheme = (theme) => {
+            body.className = `theme-${theme}`;
+            localStorage.setItem('qrAppTheme', theme);
+            themeSwitcher.querySelectorAll('button').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === theme);
+            });
+        };
+
+        themeSwitcher.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (button && button.dataset.theme) {
+                applyTheme(button.dataset.theme);
+            }
+        });
+
+        const savedTheme = localStorage.getItem('qrAppTheme') || 'light';
+        applyTheme(savedTheme);
+
+        // --- MODAL LOGIC ---
+        const suggestionModal = document.getElementById('suggestion-modal');
+        const supportModal = document.getElementById('support-modal');
+        const alertModal = document.getElementById('alert-modal');
+        const openSuggestionModalBtn = document.getElementById('open-suggestion-modal');
+        const openSupportModalBtn = document.getElementById('open-support-modal');
+
+        const toggleModal = (modal, show) => {
+            modal.classList.toggle('hidden', !show);
+            modal.classList.toggle('flex', show);
+        };
+
+        openSuggestionModalBtn.addEventListener('click', () => toggleModal(suggestionModal, true));
+        openSupportModalBtn.addEventListener('click', () => toggleModal(supportModal, true));
+
+        document.querySelectorAll('.modal-backdrop, .close-modal-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.target.closest('.modal').classList.add('hidden');
+                e.target.closest('.modal').classList.remove('flex');
+            });
+        });
+
+        window.showModal = (title, message, buttons = []) => {
+            document.getElementById('alert-modal-title').textContent = title;
+            document.getElementById('alert-modal-message').textContent = message;
+            const buttonsContainer = document.getElementById('alert-modal-buttons');
+            buttonsContainer.innerHTML = '';
+
+            buttons.forEach(btnInfo => {
+                const button = document.createElement('button');
+                button.textContent = btnInfo.text;
+                button.className = `${btnInfo.class} px-4 py-2 rounded-lg`;
+                button.addEventListener('click', () => {
+                    toggleModal(alertModal, false);
+                    if (btnInfo.callback) {
+                        btnInfo.callback();
+                    }
+                });
+                buttonsContainer.appendChild(button);
+            });
+            toggleModal(alertModal, true);
+        };
+
+        const suggestionTextarea = document.getElementById('suggestion-textarea');
+        const sendSuggestionBtn = document.getElementById('send-suggestion-btn');
+        suggestionTextarea.addEventListener('input', () => {
+            const suggestionText = encodeURIComponent(suggestionTextarea.value);
+            sendSuggestionBtn.href = `mailto:info@zripi.com.ar?subject=Sugerencia%20para%20HaceloQR&body=${suggestionText}`;
+        });
+        sendSuggestionBtn.href = `mailto:info@zripi.com.ar?subject=Sugerencia%20para%20HaceloQR`;
+
+        const allInputs = document.querySelectorAll('input, select, textarea');
+        let activeTab = 'url';
+
+        const updateQRCode = () => {
+            let data = '';
+            switch (activeTab) {
+                case 'url': data = document.getElementById('url-input').value; break;
+                case 'text': data = document.getElementById('text-input').value; break;
+                case 'wifi':
+                    const ssid = document.getElementById('wifi-ssid').value;
+                    const password = document.getElementById('wifi-password').value;
+                    const encryption = document.getElementById('wifi-encryption').value;
+                    if (ssid) data = `WIFI:T:${encryption};S:${ssid};P:${password};;`;
+                    break;
+                case 'vcard':
+                    const name = document.getElementById('vcard-name').value;
+                    const phone = document.getElementById('vcard-phone').value;
+                    const email = document.getElementById('vcard-email').value;
+                    const website = document.getElementById('vcard-website').value;
+                    if (name || phone || email || website) data = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEMAIL:${email}\nURL:${website}\nEND:VCARD`;
+                    break;
+            }
+            if (!data.trim()) data = ' ';
+            qrCode.update({
+                data: data,
+                dotsOptions: { type: document.getElementById('dots-style').value, color: document.getElementById('color-dark').value },
+                cornersSquareOptions: { type: document.getElementById('corners-style').value },
+                backgroundOptions: { color: document.getElementById('color-light').value }
+            });
+        };
+
+        document.getElementById('tabs-container').addEventListener('click', (e) => {
+            const tabButton = e.target.closest('.tab-button');
+            if (!tabButton) return;
+            const newTab = tabButton.dataset.tab;
+            if (newTab === activeTab) return;
+            document.querySelector('#tabs-container .active').classList.remove('active');
+            tabButton.classList.add('active');
+            document.querySelector('#forms-container .active').classList.remove('active');
+            document.getElementById(`form-${newTab}`).classList.add('active');
+            activeTab = newTab;
+
+            document.getElementById('save-history-btn').style.display = (newTab === 'history') ? 'none' : 'flex';
+
+            if(newTab !== 'history') {
+                updateQRCode();
+            }
+        });
+
+        allInputs.forEach(input => {
+            if (input.id !== 'suggestion-textarea') {
+                input.addEventListener('input', updateQRCode);
+                input.addEventListener('change', updateQRCode);
+            }
+        });
+
+        document.getElementById('logo-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                qrCode.update({ image: reader.result });
+                document.getElementById('remove-logo-btn').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('remove-logo-btn').addEventListener('click', () => {
+            qrCode.update({ image: '' });
+            document.getElementById('logo-input').value = '';
+            document.getElementById('remove-logo-btn').classList.add('hidden');
+        });
+
+        document.getElementById('download-png-btn').addEventListener('click', () => {
+            const downloadSize = parseInt(document.getElementById('download-size').value, 10);
+            qrCode.update({ width: downloadSize, height: downloadSize });
+            qrCode.download({ name: 'HaceloQR', extension: 'png' });
+            setTimeout(() => qrCode.update({ width: PREVIEW_SIZE, height: PREVIEW_SIZE }), 500);
+            if (window.updateMetric) window.updateMetric('totalDownloads');
+        });
+
+        document.getElementById('download-svg-btn').addEventListener('click', () => {
+            qrCode.download({ name: 'HaceloQR', extension: 'svg' });
+            if (window.updateMetric) window.updateMetric('totalDownloads');
+        });
+
+        const shareBtn = document.getElementById('share-btn');
+        const shareBtnText = document.getElementById('share-btn-text');
+        const notification = document.getElementById('notification');
+
+        if (!navigator.share) {
+            shareBtnText.textContent = 'Copiar QR';
+        }
+
+        shareBtn.addEventListener('click', async () => {
+            const downloadSize = parseInt(document.getElementById('download-size').value, 10);
+
+            qrCode.update({ width: downloadSize, height: downloadSize });
+            const qrBlob = await qrCode.getRawData('png');
+
+            qrCode.update({ width: PREVIEW_SIZE, height: PREVIEW_SIZE });
+
+            if (!qrBlob) return;
+
+            const data = {
+                files: [new File([qrBlob], 'HaceloQR.png', { type: qrBlob.type })],
+                title: 'Código QR de HaceloQR',
+                text: 'Aquí tienes un código QR generado con HaceloQR.',
+            };
+
+            if (navigator.canShare && navigator.canShare(data)) {
+                try {
+                    await navigator.share(data);
+                    if (window.updateMetric) window.updateMetric('totalShares');
+                } catch (err) {
+                    // User cancelled, do nothing.
+                }
+            } else {
+                try {
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ [qrBlob.type]: qrBlob })
+                    ]);
+                    notification.classList.remove('opacity-0');
+                    setTimeout(() => {
+                        notification.classList.add('opacity-0');
+                    }, 2000);
+                    if (window.updateMetric) window.updateMetric('totalShares');
+                } catch (err) {
+                    console.error('Error copying to clipboard:', err);
+                    window.showModal('Error', 'No se pudo copiar la imagen al portapapeles.', [{text: 'Cerrar', class: 'btn-secondary'}]);
+                }
+            }
+        });
+
+        // --- Firebase History Logic ---
+        document.getElementById('save-history-btn').addEventListener('click', () => {
+            let name = 'QR Guardado';
+            let iconName = 'link';
+
+            switch(activeTab) {
+                case 'url':
+                    name = document.getElementById('url-input').value;
+                    iconName = 'link';
+                    break;
+                case 'wifi':
+                    name = document.getElementById('wifi-ssid').value;
+                    iconName = 'wifi';
+                    break;
+                case 'vcard':
+                    name = document.getElementById('vcard-name').value;
+                    iconName = 'contact';
+                    break;
+                case 'text':
+                    name = document.getElementById('text-input').value.substring(0, 30);
+                    iconName = 'pilcrow';
+                    break;
+            }
+
+            const dataToSave = {
+                type: activeTab,
+                name: name || `QR del ${new Date().toLocaleDateString()}`,
+                icon: iconName,
+                data: qrCode._options.data,
+                image: qrCode._options.image || '',
+                dotsOptions: {
+                    type: document.getElementById('dots-style').value,
+                    color: document.getElementById('color-dark').value
+                },
+                cornersSquareOptions: {
+                    type: document.getElementById('corners-style').value
+                },
+                backgroundOptions: {
+                    color: document.getElementById('color-light').value
+                }
+            };
+
+            if (window.saveQRToHistory) {
+                window.saveQRToHistory(dataToSave);
+            }
+        });
+
+        window.addEventListener('reuseQR', (event) => {
+            const item = event.detail;
+
+            document.querySelector(`[data-tab='${item.type}']`).click();
+
+            switch(item.type) {
+                case 'url': document.getElementById('url-input').value = item.data; break;
+                case 'text': document.getElementById('text-input').value = item.data; break;
+                case 'wifi':
+                    const wifiData = /S:(.*?);T:(.*?);P:(.*?);;/.exec(item.data);
+                    if(wifiData) {
+                        document.getElementById('wifi-ssid').value = wifiData[1] || '';
+                        document.getElementById('wifi-encryption').value = wifiData[2] || 'WPA';
+                        document.getElementById('wifi-password').value = wifiData[3] || '';
+                    }
+                    break;
+                case 'vcard':
+                    const vcardData = {
+                        name: (/FN:(.*?)\n/.exec(item.data) || [])[1],
+                        phone: (/TEL:(.*?)\n/.exec(item.data) || [])[1],
+                        email: (/EMAIL:(.*?)\n/.exec(item.data) || [])[1],
+                        website: (/URL:(.*?)\n/.exec(item.data) || [])[1]
+                    };
+                    document.getElementById('vcard-name').value = vcardData.name || '';
+                    document.getElementById('vcard-phone').value = vcardData.phone || '';
+                    document.getElementById('vcard-email').value = vcardData.email || '';
+                    document.getElementById('vcard-website').value = vcardData.website || '';
+                    break;
+            }
+
+            document.getElementById('color-dark').value = item.dotsOptions.color;
+            document.getElementById('color-light').value = item.backgroundOptions.color;
+            document.getElementById('dots-style').value = item.dotsOptions.type;
+            document.getElementById('corners-style').value = item.cornersSquareOptions.type;
+
+            const logo = item.image || '';
+            document.getElementById('logo-input').value = '';
+            document.getElementById('remove-logo-btn').classList.toggle('hidden', !logo);
+
+            qrCode.update({ image: logo });
+            updateQRCode();
+        });
+
+        updateQRCode();
+    });
+</script>
+</body>
+</html>
