@@ -19,6 +19,9 @@
         gtag('config', 'G-M8MMVGDH51');
     </script>
 
+    <!-- Tone.js for reliable sounds -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+
     <style>
         :root {
             --font-family-sans: 'Inter', sans-serif;
@@ -425,8 +428,7 @@
         body.timer-maximized .app-header,
         body.timer-maximized .controls-wrapper,
         body.timer-maximized .timer-title-input,
-        body.timer-maximized .app-footer,
-        body.timer-maximized .feedback-fab {
+        body.timer-maximized .app-footer {
             display: none;
         }
 
@@ -437,7 +439,7 @@
         body.timer-maximized .app-container {
             max-width: 100%;
             height: 100vh;
-            padding: 3rem;
+            padding: 2rem;
             box-sizing: border-box;
             justify-content: center;
         }
@@ -472,11 +474,16 @@
         }
 
         body.timer-maximized #timer-display {
-            font-size: clamp(5rem, 30vw, 25rem);
+            font-size: clamp(5rem, 25vw, 20rem);
         }
 
         /* --- FOOTER --- */
         .app-footer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem 1rem;
             text-align: center;
             padding-top: 1rem;
             margin-top: -1rem;
@@ -484,49 +491,25 @@
             opacity: 0.7;
         }
 
-        .app-footer p {
-            margin: 0;
+        .footer-link {
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
-
+        .footer-link:hover {
+            opacity: 1;
+        }
+        .footer-separator {
+            opacity: 0.5;
+        }
         .app-footer a {
-            color: var(--primary-color);
+            color: var(--text-color);
             text-decoration: none;
-            font-weight: 700;
         }
-
         .app-footer a:hover {
             text-decoration: underline;
         }
 
-        /* --- FEEDBACK --- */
-        .feedback-fab {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            width: 56px;
-            height: 56px;
-            background-color: var(--primary-color);
-            color: var(--bg-color);
-            border-radius: 50%;
-            border: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            cursor: pointer;
-            z-index: 999;
-            transition: all 0.3s;
-        }
-        .feedback-fab:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-        }
-
-        .feedback-link-mobile {
-            display: none;
-        }
-
+        /* --- MODALS --- */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -569,55 +552,115 @@
             color: var(--primary-color);
         }
 
-        #feedback-textarea {
-            width: 100%;
-            min-height: 120px;
-            margin: 1rem 0;
-            padding: 0.5rem;
-            box-sizing: border-box;
-            border: 2px solid var(--progress-bg);
-            border-radius: 8px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-family-sans);
-            resize: vertical;
-        }
-        #feedback-textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
+        .modal-content p {
+            line-height: 1.6;
         }
 
         .modal-actions {
             display: flex;
-            justify-content: flex-end;
+            flex-direction: column;
             gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .support-btn {
+            display: block;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.2s;
+        }
+        .support-btn:hover {
+            transform: scale(1.05);
+        }
+        .mp-btn {
+            background-color: #009ee3;
+            color: white;
+        }
+        .paypal-btn {
+            background-color: #0079c1;
+            color: white;
+        }
+
+        /* Sound Modal */
+        .sound-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .sound-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            border: 2px solid var(--progress-bg);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .sound-option.selected {
+            border-color: var(--primary-color);
+            background-color: var(--progress-bg);
+        }
+        .sound-option:hover {
+            border-color: var(--primary-color);
+        }
+        .sound-option .play-sound-btn {
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+        .sound-option .play-sound-btn:hover {
+            opacity: 1;
         }
 
         /* --- MOBILE OPTIMIZATION --- */
-        @media (max-width: 480px) {
+        @media (max-width: 520px) {
             .app-container {
                 padding: 1.5rem 1rem;
                 gap: 1.5rem;
             }
-            .feedback-fab {
+            .app-footer {
+                flex-direction: row;
+                gap: 0.5rem 1rem;
+            }
+            .footer-separator {
+                display: inline;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .app-footer {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            .footer-separator {
                 display: none;
             }
-            .feedback-link-mobile {
-                display: block;
-                background: none;
-                border: none;
-                font-family: inherit;
-                font-size: 0.9rem;
-                cursor: pointer;
-                padding: 0;
-                color: var(--text-color);
-                opacity: 0.7;
-                margin-top: 0.5rem;
-                margin-left: auto;
-                margin-right: auto;
+        }
+
+        @media (max-width: 900px) and (orientation: landscape) {
+            body.timer-maximized .app-container {
+                padding: 1rem 2rem;
             }
-            .feedback-link-mobile:hover {
-                opacity: 1;
+            body.timer-maximized .timer-title-display {
+                font-size: clamp(1.5rem, 4vh, 2.5rem);
+                margin-bottom: 0.5rem;
+            }
+            body.timer-maximized #timer-display {
+                font-size: clamp(4rem, 30vh, 15rem);
+            }
+        }
+
+        @media (max-width: 480px) and (orientation: portrait) {
+            body.timer-maximized .app-container {
+                padding: 2rem 1rem;
+            }
+            body.timer-maximized .timer-title-display {
+                font-size: clamp(1.5rem, 5vw, 2.5rem);
+            }
+            body.timer-maximized #timer-display {
+                font-size: clamp(4rem, 20vw, 10rem);
             }
         }
 
@@ -646,6 +689,7 @@
             </div>
         </div>
         <div class="settings-icons">
+            <button id="open-sound-modal-btn" class="icon-btn">🎵</button>
             <button id="maximize-timer-btn" class="icon-btn">↗</button>
             <button id="sound-toggle-btn" class="icon-btn">🔊</button>
         </div>
@@ -694,30 +738,69 @@
     </div>
 
     <footer class="app-footer">
-        <p>Creado por <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer">zripi.com.ar</a></p>
-        <button id="open-feedback-modal-btn-mobile" class="feedback-link-mobile">Sugerencias 💡</button>
+        <span class="footer-link">✍️ <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer">Creado por zripi.com.ar</a></span>
+        <span class="footer-separator">|</span>
+        <span id="open-support-modal-btn" class="footer-link">❤️ Apoyar el proyecto</span>
+        <span class="footer-separator">|</span>
+        <span id="open-suggest-modal-btn" class="footer-link">💡 Sugerir una función</span>
     </footer>
 
 </div>
 
-<button id="open-feedback-modal-btn" class="feedback-fab" title="Enviar sugerencia">💡</button>
-
-<div id="feedback-modal" class="modal-overlay">
+<!-- Support Modal -->
+<div id="support-modal" class="modal-overlay">
     <div class="modal-content">
-        <h2>Enviar Sugerencia</h2>
-        <p>Nos encantaría saber tu opinión para mejorar Focus Flow.</p>
-        <textarea id="feedback-textarea" placeholder="Escribe tu idea o sugerencia aquí..." rows="5"></textarea>
+        <h2 id="support-modal-title">¡Gracias por usar Focus Flow!</h2>
+        <p>Esta es una herramienta gratuita, sin anuncios y sin límites. Tu apoyo ayuda a cubrir los costos y a desarrollar nuevas funcionalidades. ¡Cualquier aporte es bienvenido!</p>
         <div class="modal-actions">
-            <button id="cancel-feedback-btn" class="control-btn reset">Cancelar</button>
-            <button id="send-feedback-btn" class="control-btn start">Enviar</button>
+            <a href="https://link.mercadopago.com.ar/cursoszripi" target="_blank" rel="noopener noreferrer" class="support-btn mp-btn">Mercado Pago</a>
+            <a href="https://paypal.me/drminniti" target="_blank" rel="noopener noreferrer" class="support-btn paypal-btn">PayPal</a>
+        </div>
+    </div>
+</div>
+
+<!-- Suggestion Modal -->
+<div id="suggest-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Sugerir una función</h2>
+        <p>¡Nos encantaría escuchar tus ideas! Para sugerir una nueva función o una mejora, por favor envíanos un correo electrónico a info@zripi.com.ar</p>
+        <div class="modal-actions">
+            <a href="mailto:info@zripi.com.ar?subject=Sugerencia para Focus Flow" class="control-btn start">Enviar Correo</a>
+        </div>
+    </div>
+</div>
+
+<!-- Sound Selection Modal -->
+<div id="sound-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Seleccionar Sonido de Alarma</h2>
+        <div class="sound-options">
+            <div class="sound-option" data-sound="punto">
+                <span>Punto</span><button class="icon-btn play-sound-btn">▶</button>
+            </div>
+            <div class="sound-option" data-sound="arpegio">
+                <span>Arpegio</span><button class="icon-btn play-sound-btn">▶</button>
+            </div>
+            <div class="sound-option" data-sound="ascenso">
+                <span>Ascenso</span><button class="icon-btn play-sound-btn">▶</button>
+            </div>
+            <div class="sound-option" data-sound="calido">
+                <span>Cálido</span><button class="icon-btn play-sound-btn">▶</button>
+            </div>
+            <div class="sound-option" data-sound="brillo">
+                <span>Brillo</span><button class="icon-btn play-sound-btn">▶</button>
+            </div>
+            <div class="sound-option" data-sound="alerta">
+                <span>Alerta Suave</span><button class="icon-btn play-sound-btn">▶</button>
+            </div>
+            <div class="sound-option" data-sound="digital">
+                <span>Digital</span><button class="icon-btn play-sound-btn">▶</button>
+            </div>
         </div>
     </div>
 </div>
 
 <button id="close-maximized-btn" class="icon-btn">×</button>
-
-<!-- Alert Sound -->
-<audio id="alert-sound" src="https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg" preload="auto"></audio>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -735,19 +818,53 @@
         const minutesInput = document.getElementById('minutes-input');
         const secondsInput = document.getElementById('seconds-input');
         const soundToggleBtn = document.getElementById('sound-toggle-btn');
-        const alertSound = document.getElementById('alert-sound');
         const extraTimeControls = document.getElementById('extra-time-controls');
         const extraTimeBtn = extraTimeControls.querySelector('.extra-time-btn');
         const maximizeTimerBtn = document.getElementById('maximize-timer-btn');
         const closeMaximizedBtn = document.getElementById('close-maximized-btn');
         const timerTitleInput = document.getElementById('timer-title-input');
         const displayTitle = document.getElementById('display-title');
-        const feedbackModal = document.getElementById('feedback-modal');
-        const openFeedbackBtn = document.getElementById('open-feedback-modal-btn');
-        const openFeedbackBtnMobile = document.getElementById('open-feedback-modal-btn-mobile');
-        const cancelFeedbackBtn = document.getElementById('cancel-feedback-btn');
-        const sendFeedbackBtn = document.getElementById('send-feedback-btn');
-        const feedbackTextarea = document.getElementById('feedback-textarea');
+
+        const supportModal = document.getElementById('support-modal');
+        const suggestModal = document.getElementById('suggest-modal');
+        const soundModal = document.getElementById('sound-modal');
+        const openSupportBtn = document.getElementById('open-support-modal-btn');
+        const openSuggestBtn = document.getElementById('open-suggest-modal-btn');
+        const openSoundBtn = document.getElementById('open-sound-modal-btn');
+
+        // --- TONE.JS SOUND SETUP ---
+        const synth = new Tone.Synth().toDestination();
+        const polySynth = new Tone.PolySynth(Tone.Synth).toDestination();
+        const pluckSynth = new Tone.PluckSynth().toDestination();
+        const metalSynth = new Tone.MetalSynth({ frequency: 400, harmonicity: 8, modulationIndex: 20, resonance: 8000, octaves: 1.5 }).toDestination();
+        const fmSynth = new Tone.FMSynth().toDestination();
+
+        const sounds = {
+            punto: () => synth.triggerAttackRelease("G5", "16n", Tone.now()),
+            arpegio: () => {
+                const now = Tone.now();
+                synth.triggerAttackRelease("C4", "8n", now);
+                synth.triggerAttackRelease("E4", "8n", now + 0.12);
+                synth.triggerAttackRelease("G4", "8n", now + 0.24);
+                synth.triggerAttackRelease("C5", "8n", now + 0.36);
+            },
+            ascenso: () => {
+                const now = Tone.now();
+                polySynth.triggerAttackRelease(["C4", "E4", "G4"], "8n", now);
+            },
+            calido: () => polySynth.triggerAttackRelease(["C4", "E4", "A4"], "1n", Tone.now()),
+            brillo: () => metalSynth.triggerAttackRelease("C6", "4n", Tone.now()),
+            alerta: () => {
+                const now = Tone.now();
+                synth.triggerAttackRelease("A4", "16n", now);
+                synth.triggerAttackRelease("C5", "16n", now + 0.15);
+            },
+            digital: () => {
+                const now = Tone.now();
+                fmSynth.triggerAttackRelease("C6", "16n", now);
+                fmSynth.triggerAttackRelease("C6", "16n", now + 0.2);
+            }
+        };
 
         // --- APP STATE ---
         let timerInterval = null;
@@ -756,7 +873,8 @@
         let initialTime = 0;
         let isRunning = false;
         let isSoundOn = true;
-        let targetTime = 0; // For robust background timing
+        let targetTime = 0;
+        let selectedSound = 'punto';
 
         // --- TIMER FUNCTIONS ---
         const formatTime = (seconds) => {
@@ -790,7 +908,7 @@
                     clearInterval(timerInterval);
                     isRunning = false;
 
-                    if(isSoundOn) alertSound.play();
+                    if(isSoundOn) sounds[selectedSound]();
                     timerProgress.style.width = '100%';
                     document.body.classList.add('finished');
                     extraTimeControls.style.display = 'none';
@@ -815,6 +933,7 @@
         const startTimer = () => {
             if (isRunning || (mode === 'countdown' && totalSeconds <= 0)) return;
 
+            Tone.start(); // Ensure audio context is running
             isRunning = true;
             startBtn.style.display = 'none';
             pauseBtn.style.display = 'inline-block';
@@ -944,8 +1063,7 @@
 
 
         window.addEventListener('keydown', (e) => {
-            // If typing in an input/textarea or the modal is open, do nothing.
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || feedbackModal.classList.contains('visible')) return;
+            if (e.target.tagName === 'INPUT' || supportModal.classList.contains('visible') || suggestModal.classList.contains('visible') || soundModal.classList.contains('visible')) return;
 
             if (e.code === 'Space') {
                 e.preventDefault();
@@ -959,34 +1077,49 @@
             }
         });
 
-        // --- FEEDBACK MODAL LOGIC ---
-        const openModal = () => feedbackModal.classList.add('visible');
-        const closeModal = () => feedbackModal.classList.remove('visible');
+        // --- MODAL LOGIC ---
+        const setupModal = (modal, openBtn) => {
+            const open = () => modal.classList.add('visible');
+            const close = () => modal.classList.remove('visible');
+            openBtn.addEventListener('click', open);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    close();
+                }
+            });
+        };
 
-        openFeedbackBtn.addEventListener('click', openModal);
-        openFeedbackBtnMobile.addEventListener('click', openModal);
-        cancelFeedbackBtn.addEventListener('click', closeModal);
-        feedbackModal.addEventListener('click', (e) => {
-            if (e.target === feedbackModal) {
-                closeModal();
-            }
-        });
+        setupModal(supportModal, openSupportBtn);
+        setupModal(suggestModal, openSuggestBtn);
+        setupModal(soundModal, openSoundBtn);
 
-        sendFeedbackBtn.addEventListener('click', () => {
-            const feedbackText = feedbackTextarea.value.trim();
-            if (feedbackText) {
-                const subject = 'Sugerencia para Focus Flow';
-                const body = encodeURIComponent(feedbackText);
-                window.location.href = `mailto:info@zripi.com.ar?subject=${subject}&body=${body}`;
-                feedbackTextarea.value = '';
-                closeModal();
-            }
+        // --- SOUND SELECTION LOGIC ---
+        const soundOptions = document.querySelectorAll('.sound-option');
+
+        soundOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const soundId = option.dataset.sound;
+
+                if (e.target.classList.contains('play-sound-btn')) {
+                    Tone.start();
+                    sounds[soundId]();
+                    return;
+                }
+
+                selectedSound = soundId;
+                soundOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                soundModal.classList.remove('visible');
+            });
         });
 
         window.changeTheme = (themeName) => {
             document.body.dataset.theme = themeName;
         };
 
+        // --- INITIALIZATION ---
+        document.querySelector(`.sound-option[data-sound="${selectedSound}"]`).classList.add('selected');
         updateDisplay();
     });
 </script>

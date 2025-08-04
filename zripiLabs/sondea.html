@@ -81,7 +81,7 @@
         <!-- =================================================================== -->
         <!-- VIEW 1: CREATE POLL                                                 -->
         <!-- =================================================================== -->
-        <div id="create-view" class="bg-white p-8 rounded-2xl shadow-lg transition-all duration-300 w-full hidden">
+        <div id="create-view" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg transition-all duration-300 w-full hidden">
             <div class="flex justify-center items-center gap-3 mb-2">
                 <div id="logo-container" class="w-10 h-10" style="color: var(--primary-color);">
                     <svg class="app-logo" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -90,7 +90,7 @@
                         <rect x="16" y="14" width="4" height="6" rx="1.5"></rect>
                     </svg>
                 </div>
-                <h1 class="text-3xl font-bold text-slate-900">Sondea</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Sondea</h1>
             </div>
             <p class="text-center text-slate-500 mb-8">Crea una encuesta de opción múltiple en segundos. Sin registros.</p>
 
@@ -178,7 +178,7 @@
         <!-- VIEW 3: PARTICIPANT VOTING                                          -->
         <!-- =================================================================== -->
         <div id="participant-view" class="hidden w-full">
-            <div class="bg-white p-8 rounded-2xl shadow-lg">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
                 <div id="vote-content">
                     <h2 class="text-2xl font-bold text-center mb-6 text-slate-900" id="participant-question"></h2>
                     <div id="participant-options" class="space-y-3">
@@ -233,9 +233,12 @@
 </div>
 
 
-<!-- MODAL FOR CONFIRMATION -->
-<div id="confirm-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-    <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm">
+<!-- MODALS -->
+<div id="confirm-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+    <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm relative">
+        <button class="modal-close-btn absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
         <h3 id="modal-title" class="text-lg font-bold mb-4">Confirmar Acción</h3>
         <p id="modal-text" class="text-slate-600 mb-6">¿Estás seguro?</p>
         <div class="flex justify-end gap-4">
@@ -245,8 +248,45 @@
     </div>
 </div>
 
-<footer class="text-center py-4 text-sm text-slate-500">
-    Creado por <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer" class="font-semibold hover:underline" style="color: var(--primary-color);">zripi.com.ar</a>
+<div id="support-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md relative">
+        <button class="modal-close-btn absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <h3 class="text-2xl font-bold text-center mb-4">¡Gracias por usar Sondea!</h3>
+        <p class="text-slate-600 text-center mb-6">Esta es una herramienta gratuita, sin anuncios y sin límites. Tu apoyo ayuda a cubrir los costos y a desarrollar nuevas funcionalidades. ¡Cualquier aporte es bienvenido!</p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="https://link.mercadopago.com.ar/cursoszripi" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center bg-[#009EE3] text-white font-bold py-3 px-4 rounded-lg hover:bg-[#0081b8] transition">
+                <span>Mercado Pago</span>
+            </a>
+            <a href="https://paypal.me/drminniti" target="_blank" rel="noopener noreferrer" class="flex-1 flex items-center justify-center bg-[#0070BA] text-white font-bold py-3 px-4 rounded-lg hover:bg-[#005ea6] transition">
+                <span>PayPal</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="suggestion-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md relative">
+        <button class="modal-close-btn absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <h3 class="text-2xl font-bold text-center mb-4">Sugerir una función</h3>
+        <p class="text-slate-600 text-center mb-6">¡Nos encantaría escuchar tus ideas! Para sugerir una nueva función o una mejora, por favor envíanos un correo electrónico a info@zripi.com.ar</p>
+        <div class="text-center">
+            <a href="mailto:info@zripi.com.ar" class="inline-block text-white font-bold py-3 px-6 rounded-lg transition" style="background-color: var(--primary-color);">
+                Enviar sugerencia por correo
+            </a>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center py-4 text-sm text-slate-500 flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-x-4">
+    <span>✍️ Creado por <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer" class="font-semibold hover:underline" style="color: var(--primary-color);">zripi.com.ar</a></span>
+    <span class="hidden sm:inline">|</span>
+    <button id="support-btn" class="font-semibold hover:underline" style="color: var(--primary-color);">❤️ Apoyar el proyecto</button>
+    <span class="hidden sm:inline">|</span>
+    <button id="suggest-btn" class="font-semibold hover:underline" style="color: var(--primary-color);">💡 Sugerir una función</button>
 </footer>
 
 
@@ -344,17 +384,20 @@
 
     // --- Modal Logic ---
     const confirmModal = document.getElementById('confirm-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalText = document.getElementById('modal-text');
-    const modalCancelBtn = document.getElementById('modal-cancel-btn');
-    const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+    const supportModal = document.getElementById('support-modal');
+    const suggestionModal = document.getElementById('suggestion-modal');
+
     let confirmCallback = null;
 
     function showConfirmModal(title, text, onConfirm) {
-        modalTitle.textContent = title;
-        modalText.textContent = text;
+        confirmModal.querySelector('#modal-title').textContent = title;
+        confirmModal.querySelector('#modal-text').textContent = text;
         confirmCallback = onConfirm;
         confirmModal.classList.remove('hidden');
+    }
+
+    function hideModal(modal) {
+        modal.classList.add('hidden');
     }
 
     // --- App Logic ---
@@ -799,9 +842,9 @@
 
     // --- GLOBAL EVENT LISTENERS ---
     document.body.addEventListener('click', (event) => {
-        if (event.target.matches('#add-option-btn')) addOptionInput();
-        if (event.target.matches('#create-poll-btn')) handleCreatePoll();
-        if (event.target.matches('#copy-link-btn')) {
+        if (event.target.closest('#add-option-btn')) addOptionInput();
+        if (event.target.closest('#create-poll-btn')) handleCreatePoll();
+        if (event.target.closest('#copy-link-btn')) {
             const linkInput = document.getElementById('share-link');
             linkInput.select();
             try {
@@ -811,18 +854,26 @@
                 setTimeout(() => feedback.classList.add('hidden'), 2000);
             } catch (err) { console.error('Failed to copy text: ', err); }
         }
-        if (event.target.matches('#toggle-voting-btn')) handleToggleVoting();
-        if (event.target.matches('#toggle-results-btn')) handleToggleResults();
-        if (event.target.matches('#reset-votes-btn')) handleResetVotes();
-        if (event.target.matches('#back-to-create-btn')) window.location.hash = '';
-        if (event.target.matches('#go-home-btn')) window.location.hash = '';
+        if (event.target.closest('#toggle-voting-btn')) handleToggleVoting();
+        if (event.target.closest('#toggle-results-btn')) handleToggleResults();
+        if (event.target.closest('#reset-votes-btn')) handleResetVotes();
+        if (event.target.closest('#back-to-create-btn')) window.location.hash = '';
+        if (event.target.closest('#go-home-btn')) window.location.hash = '';
+
+        // Modal handling
+        if (event.target.closest('#support-btn')) supportModal.classList.remove('hidden');
+        if (event.target.closest('#suggest-btn')) suggestionModal.classList.remove('hidden');
+
+        if (event.target.closest('.modal-close-btn')) {
+            event.target.closest('.fixed').classList.add('hidden');
+        }
         if (event.target.matches('#modal-cancel-btn')) {
-            confirmModal.classList.add('hidden');
+            hideModal(confirmModal);
             confirmCallback = null;
         }
         if (event.target.matches('#modal-confirm-btn')) {
             if (confirmCallback) confirmCallback();
-            confirmModal.classList.add('hidden');
+            hideModal(confirmModal);
             confirmCallback = null;
         }
     });
