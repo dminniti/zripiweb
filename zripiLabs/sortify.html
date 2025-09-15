@@ -113,7 +113,6 @@
     .peer + label { background-color: var(--color-surface-light); }
     .focus-ring:focus { ring-color: var(--color-primary); border-color: var(--color-primary); }
     .checkbox-style { color: var(--color-primary); background-color: var(--color-surface-light); border-color: var(--color-border); }
-    .spotlight { background-color: var(--color-primary); box-shadow: 0 0 25px 10px var(--color-primary); opacity: 0.5; }
     .spotlight-name.is-winner { background-color: var(--color-primary); color: var(--color-primary-text-inverted); }
     .team-slot-title { color: var(--color-primary); }
 
@@ -122,7 +121,24 @@
     .modal-fade-in { animation: fadeIn 0.3s ease-out forwards; }
     .spotlight-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; position: relative; max-width: 600px; }
     .spotlight-name { background-color: var(--color-surface-light); padding: 0.5rem 1rem; border-radius: 0.375rem; font-size: 1.125rem; font-weight: 500; transition: all 0.3s ease; }
-    .spotlight { position: absolute; width: 120px; height: 60px; border-radius: 9999px; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none; }
+
+    /* --- ¡REFACTORIZADO PARA RENDIMIENTO! --- */
+    /* Se anima la propiedad `transform` en lugar de `left`, `top`, `width` y `height` */
+    .spotlight {
+      position: absolute;
+      left: 0;
+      top: 0;
+      border-radius: 9999px;
+      pointer-events: none;
+      background-color: var(--color-primary);
+      box-shadow: 0 0 25px 10px var(--color-primary);
+      opacity: 0.5;
+      /* Animamos la transformación, que es acelerada por hardware */
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      /* Le damos una pista al navegador para que optimice esta propiedad */
+      will-change: transform;
+    }
+
     .spotlight-name.is-winner { transform: scale(1.1); }
     .spotlight-name.is-loser { opacity: 0.3; }
     .team-slots-container { display: grid; gap: 1rem; width: 100%; max-width: 600px; }
@@ -212,7 +228,7 @@
   </div>
 
   <footer class="text-center p-3 border-t main-border">
-    <p class="text-sm muted-text">Creado por <a href="https://zripi.com.ar" target="_blank" class="font-semibold primary-text hover:underline">zripi.com.ar</a></p>
+    <p class="text-sm muted-text">&copy; <span id="current-year"></span> Sortify | Creado por <a href="https://zripi.com.ar" target="_blank" class="font-semibold primary-text hover:underline">zripi.com.ar</a></p>
   </footer>
 </div>
 
@@ -291,6 +307,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('sortify-theme') || 'theme-default';
     applyTheme(savedTheme);
+    document.getElementById('current-year').textContent = new Date().getFullYear();
   });
 
 
@@ -317,11 +334,17 @@
     return participantsTextarea.value.split(/[\n,]/).map(p => p.trim()).filter(p => p.length > 0);
   }
 
+  // --- ¡MEJORA DE RENDIMIENTO APLICADA! ---
+  // Esta función ahora usa `transform` para una animación fluida y acelerada por hardware.
   function runSpotlightAnimation(participants, finalResults, onAnimationEnd) {
     animationTitle.textContent = 'Buscando al ganador...';
-    animationContent.innerHTML = `<div class="spotlight-grid"></div>`;
-    const grid = animationContent.querySelector('.spotlight-grid');
 
+    // Creamos la estructura base: una grilla y el foco (spotlight) dentro de ella.
+    animationContent.innerHTML = `<div class="spotlight-grid"><div class="spotlight"></div></div>`;
+    const grid = animationContent.querySelector('.spotlight-grid');
+    const spotlight = grid.querySelector('.spotlight');
+
+    // Generamos los elementos de nombre para cada participante.
     participants.forEach((name, index) => {
       const nameEl = document.createElement('div');
       nameEl.className = 'spotlight-name';
@@ -330,77 +353,73 @@
       grid.appendChild(nameEl);
     });
 
-    const spotlight = document.createElement('div');
-    spotlight.className = 'spotlight';
-    grid.appendChild(spotlight);
-
     animationModal.style.display = 'flex';
 
-    // Pre-calculate positions to avoid reflow in the loop
-    const nameElements = grid.querySelectorAll('.spotlight-name');
-    const gridPos = grid.getBoundingClientRect();
-    const positions = Array.from(nameElements).map(el => {
-      const pos = el.getBoundingClientRect();
-      return {
-        left: pos.left - gridPos.left,
-        top: pos.top - gridPos.top,
-        width: pos.width,
-        height: pos.height,
-      };
-    });
+    // Usamos requestAnimationFrame para asegurarnos de que el navegador haya "pintado"
+    // los elementos antes de medir sus posiciones. Esto evita errores de cálculo.
+    requestAnimationFrame(() => {
+      const nameElements = grid.querySelectorAll('.spotlight-name');
+      const gridRect = grid.getBoundingClientRect();
 
-    let duration = 5000;
-    let interval = 100;
-    let startTime = Date.now();
-    let animationFrame;
+      // Pre-calculamos la transformación para cada nombre UNA SOLA VEZ.
+      const transforms = Array.from(nameElements).map(el => {
+        const elRect = el.getBoundingClientRect();
+        const scaleX = elRect.width / 100; // Asumimos un tamaño base de 100px para el spotlight
+        const scaleY = elRect.height / 100;
+        const translateX = elRect.left - gridRect.left + elRect.width / 2;
+        const translateY = elRect.top - gridRect.top + elRect.height / 2;
+        // Devolvemos el string completo del transform. `translate(-50%, -50%)` centra el origen.
+        return `translateX(${translateX}px) translateY(${translateY}px) translate(-50%, -50%) scale(${scaleX}, ${scaleY})`;
+      });
 
-    function cycle() {
-      const elapsedTime = Date.now() - startTime;
-      if (elapsedTime >= duration) {
-        const winnerName = finalResults.data[0];
-        const winnerIndex = participants.indexOf(winnerName);
-        const winnerEl = document.getElementById(`spotlight-name-${winnerIndex}`);
+      // Definimos el tamaño base de nuestro spotlight, que luego será escalado.
+      spotlight.style.width = '100px';
+      spotlight.style.height = '100px';
 
-        if(winnerEl) {
-          const finalPos = positions[winnerIndex];
-          spotlight.style.left = `${finalPos.left}px`;
-          spotlight.style.top = `${finalPos.top}px`;
-          spotlight.style.width = `${finalPos.width}px`;
-          spotlight.style.height = `${finalPos.height}px`;
+      let duration = 5000;
+      let intervalTime = 100;
+      let startTime = Date.now();
+      let timeoutId;
 
-          document.querySelectorAll('.spotlight-name').forEach(el => el.classList.add('is-loser'));
-          winnerEl.classList.remove('is-loser');
-          winnerEl.classList.add('is-winner');
-          tickSound.triggerAttackRelease('C6', '8n');
+      function cycle() {
+        const elapsedTime = Date.now() - startTime;
+
+        if (elapsedTime >= duration) {
+          // Animación final hacia el ganador
+          const winnerName = finalResults.data[0];
+          const winnerIndex = participants.indexOf(winnerName);
+          if (winnerIndex !== -1) {
+            const winnerEl = document.getElementById(`spotlight-name-${winnerIndex}`);
+            spotlight.style.transform = transforms[winnerIndex];
+            document.querySelectorAll('.spotlight-name').forEach(el => el.classList.add('is-loser'));
+            winnerEl.classList.remove('is-loser');
+            winnerEl.classList.add('is-winner');
+            tickSound.triggerAttackRelease('C6', '8n');
+          }
+
+          // Fin de la animación
+          setTimeout(() => {
+            animationModal.style.display = 'none';
+            onAnimationEnd();
+          }, 1500);
+          return;
         }
 
-        cancelAnimationFrame(animationFrame);
-        setTimeout(() => {
-          animationModal.style.display = 'none';
-          onAnimationEnd();
-        }, 1500);
-        return;
-      }
-
-      const randomIndex = Math.floor(Math.random() * positions.length);
-      const randomPos = positions[randomIndex];
-      if (randomPos) {
-        spotlight.style.left = `${randomPos.left}px`;
-        spotlight.style.top = `${randomPos.top}px`;
-        spotlight.style.width = `${randomPos.width}px`;
-        spotlight.style.height = `${randomPos.height}px`;
+        // Durante la animación, elegimos un objetivo al azar y aplicamos su transform.
+        const randomIndex = Math.floor(Math.random() * transforms.length);
+        spotlight.style.transform = transforms[randomIndex];
         tickSound.triggerAttackRelease('C5', '8n');
+
+        // El intervalo se hace más largo a medida que avanza la animación para un efecto de desaceleración.
+        const progress = elapsedTime / duration;
+        intervalTime = 100 + (progress * progress * 300);
+
+        timeoutId = setTimeout(cycle, intervalTime);
       }
-
-      const progress = elapsedTime / duration;
-      interval = 100 + (progress * progress * 300);
-
-      setTimeout(() => {
-        animationFrame = requestAnimationFrame(cycle);
-      }, interval);
-    }
-    cycle();
+      cycle();
+    });
   }
+
 
   function runTeamAnimation(participants, finalResults, onAnimationEnd) {
     animationTitle.textContent = 'Formando Equipos...';

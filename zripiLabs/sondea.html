@@ -55,6 +55,13 @@
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.05); opacity: 0.7; }
         }
+        /* <!-- UX MEJORA: Animación para el spinner de carga --> */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
         .fade-in {
             animation: fadeIn 0.5s ease-out forwards;
         }
@@ -71,6 +78,10 @@
             transform: scale(1.2);
             box-shadow: 0 0 0 3px white, 0 0 0 5px var(--primary-color);
         }
+        .poll-type-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 p-4">
@@ -82,17 +93,31 @@
         <!-- VIEW 1: CREATE POLL                                                 -->
         <!-- =================================================================== -->
         <div id="create-view" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg transition-all duration-300 w-full hidden">
-            <div class="flex justify-center items-center gap-3 mb-2">
-                <div id="logo-container" class="w-10 h-10" style="color: var(--primary-color);">
-                    <svg class="app-logo" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="4" y="10" width="4" height="10" rx="1.5"></rect>
-                        <rect x="10" y="4" width="4" height="16" rx="1.5"></rect>
-                        <rect x="16" y="14" width="4" height="6" rx="1.5"></rect>
-                    </svg>
+            <div class="flex justify-between items-center mb-4">
+                <div></div> <!-- Spacer -->
+                <div class="flex items-center gap-3">
+                    <div id="logo-container" class="w-10 h-10" style="color: var(--primary-color);">
+                        <svg class="app-logo" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="10" width="4" height="10" rx="1.5"></rect>
+                            <rect x="10" y="4" width="4" height="16" rx="1.5"></rect>
+                            <rect x="16" y="14" width="4" height="6" rx="1.5"></rect>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Sondea</h1>
                 </div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Sondea</h1>
+                <button id="go-to-saved-btn" title="Mis Encuestas Guardadas" class="text-slate-400 hover:text-slate-600 transition">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                </button>
             </div>
-            <p class="text-center text-slate-500 mb-8">Crea una encuesta de opción múltiple en segundos. Sin registros.</p>
+            <p class="text-center text-slate-500 mb-8">Crea encuestas en vivo en segundos. Sin registros.</p>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-slate-600 mb-2 text-center">Tipo de Encuesta</label>
+                <div class="grid grid-cols-2 gap-2 rounded-lg bg-slate-100 p-1">
+                    <button id="type-multiple-choice" class="poll-type-btn active font-semibold py-2 rounded-md transition">Opción Múltiple</button>
+                    <button id="type-open-text" class="poll-type-btn font-semibold py-2 rounded-md transition">Texto Libre</button>
+                </div>
+            </div>
 
             <div class="space-y-6">
                 <div>
@@ -100,7 +125,7 @@
                     <input type="text" id="poll-question" placeholder="Ej: ¿Qué tema cubrimos ahora?" class="w-full px-4 py-3 bg-slate-100 rounded-lg border-2 border-transparent focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
                 </div>
 
-                <div>
+                <div id="multiple-choice-options">
                     <label class="block text-sm font-medium text-slate-600 mb-1">Opciones de Respuesta</label>
                     <div id="options-container" class="space-y-3">
                         <!-- Options will be dynamically added here -->
@@ -111,8 +136,13 @@
                 </div>
             </div>
 
+            <div class="mt-6 flex items-center">
+                <input id="save-poll-checkbox" type="checkbox" class="h-4 w-4 rounded border-gray-300" style="color: var(--primary-color);">
+                <label for="save-poll-checkbox" class="ml-2 block text-sm text-slate-700">Guardar esta encuesta para usarla en el futuro</label>
+            </div>
+
             <div class="mt-8">
-                <button id="create-poll-btn" class="w-full text-white font-bold py-4 rounded-lg focus:outline-none focus:ring-4 transition-all duration-300 transform hover:scale-105" style="background-color: var(--primary-color); --tw-ring-color: var(--primary-color-ring);">
+                <button id="create-poll-btn" class="w-full text-white font-bold py-4 rounded-lg focus:outline-none focus:ring-4 transition-all duration-300 transform hover:scale-105 flex items-center justify-center" style="background-color: var(--primary-color); --tw-ring-color: var(--primary-color-ring);">
                     Crear Encuesta y Empezar
                 </button>
             </div>
@@ -153,10 +183,18 @@
             <!-- Results Section -->
             <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
                 <h3 class="text-xl font-bold mb-4 text-center">Resultados en Vivo</h3>
-                <div class="relative min-h-[120px]">
+                <div id="results-chart-container" class="relative min-h-[120px]">
                     <canvas id="results-chart"></canvas>
                 </div>
-                <p class="text-center text-slate-500 mt-4 text-lg">Total de Votos: <span id="total-votes" class="font-bold text-slate-800">0</span></p>
+                <div id="results-wall-container" class="relative w-full max-h-96 overflow-y-auto p-2 bg-slate-50 rounded-lg">
+                    <!-- Text responses will be rendered here -->
+                </div>
+                <p class="text-center text-slate-500 mt-4 text-lg"><span id="total-count-label"></span>: <span id="total-votes" class="font-bold text-slate-800">0</span></p>
+                <div id="download-button-container" class="mt-4 text-center">
+                    <button id="download-results-btn" class="font-semibold py-2 px-4 rounded-lg transition-colors duration-200" style="color: var(--primary-color); background-color: var(--primary-color-light);">
+                        Descargar Resultados
+                    </button>
+                </div>
             </div>
 
             <!-- Controls Section -->
@@ -181,8 +219,12 @@
             <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
                 <div id="vote-content">
                     <h2 class="text-2xl font-bold text-center mb-6 text-slate-900" id="participant-question"></h2>
-                    <div id="participant-options" class="space-y-3">
-                        <!-- Voting options will be rendered here -->
+                    <div id="participant-options-mc" class="space-y-3">
+                        <!-- Multiple choice options will be rendered here -->
+                    </div>
+                    <div id="participant-options-ot" class="space-y-4">
+                        <input type="text" id="open-text-input" placeholder="Escribe tu respuesta..." class="w-full px-4 py-3 bg-slate-100 rounded-lg border-2 border-transparent focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                        <button id="submit-open-text" class="w-full text-white font-bold py-3 rounded-lg" style="background-color: var(--primary-color);">Enviar Respuesta</button>
                     </div>
                 </div>
 
@@ -190,7 +232,7 @@
                     <svg class="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h3 class="text-2xl font-bold mt-4">¡Gracias por tu voto!</h3>
+                    <h3 id="vote-feedback-title" class="text-2xl font-bold mt-4"></h3>
                     <p id="results-message" class="text-slate-500 mt-2">Los resultados se mostrarán cuando el facilitador los comparta.</p>
                 </div>
 
@@ -200,8 +242,11 @@
 
                 <div id="participant-results-container" class="hidden mt-8">
                     <h3 class="text-xl font-bold mb-4 text-center">Resultados</h3>
-                    <div class="relative min-h-[120px]">
+                    <div id="participant-results-chart-container" class="relative min-h-[120px]">
                         <canvas id="participant-results-chart"></canvas>
+                    </div>
+                    <div id="participant-results-wall-container" class="relative w-full max-h-80 overflow-y-auto p-2 bg-slate-50 rounded-lg">
+                        <!-- Participant text responses will be rendered here -->
                     </div>
                 </div>
             </div>
@@ -214,6 +259,21 @@
             <h2 class="text-3xl font-bold text-red-500 mb-4">Encuesta no encontrada</h2>
             <p class="text-slate-600 mb-6">El enlace que has usado no parece correcto. Por favor, comprueba la URL.</p>
             <button id="go-home-btn" class="text-white font-bold py-3 px-6 rounded-lg transition" style="background-color: var(--primary-color);">Crear una encuesta</button>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 5: SAVED POLLS                                                 -->
+        <!-- =================================================================== -->
+        <div id="saved-polls-view" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg transition-all duration-300 w-full hidden">
+            <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">Mis Encuestas Guardadas</h2>
+            <div id="saved-polls-list" class="space-y-3 max-h-96 overflow-y-auto">
+                <!-- Saved polls will be rendered here -->
+            </div>
+            <div class="mt-8">
+                <button id="back-to-create-from-saved" class="w-full font-semibold py-3 rounded-lg transition" style="color: var(--primary-color);">
+                    ← Volver a Crear
+                </button>
+            </div>
         </div>
 
         <!-- =================================================================== -->
@@ -293,7 +353,7 @@
 <!-- Firebase SDK -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, runTransaction, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, runTransaction, arrayUnion, collection, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
     import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
     // Register ChartJS Datalabels plugin globally
@@ -320,6 +380,9 @@
     let facilitatorChart = null;
     let participantChart = null;
     let unsubscribePoll = null;
+    let unsubscribeSavedPolls = null;
+    let currentPollType = 'multiple-choice';
+    let currentUserId = null;
 
     // --- THEME LOGIC ---
     const themes = [
@@ -379,7 +442,8 @@
         facilitator: document.getElementById('facilitator-view'),
         participant: document.getElementById('participant-view'),
         notFound: document.getElementById('not-found-view'),
-        loading: document.getElementById('loading-view')
+        loading: document.getElementById('loading-view'),
+        savedPolls: document.getElementById('saved-polls-view')
     };
 
     // --- Modal Logic ---
@@ -402,18 +466,15 @@
 
     // --- App Logic ---
     function showView(viewName) {
-        if (unsubscribePoll) {
-            unsubscribePoll();
-            unsubscribePoll = null;
-        }
-        if (facilitatorChart) {
-            facilitatorChart.destroy();
-            facilitatorChart = null;
-        }
-        if (participantChart) {
-            participantChart.destroy();
-            participantChart = null;
-        }
+        if (unsubscribePoll) unsubscribePoll();
+        if (unsubscribeSavedPolls) unsubscribeSavedPolls();
+        unsubscribePoll = null;
+        unsubscribeSavedPolls = null;
+
+        if (facilitatorChart) facilitatorChart.destroy();
+        if (participantChart) participantChart.destroy();
+        facilitatorChart = null;
+        participantChart = null;
 
         Object.values(views).forEach(view => view.classList.add('hidden'));
         if (views[viewName]) {
@@ -445,45 +506,116 @@
                 input.placeholder = `Opción ${index + 1}`;
             });
         });
+
+        // UX MEJORA: Añadir nueva opción al presionar "Enter"
+        const input = newOptionDiv.querySelector('input');
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addOptionInput();
+                // Enfocar el nuevo input creado para una experiencia fluida
+                optionsContainer.lastChild.querySelector('input').focus();
+            }
+        });
+
         optionsContainer.appendChild(newOptionDiv);
+    }
+
+    async function createAndLaunchPoll(pollTemplate) {
+        showView('loading');
+        const newPollId = generatePollId();
+
+        let livePollData = { ...pollTemplate };
+        delete livePollData.savedAt;
+        delete livePollData.id;
+
+        livePollData.version = 1;
+        livePollData.createdAt = new Date();
+        livePollData.status = 'open';
+        livePollData.showResults = true;
+
+        if (livePollData.type === 'multiple-choice') {
+            livePollData.options = livePollData.options.map(opt => ({ ...opt, votes: 0 }));
+        } else {
+            livePollData.responses = [];
+        }
+
+        try {
+            const pollRef = doc(db, "polls", newPollId);
+            await setDoc(pollRef, livePollData);
+            window.location.hash = `poll/${newPollId}/facilitator`;
+        } catch (error) {
+            console.error("Error launching poll:", error);
+            showView('savedPolls'); // Go back to saved polls on error
+        }
     }
 
     async function handleCreatePoll() {
         const question = document.getElementById('poll-question').value.trim();
-        const optionInputs = document.querySelectorAll('#options-container input');
-        const options = Array.from(optionInputs).map(input => input.value.trim()).filter(text => text !== '');
         const errorMessage = document.getElementById('error-message-create');
+        const shouldSave = document.getElementById('save-poll-checkbox').checked;
+        const createPollBtn = document.getElementById('create-poll-btn'); // UX MEJORA
 
-        if (!question || options.length < 2) {
-            errorMessage.textContent = 'Por favor, introduce una pregunta y al menos dos opciones.';
-            errorMessage.classList.remove('hidden');
-            return;
-        }
-        errorMessage.classList.add('hidden');
-
-        showView('loading');
-
-        currentPollId = generatePollId();
-        const pollData = {
-            question: question,
-            options: options.map((opt, index) => ({ id: index, text: opt, votes: 0 })),
-            status: 'open',
-            showResults: true,
-            theme: localStorage.getItem('poll-theme') || 'blue',
-            version: 1,
-            createdAt: new Date()
+        // Función para restaurar el botón en caso de error
+        const restoreCreateButton = () => {
+            createPollBtn.disabled = false;
+            createPollBtn.innerHTML = 'Crear Encuesta y Empezar';
         };
 
-        try {
-            const pollRef = doc(db, "polls", currentPollId);
-            await setDoc(pollRef, pollData);
-            window.location.hash = `poll/${currentPollId}/facilitator`;
-        } catch (error) {
-            console.error("Error creating poll:", error);
-            errorMessage.textContent = 'Hubo un error al crear la encuesta. Inténtalo de nuevo.';
-            errorMessage.classList.remove('hidden');
-            showView('create');
+        let pollData = {
+            question: question,
+            type: currentPollType,
+            theme: localStorage.getItem('poll-theme') || 'blue'
+        };
+
+        if (currentPollType === 'multiple-choice') {
+            const optionInputs = document.querySelectorAll('#options-container input');
+            const options = Array.from(optionInputs).map(input => input.value.trim()).filter(text => text !== '');
+            if (!question || options.length < 2) {
+                errorMessage.textContent = 'Por favor, introduce una pregunta y al menos dos opciones.';
+                errorMessage.classList.remove('hidden');
+                // UX MEJORA: No es necesario restaurar el botón aquí porque aún no lo hemos cambiado.
+                return;
+            }
+            pollData.options = options.map((opt, index) => ({ id: index, text: opt, votes: 0 }));
+        } else { // open-text
+            if (!question) {
+                errorMessage.textContent = 'Por favor, introduce una pregunta.';
+                errorMessage.classList.remove('hidden');
+                // UX MEJORA: No es necesario restaurar el botón aquí.
+                return;
+            }
+            pollData.responses = [];
         }
+
+        errorMessage.classList.add('hidden');
+
+        // UX MEJORA: Cambiar estado del botón a "cargando" DESPUÉS de la validación
+        createPollBtn.disabled = true;
+        createPollBtn.innerHTML = `
+            <svg class="spinner w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Creando...
+        `;
+
+        if (shouldSave && currentUserId) {
+            try {
+                const savedPollsCollection = collection(db, 'users', currentUserId, 'polls');
+                await addDoc(savedPollsCollection, { ...pollData, savedAt: new Date() });
+            } catch (error) {
+                console.error("Error saving poll:", error);
+                // Si guardar falla, podemos decidir si continuar o mostrar error.
+                // Por ahora, continuamos pero restauramos el botón.
+                errorMessage.textContent = 'Error al guardar la encuesta. Inténtalo de nuevo.';
+                errorMessage.classList.remove('hidden');
+                restoreCreateButton();
+                return;
+            }
+        }
+
+        createAndLaunchPoll(pollData);
     }
 
     function formatLabel(str, maxwidth){
@@ -515,7 +647,7 @@
 
         const container = canvas.parentElement;
         const numOptions = pollData.options.length;
-        container.style.height = `${60 + numOptions * 50}px`; // Adjusted height for better spacing
+        container.style.height = `${60 + numOptions * 50}px`;
 
         const ctx = canvas.getContext('2d');
 
@@ -553,19 +685,18 @@
                 plugins: {
                     legend: { display: false },
                     datalabels: {
-                        anchor: 'end',
-                        align: 'end',
-                        offset: 8,
-                        color: '#334155',
+                        anchor: 'center',
+                        align: 'center',
+                        color: '#ffffff',
                         font: {
-                            weight: '600',
+                            weight: 'bold',
                             size: 14,
                         },
                         formatter: (value) => {
                             if (value === 0) return '';
                             if (totalVotes === 0) return `${value} (0%)`;
                             const percentage = ((value / totalVotes) * 100).toFixed(0);
-                            return `${value}  (${percentage}%)`;
+                            return `${value} (${percentage}%)`;
                         }
                     }
                 }
@@ -586,34 +717,71 @@
         qr.make();
         document.getElementById('qrcode-container').innerHTML = qr.createImgTag(5, 8);
 
-        if (facilitatorChart) facilitatorChart.destroy();
-        facilitatorChart = createChart('results-chart', pollData);
+        if (pollData.type === 'open-text') {
+            document.getElementById('results-chart-container').style.display = 'none';
+            document.getElementById('results-wall-container').style.display = 'block';
+            document.getElementById('download-button-container').style.display = 'block';
+            updateResponseWall('results-wall-container', pollData);
+        } else {
+            document.getElementById('results-chart-container').style.display = 'block';
+            document.getElementById('results-wall-container').style.display = 'none';
+            document.getElementById('download-button-container').style.display = 'block';
+            if (facilitatorChart) facilitatorChart.destroy();
+            facilitatorChart = createChart('results-chart', pollData);
+        }
 
         updateFacilitatorControls(pollData);
     }
 
     function updateFacilitatorView(pollData) {
-        if (!facilitatorChart) {
-            facilitatorChart = createChart('results-chart', pollData);
-            if (!facilitatorChart) return;
-        };
+        const totalCountLabel = document.getElementById('total-count-label');
+        if (pollData.type === 'open-text') {
+            updateResponseWall('results-wall-container', pollData);
+            if(totalCountLabel) totalCountLabel.textContent = 'Total de Respuestas';
+            document.getElementById('total-votes').textContent = pollData.responses.length;
+        } else {
+            if (!facilitatorChart) {
+                facilitatorChart = createChart('results-chart', pollData);
+                if (!facilitatorChart) return;
+            };
 
-        facilitatorChart.data.labels = pollData.options.map(o => formatLabel(o.text, 30));
-        facilitatorChart.data.datasets[0].data = pollData.options.map(o => o.votes);
+            facilitatorChart.data.labels = pollData.options.map(o => formatLabel(o.text, 30));
+            facilitatorChart.data.datasets[0].data = pollData.options.map(o => o.votes);
 
-        const totalVotes = pollData.options.reduce((sum, opt) => sum + opt.votes, 0);
-        facilitatorChart.options.plugins.datalabels.formatter = (value) => {
-            if (value === 0) return '';
-            if (totalVotes === 0) return `${value} (0%)`;
-            const percentage = ((value / totalVotes) * 100).toFixed(0);
-            return `${value}  (${percentage}%)`;
-        };
+            const totalVotes = pollData.options.reduce((sum, opt) => sum + opt.votes, 0);
+            facilitatorChart.options.plugins.datalabels.formatter = (value) => {
+                if (value === 0) return '';
+                if (totalVotes === 0) return `${value} (0%)`;
+                const percentage = ((value / totalVotes) * 100).toFixed(0);
+                return `${value} (${percentage}%)`;
+            };
 
-        facilitatorChart.update();
-
-        document.getElementById('total-votes').textContent = totalVotes;
-
+            facilitatorChart.update();
+            if(totalCountLabel) totalCountLabel.textContent = 'Total de Votos';
+            document.getElementById('total-votes').textContent = totalVotes;
+        }
         updateFacilitatorControls(pollData);
+    }
+
+    function updateResponseWall(containerId, pollData) {
+        const wallContainer = document.getElementById(containerId);
+        if (!wallContainer) return;
+        wallContainer.innerHTML = '';
+        const responses = pollData.responses || [];
+
+        if (responses.length === 0) {
+            wallContainer.innerHTML = `<p class="text-slate-400 text-center p-4">Esperando respuestas...</p>`;
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        responses.forEach(response => {
+            const responseEl = document.createElement('div');
+            responseEl.className = 'bg-white p-3 rounded-lg shadow mb-2';
+            responseEl.textContent = response;
+            fragment.appendChild(responseEl);
+        });
+        wallContainer.appendChild(fragment);
     }
 
     function updateFacilitatorControls(pollData) {
@@ -665,12 +833,16 @@
                         if (!pollDoc.exists()) throw "Document does not exist!";
 
                         const currentVersion = pollDoc.data().version || 1;
-                        const resetOptions = pollDoc.data().options.map(opt => ({...opt, votes: 0 }));
+                        const pollType = pollDoc.data().type;
+                        let updates = { version: currentVersion + 1 };
 
-                        transaction.update(pollRef, {
-                            options: resetOptions,
-                            version: currentVersion + 1
-                        });
+                        if (pollType === 'open-text') {
+                            updates.responses = [];
+                        } else {
+                            updates.options = pollDoc.data().options.map(opt => ({...opt, votes: 0 }));
+                        }
+
+                        transaction.update(pollRef, updates);
                     });
                 } catch (e) {
                     console.error("Reset transaction failed: ", e);
@@ -711,19 +883,26 @@
             voteContent.classList.remove('hidden');
             votingClosedMessage.classList.add('hidden');
 
-            const optionsContainer = document.getElementById('participant-options');
-            optionsContainer.innerHTML = '';
-            pollData.options.forEach(option => {
-                const button = document.createElement('button');
-                button.className = 'w-full text-left p-4 bg-slate-100 rounded-lg border-2 border-transparent focus:outline-none transition-all duration-200';
-                button.style.setProperty('--tw-ring-color', 'var(--primary-color)');
-                button.addEventListener('mouseover', () => button.style.backgroundColor = 'var(--primary-color-light)');
-                button.addEventListener('mouseout', () => button.style.backgroundColor = '');
-                button.textContent = option.text;
-                button.dataset.optionId = option.id;
-                button.addEventListener('click', () => handleVote(option.id, pollData.version));
-                optionsContainer.appendChild(button);
-            });
+            if (pollData.type === 'open-text') {
+                document.getElementById('participant-options-mc').style.display = 'none';
+                document.getElementById('participant-options-ot').style.display = 'block';
+            } else {
+                document.getElementById('participant-options-mc').style.display = 'block';
+                document.getElementById('participant-options-ot').style.display = 'none';
+                const optionsContainer = document.getElementById('participant-options-mc');
+                optionsContainer.innerHTML = '';
+                pollData.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'w-full text-left p-4 bg-slate-100 rounded-lg border-2 border-transparent focus:outline-none transition-all duration-200';
+                    button.style.setProperty('--tw-ring-color', 'var(--primary-color)');
+                    button.addEventListener('mouseover', () => button.style.backgroundColor = 'var(--primary-color-light)');
+                    button.addEventListener('mouseout', () => button.style.backgroundColor = '');
+                    button.textContent = option.text;
+                    button.dataset.optionId = option.id;
+                    button.addEventListener('click', () => handleVote(option.id, pollData.version));
+                    optionsContainer.appendChild(button);
+                });
+            }
         }
     }
 
@@ -734,13 +913,28 @@
 
         const resultsContainer = document.getElementById('participant-results-container');
         const resultsMessage = document.getElementById('results-message');
+        const feedbackTitle = document.getElementById('vote-feedback-title');
+
+        if (pollData.type === 'open-text') {
+            feedbackTitle.textContent = '¡Gracias por tu respuesta!';
+        } else {
+            feedbackTitle.textContent = '¡Gracias por tu voto!';
+        }
 
         if (pollData.showResults) {
             resultsMessage.classList.add('hidden');
             resultsContainer.classList.remove('hidden');
 
-            if (participantChart) participantChart.destroy();
-            participantChart = createChart('participant-results-chart', pollData);
+            if (pollData.type === 'open-text') {
+                document.getElementById('participant-results-chart-container').style.display = 'none';
+                document.getElementById('participant-results-wall-container').style.display = 'block';
+                updateResponseWall('participant-results-wall-container', pollData);
+            } else {
+                document.getElementById('participant-results-chart-container').style.display = 'block';
+                document.getElementById('participant-results-wall-container').style.display = 'none';
+                if (participantChart) participantChart.destroy();
+                participantChart = createChart('participant-results-chart', pollData);
+            }
 
         } else {
             resultsMessage.classList.remove('hidden');
@@ -766,6 +960,37 @@
             });
         } catch (e) {
             console.error("Transaction failed: ", e);
+        }
+    }
+
+    async function handleOpenTextSubmit(pollVersion) {
+        const input = document.getElementById('open-text-input');
+        const submitBtn = document.getElementById('submit-open-text');
+        const responseText = input.value.trim();
+
+        // Si no hay texto o el botón ya está deshabilitado, no hacer nada.
+        if (!responseText || submitBtn.disabled) return;
+
+        // Deshabilitar el botón y el input inmediatamente para prevenir envíos múltiples.
+        submitBtn.disabled = true;
+        input.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+
+        sessionStorage.setItem(`voted_${currentPollId}_v${pollVersion}`, 'true');
+
+        const pollRef = doc(db, "polls", currentPollId);
+        try {
+            await updateDoc(pollRef, {
+                responses: arrayUnion(responseText)
+            });
+            // El listener de onSnapshot se encargará de actualizar la UI a la vista de feedback.
+            // No es necesario restaurar el botón aquí ya que la vista cambiará.
+        } catch (error) {
+            console.error("Error submitting open text response:", error);
+            // En caso de error, volvemos a habilitar los controles para que el usuario pueda reintentar.
+            submitBtn.disabled = false;
+            input.disabled = false;
+            submitBtn.textContent = 'Enviar Respuesta';
         }
     }
 
@@ -812,6 +1037,34 @@
                 showView('notFound');
             }
 
+        } else if (hash === '#saved') {
+            showView('savedPolls');
+            if (currentUserId) {
+                const savedPollsCollection = collection(db, 'users', currentUserId, 'polls');
+                unsubscribeSavedPolls = onSnapshot(savedPollsCollection, (snapshot) => {
+                    const savedPollsList = document.getElementById('saved-polls-list');
+                    savedPollsList.innerHTML = '';
+                    if (snapshot.empty) {
+                        savedPollsList.innerHTML = `<p class="text-slate-400 text-center p-4">Aún no tienes encuestas guardadas.</p>`;
+                        return;
+                    }
+                    snapshot.forEach(doc => {
+                        const poll = { id: doc.id, ...doc.data() };
+                        const pollEl = document.createElement('div');
+                        pollEl.className = 'bg-slate-50 p-3 rounded-lg flex justify-between items-center';
+                        pollEl.innerHTML = `
+                                <span class="truncate font-medium">${poll.question}</span>
+                                <div class="flex gap-2">
+                                    <button class="launch-saved-poll-btn text-white font-bold py-1 px-3 rounded-md" style="background-color: var(--primary-color);" data-poll='${JSON.stringify(poll)}'>Lanzar</button>
+                                    <button class="delete-saved-poll-btn text-red-500 hover:text-red-700" data-id="${poll.id}">
+                                        <svg class="w-6 h-6 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    </button>
+                                </div>
+                            `;
+                        savedPollsList.appendChild(pollEl);
+                    });
+                });
+            }
         } else {
             showView('create');
             document.getElementById('poll-question').value = '';
@@ -828,6 +1081,7 @@
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
+            currentUserId = user.uid;
             router();
         } else {
             signInAnonymously(auth).catch((error) => {
@@ -857,8 +1111,72 @@
         if (event.target.closest('#toggle-voting-btn')) handleToggleVoting();
         if (event.target.closest('#toggle-results-btn')) handleToggleResults();
         if (event.target.closest('#reset-votes-btn')) handleResetVotes();
+        if (event.target.closest('#download-results-btn')) {
+            const pollRef = doc(db, "polls", currentPollId);
+            getDoc(pollRef).then(doc => {
+                if (doc.exists()) {
+                    const pollData = doc.data();
+                    if (pollData.type === 'multiple-choice' && facilitatorChart) {
+                        const link = document.createElement('a');
+                        link.href = facilitatorChart.toBase64Image();
+                        link.download = 'resultados-sondea.png';
+                        link.click();
+                    } else if (pollData.type === 'open-text') {
+                        const responses = pollData.responses || [];
+                        const textContent = "Pregunta: " + pollData.question + "\n\n" + "Respuestas:\n" + responses.join('\n');
+                        const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = 'respuestas-sondea.txt';
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                    }
+                }
+            });
+        }
         if (event.target.closest('#back-to-create-btn')) window.location.hash = '';
         if (event.target.closest('#go-home-btn')) window.location.hash = '';
+        if (event.target.closest('#go-to-saved-btn')) window.location.hash = '#saved';
+        if (event.target.closest('#back-to-create-from-saved')) window.location.hash = '';
+
+        if (event.target.closest('#type-multiple-choice')) {
+            currentPollType = 'multiple-choice';
+            document.getElementById('type-multiple-choice').classList.add('active');
+            document.getElementById('type-open-text').classList.remove('active');
+            document.getElementById('multiple-choice-options').style.display = 'block';
+        }
+        if (event.target.closest('#type-open-text')) {
+            currentPollType = 'open-text';
+            document.getElementById('type-open-text').classList.add('active');
+            document.getElementById('type-multiple-choice').classList.remove('active');
+            document.getElementById('multiple-choice-options').style.display = 'none';
+        }
+        if (event.target.closest('#submit-open-text')) {
+            const pollRef = doc(db, "polls", currentPollId);
+            getDoc(pollRef).then(doc => {
+                if (doc.exists()) handleOpenTextSubmit(doc.data().version);
+            });
+        }
+
+        // Saved Polls actions
+        const launchButton = event.target.closest('.launch-saved-poll-btn');
+        if (launchButton) {
+            const pollData = JSON.parse(launchButton.dataset.poll);
+            if (pollData) {
+                createAndLaunchPoll(pollData);
+            }
+        }
+
+        const deleteButton = event.target.closest('.delete-saved-poll-btn');
+        if (deleteButton) {
+            const pollId = deleteButton.dataset.id;
+            if (pollId) {
+                showConfirmModal('Eliminar Encuesta', '¿Estás seguro de que quieres eliminar esta encuesta guardada?', async () => {
+                    const pollDocRef = doc(db, 'users', currentUserId, 'polls', pollId);
+                    await deleteDoc(pollDocRef);
+                });
+            }
+        }
 
         // Modal handling
         if (event.target.closest('#support-btn')) supportModal.classList.remove('hidden');

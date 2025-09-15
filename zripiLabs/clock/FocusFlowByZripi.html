@@ -563,6 +563,10 @@
             margin-top: 1.5rem;
         }
 
+        .modal-content .control-btn {
+            width: 100%;
+        }
+
         .support-btn {
             display: block;
             padding: 0.8rem 1rem;
@@ -876,6 +880,23 @@
         let targetTime = 0;
         let selectedSound = 'punto';
 
+        // --- Lógica para Notificaciones ---
+        const notificationIcon = "data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 10C27.9086 10 10 27.9086 10 50C10 72.0914 27.9086 90 50 90' stroke='%234c86a8' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M50 90C72.0914 90 90 72.0914 90 50C90 27.9086 72.0914 10 50 10' stroke='%234c86a8' stroke-width='12' stroke-linecap='round' stroke-linejoin='round' stroke-dasharray='2 18'/%3E%3Cpath d='M50 30V50H70' stroke='%234c86a8' stroke-width='12' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E";
+
+        function handleNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+
+        function showCompletionNotification() {
+            if (Notification.permission === 'granted') {
+                const title = timerTitleInput.value || '¡Tiempo terminado!';
+                const body = `Tu sesión de Focus Flow ha finalizado.`;
+                new Notification('Focus Flow', { body: body, icon: notificationIcon, silent: true });
+            }
+        }
+
         // --- TIMER FUNCTIONS ---
         const formatTime = (seconds) => {
             const h = Math.floor(seconds / 3600);
@@ -909,6 +930,8 @@
                     isRunning = false;
 
                     if(isSoundOn) sounds[selectedSound]();
+                    showCompletionNotification();
+
                     timerProgress.style.width = '100%';
                     document.body.classList.add('finished');
                     extraTimeControls.style.display = 'none';
@@ -933,7 +956,7 @@
         const startTimer = () => {
             if (isRunning || (mode === 'countdown' && totalSeconds <= 0)) return;
 
-            Tone.start(); // Ensure audio context is running
+            Tone.start();
             isRunning = true;
             startBtn.style.display = 'none';
             pauseBtn.style.display = 'inline-block';
@@ -985,7 +1008,10 @@
         };
 
         // --- EVENT HANDLERS ---
-        startBtn.addEventListener('click', startTimer);
+        startBtn.addEventListener('click', () => {
+            handleNotificationPermission();
+            startTimer();
+        });
         pauseBtn.addEventListener('click', pauseTimer);
         resetBtn.addEventListener('click', resetTimer);
 

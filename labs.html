@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZripiLabs - Índice de Aplicaciones</title>
+
+    <!-- Favicon SVG (mantenido de la versión anterior) -->
+    <link rel="icon" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3cdefs%3e%3clinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3e%3cstop offset='0%25' style='stop-color:%2322d3ee;'/%3e%3cstop offset='100%25' style='stop-color:%230ea5e9;'/%3e%3c/linearGradient%3e%3c/defs%3e%3cpath d='M50,5 C25.16,5 5,25.16 5,50 C5,74.84 25.16,95 50,95 C74.84,95 95,74.84 95,50 C95,25.16 74.84,5 50,5 Z M50,10 C72.08,10 90,27.92 90,50 C90,72.08 72.08,90 50,90 C27.92,90 10,72.08 10,50 C10,27.92 27.92,10 50,10 Z' fill='url(%23g)'/%3e%3cpath d='M 65,35 H 35 L 65,65 H 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3e%3c/svg%3e">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Exo 2 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Estilos personalizados para el look futurista -->
+    <style>
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: #0c0a09; /* bg-stone-950 */
+            color: #e7e5e4; /* text-stone-200 */
+            overflow-x: hidden; /* Permite scroll vertical, evita el horizontal */
+        }
+        #particles-js {
+            position: fixed; /* Se mantiene fijo en el fondo */
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            top: 0;
+            left: 0;
+        }
+        main {
+            position: relative;
+            z-index: 1;
+        }
+        .card {
+            background: rgba(12, 10, 9, 0.4); /* Fondo semi-transparente */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(38, 209, 237, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: card-fade-in 0.5s ease-out forwards;
+        }
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(38, 209, 237, 0.8);
+            box-shadow: 0 0 20px rgba(38, 209, 237, 0.4), 0 0 40px rgba(217, 70, 239, 0.2);
+        }
+        @keyframes card-fade-in {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .text-cyan-glow {
+            color: #22d3ee;
+            text-shadow: 0 0 5px rgba(34, 211, 238, 0.7);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 lg:p-8">
+
+<!-- Contenedor para el fondo de partículas -->
+<div id="particles-js"></div>
+
+<main class="w-full max-w-6xl mx-auto py-12">
+    <!-- Encabezado con Logo -->
+    <header class="text-center mb-12">
+        <!-- Logo SVG con nuevos colores -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4" viewBox="0 0 100 100">
+            <defs>
+                <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#22d3ee;" /> <!-- cyan-400 -->
+                    <stop offset="100%" style="stop-color:#d946ef;" /> <!-- fuchsia-500 -->
+                </linearGradient>
+            </defs>
+            <path d="M50,5 C25.16,5 5,25.16 5,50 C5,74.84 25.16,95 50,95 C74.84,95 95,74.84 95,50 C95,25.16 74.84,5 50,5 Z M50,10 C72.08,10 90,27.92 90,50 C90,72.08 72.08,90 50,90 C27.92,90 10,72.08 10,50 C10,27.92 27.92,10 50,10 Z" fill="url(#logoGradient)" />
+            <path d="M 65,35 H 35 L 65,65 H 35" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-white">Zripi<span class="text-cyan-glow">Labs</span></h1>
+        <p class="mt-3 text-lg text-stone-400">Portfolio de aplicaciones web.</p>
+    </header>
+
+    <!-- Grilla de aplicaciones -->
+    <div id="app-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Las tarjetas se insertarán aquí -->
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center mt-12">
+        <p class="text-stone-500">
+            &copy; 2025 <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer" class="hover:text-cyan-400 transition-colors duration-300">zripi.com.ar</a>.<br>
+            Todos los derechos reservados.
+        </p>
+    </footer>
+</main>
+
+<!-- Librería particles.js para el fondo animado -->
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Configuración de particles.js
+        particlesJS('particles-js', {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#22d3ee" },
+                "shape": { "type": "circle", },
+                "opacity": { "value": 0.5, "random": true, "anim": { "enable": true, "speed": 1, "opacity_min": 0.1, "sync": false } },
+                "size": { "value": 3, "random": true, "anim": { "enable": false } },
+                "line_linked": { "enable": true, "distance": 150, "color": "#22d3ee", "opacity": 0.2, "width": 1 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        // Datos de las aplicaciones
+        const apps = [
+            {
+                title: 'FocusFlow',
+                description: 'Controla tus eventos con cuentas regresivas, cronómetros y tiempos pre-seteados.',
+                url: 'https://zripi.com.ar/zripiLabs/clock/FocusFlowByZripi.html',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
+            },
+            {
+                title: 'Sondea',
+                description: 'Crea y comparte encuestas rápidas, simples y anónimas para obtener opiniones al instante.',
+                url: 'https://zripi.com.ar/zripiLabs/sondea.html',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>`
+            },
+            {
+                title: 'Hacelo QR',
+                description: 'Crea códigos QR al instante para enlaces, textos, redes Wi-Fi y mucho más.',
+                url: 'https://zripi.com.ar/zripiLabs/haceloQR.html',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h2v2H4zM4 10h2v2H4zM4 16h2v2H4zM10 4h2v2h-2zM10 10h2v2h-2zM10 16h2v2h-2zM16 4h2v2h-2zM16 10h2v2h-2zM16 16h2v2h-2z" /></svg>`
+            },
+            {
+                title: 'Sortify',
+                description: 'Realiza sorteos y arma equipos de forma aleatoria, justa y transparente en segundos.',
+                url: 'https://zripi.com.ar/zripiLabs/sortify.html',
+                icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
+            }
+        ];
+
+        const grid = document.getElementById('app-grid');
+
+        apps.forEach((app, index) => {
+            const cardLink = document.createElement('a');
+            cardLink.href = app.url;
+            cardLink.target = '_blank';
+            cardLink.rel = 'noopener noreferrer';
+            cardLink.className = 'card block p-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500';
+            cardLink.style.animationDelay = `${index * 100}ms`;
+
+            cardLink.innerHTML = `
+                    <div class="flex flex-col items-start h-full">
+                        <div class="mb-4">
+                            ${app.icon}
+                        </div>
+                        <h2 class="text-xl font-bold text-white">${app.title}</h2>
+                        <p class="mt-2 text-stone-400 flex-grow">${app.description}</p>
+                        <div class="mt-4 text-sm font-medium text-cyan-400">
+                            Abrir aplicación &rarr;
+                        </div>
+                    </div>
+                `;
+
+            grid.appendChild(cardLink);
+        });
+    });
+</script>
+</body>
+</html>
+

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZripiLink ✨</title>
+    <link rel="icon" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3ccircle cx='16' cy='8' r='3' stroke='%232563eb' stroke-width='2' fill='none'/%3e%3ccircle cx='8' cy='16' r='3' stroke='%2310b981' stroke-width='2' fill='none'/%3e%3cpath d='M16 8 L 8 16' stroke='%23cbd5e1' stroke-width='1.5' stroke-linecap='round'/%3e%3c/svg%3e">
+
+    <!-- Tailwind CSS para estilos rápidos y modernos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter (limpia y profesional) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+    <!-- SortableJS para Drag and Drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    <!-- Cropper.js para edición de imágenes -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <style>
+        /* Aplicamos la tipografía Inter a toda la aplicación */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Animación sutil de entrada para los elementos */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Ocultar scrollbars en la galería para un look más limpio */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* Estilos para los botones del Lightbox/Modal */
+        #lightbox-prev, #lightbox-next, #lightbox-close {
+            cursor: pointer;
+            user-select: none;
+            padding: 1rem;
+            transition: opacity 0.2s;
+        }
+        #lightbox-prev:hover, #lightbox-next:hover, #lightbox-close:hover {
+            opacity: 0.7;
+        }
+
+        /* Estilo para el placeholder mientras se arrastra un elemento */
+        .sortable-ghost {
+            opacity: 0.4;
+            background-color: #e0f2fe; /* Un azul claro de Tailwind */
+        }
+
+        /* Estilos para el Cropper.js */
+        #cropper-container {
+            height: 40vh;
+        }
+        .cropper-view-box,
+        .cropper-face {
+            border-radius: 50%;
+        }
+
+        /* Animación de pulso para el botón CTA principal */
+        @keyframes pulse-light {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .pulse-light {
+            animation: pulse-light 2.5s infinite ease-in-out;
+        }
+
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-600">
+
+<div id="app">
+
+    <!-- ======================================================= -->
+    <!-- PANTALLA DE INICIO DE SESIÓN (LOGIN)                    -->
+    <!-- ======================================================= -->
+    <div id="login-page" class="min-h-screen flex flex-col items-center justify-center p-4 fade-in bg-gradient-to-br from-white to-slate-200">
+        <div class="w-full max-w-sm">
+            <div class="text-center mb-8">
+                <div class="flex flex-col items-center justify-center gap-4">
+                    <svg class="w-14 h-14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Puntos -->
+                        <circle cx="16" cy="8" r="3" class="text-blue-600" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="8" cy="16" r="3" class="text-emerald-500" stroke="currentColor" stroke-width="2"/>
+                        <!-- Línea de conexión -->
+                        <path d="M16 8 L 8 16" class="text-slate-300" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <!-- Chispas animadas -->
+                        <circle r="1.5" class="text-blue-600" fill="currentColor">
+                            <animateMotion dur="2s" repeatCount="indefinite" path="M16 8 L 8 16" />
+                        </circle>
+                        <circle r="1.5" class="text-emerald-500" fill="currentColor">
+                            <animateMotion dur="2s" repeatCount="indefinite" path="M8 16 L 16 8" />
+                        </circle>
+                    </svg>
+                    <h1 class="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent drop-shadow-sm">
+                        ZripiLink
+                    </h1>
+                </div>
+                <p class="text-slate-500 mt-4">¡Hola! ¿Listo para mostrar tu talento al mundo?</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <form id="login-form">
+                    <div class="mb-4">
+                        <label for="login-email" class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+                        <input type="email" id="login-email" placeholder="tu@email.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="login-password" class="block text-sm font-medium text-slate-600 mb-1">Contraseña</label>
+                        <input type="password" id="login-password" placeholder="••••••••" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                        Iniciar Sesión
+                    </button>
+                </form>
+                <div class="text-center mt-6">
+                    <p class="text-sm text-slate-500">
+                        ¿No tienes cuenta?
+                        <a href="#signup" id="go-to-signup" class="font-medium text-blue-600 hover:underline">Regístrate gratis</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- PANTALLA DE REGISTRO (SIGNUP)                           -->
+    <!-- ======================================================= -->
+    <div id="signup-page" class="min-h-screen flex flex-col items-center justify-center p-4 fade-in hidden bg-gradient-to-br from-white to-slate-200">
+        <div class="w-full max-w-sm">
+            <div class="text-center mb-8">
+                <div class="flex flex-col items-center justify-center gap-4">
+                    <svg class="w-14 h-14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Puntos -->
+                        <circle cx="16" cy="8" r="3" class="text-blue-600" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="8" cy="16" r="3" class="text-emerald-500" stroke="currentColor" stroke-width="2"/>
+                        <!-- Línea de conexión -->
+                        <path d="M16 8 L 8 16" class="text-slate-300" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        <!-- Chispas animadas -->
+                        <circle r="1.5" class="text-blue-600" fill="currentColor">
+                            <animateMotion dur="2s" repeatCount="indefinite" path="M16 8 L 8 16" />
+                        </circle>
+                        <circle r="1.5" class="text-emerald-500" fill="currentColor">
+                            <animateMotion dur="2s" repeatCount="indefinite" path="M8 16 L 16 8" />
+                        </circle>
+                    </svg>
+                    <h1 class="text-4xl font-extrabold bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent drop-shadow-sm">
+                        ZripiLink
+                    </h1>
+                </div>
+                <p class="text-slate-500 mt-4">Tu portal al mundo, creado en minutos. ✨</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <form id="signup-form">
+                    <div class="mb-4">
+                        <label for="signup-email" class="block text-sm font-medium text-slate-600 mb-1">Email</label>
+                        <input type="email" id="signup-email" placeholder="tu@email.com" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="signup-password" class="block text-sm font-medium text-slate-600 mb-1">Contraseña</label>
+                        <input type="password" id="signup-password" placeholder="Crea una contraseña segura" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="signup-url" class="block text-sm font-medium text-slate-600 mb-1">Elige tu URL</label>
+                        <div class="flex items-center">
+                            <span class="text-slate-500 bg-slate-100 p-2 rounded-l-lg border border-r-0 border-slate-300">zripilink.com/</span>
+                            <input type="text" id="signup-url" placeholder="tunombre" class="w-full px-4 py-2 border border-slate-300 rounded-r-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                        Crear mi Cuenta Gratis
+                    </button>
+                </form>
+                <div class="text-center mt-6">
+                    <p class="text-sm text-slate-500">
+                        ¿Ya tienes cuenta?
+                        <a href="#login" id="go-to-login" class="font-medium text-blue-600 hover:underline">Inicia Sesión</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- PANEL DE EDICIÓN DEL USUARIO                            -->
+    <!-- ======================================================= -->
+    <div id="editor-page" class="min-h-screen p-4 md:p-8 fade-in hidden">
+        <div class="max-w-3xl mx-auto">
+            <header class="flex flex-wrap items-center justify-between gap-4 mb-8">
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Panel de Edición 🎨</h1>
+                <div class="flex items-center gap-2">
+                    <button id="preview-button" class="bg-slate-200 text-slate-800 font-bold py-2 px-4 rounded-lg hover:bg-slate-300 transition">Ver mi Página</button>
+                    <button id="logout-button" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 transition">Salir</button>
+                </div>
+            </header>
+
+            <!-- URL del Perfil -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+                <label class="block text-sm font-medium text-slate-600 mb-2">Tu enlace único. ¡Compártelo!</label>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="profile-url-display" value="zripilink.com/tunombre" readonly class="flex-grow bg-slate-100 p-2 rounded-lg border border-slate-300 text-slate-500">
+                    <button id="copy-url-button" class="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Formulario de Edición -->
+            <form id="editor-form" class="space-y-6">
+
+                <!-- Información Principal y Foto de Perfil (Fusionado) -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-[auto,1fr] gap-x-6 gap-y-4 items-start">
+                        <!-- Columna de la Foto -->
+                        <div class="flex flex-col items-center gap-2 md:row-span-3">
+                            <img id="profile-pic-preview" src="https://placehold.co/100x100/e2e8f0/334155?text=Foto" class="w-24 h-24 rounded-full object-cover">
+                            <input type="file" id="profile-pic-upload" class="hidden" accept="image/*">
+                            <button type="button" id="change-pic-button" class="text-sm font-semibold text-blue-600 hover:underline">Cambiar Foto</button>
+                        </div>
+
+                        <!-- Campos de Información -->
+                        <div>
+                            <label for="editor-name" class="block text-sm font-medium text-slate-600 mb-1">Tu Nombre</label>
+                            <input type="text" id="editor-name" placeholder="Ej: Ana López" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="editor-title" class="block text-sm font-medium text-slate-600 mb-1">Título / Profesión</label>
+                            <input type="text" id="editor-title" placeholder="Ej: Diseñadora Gráfica" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div class="md:col-start-2">
+                            <label for="editor-bio" class="block text-sm font-medium text-slate-600 mb-1">Sobre mí</label>
+                            <textarea id="editor-bio" rows="4" placeholder="Describe brevemente tus servicios, tu pasión, lo que te hace único..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Galería -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Mi Portfolio (hasta 6 items)</h3>
+                    <p class="text-sm text-slate-500 mb-4">Haz clic para reemplazar, o arrastra para reordenar.</p>
+                    <div id="portfolio-grid" class="grid grid-cols-3 md:grid-cols-5 gap-4">
+                        <!-- Las imágenes se agregarán aquí con JS -->
+                    </div>
+                    <input type="file" id="portfolio-upload" class="hidden" multiple accept="image/*">
+                    <input type="file" id="replace-portfolio-upload" class="hidden" accept="image/*">
+                    <button type="button" id="add-portfolio-button" class="mt-4 bg-slate-100 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-200 transition">
+                        + Añadir Imágenes
+                    </button>
+                    <button type="button" id="add-video-button" class="mt-4 bg-slate-100 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-200 transition">
+                        🎬 Añadir Video
+                    </button>
+                </div>
+
+                <!-- Enlaces -->
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="font-bold text-lg mb-2 text-slate-800">Botones de Contacto</h3>
+                    <p class="text-sm text-slate-500 mb-4">Arrastra para reordenar y elige tu acción principal con la estrella ★.</p>
+                    <div id="links-container" class="space-y-4">
+                        <!-- Los enlaces se agregarán aquí con JS -->
+                    </div>
+                    <button type="button" id="add-link-button" class="mt-4 bg-slate-100 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-200 transition">
+                        + Añadir Enlace
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- PÁGINA DE PRESENTACIÓN PÚBLICA                          -->
+    <!-- ======================================================= -->
+    <div id="profile-page" class="min-h-screen flex items-center justify-center px-4 py-20 fade-in hidden">
+        <div class="w-full max-w-md mx-auto">
+            <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 text-center relative">
+                <button id="back-to-editor" class="absolute top-4 left-4 bg-slate-100 p-2 rounded-full hover:bg-slate-200 transition">
+                    <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button id="share-profile-button" class="absolute top-4 right-4 bg-slate-100 p-2 rounded-full hover:bg-slate-200 transition">
+                    <svg class="w-5 h-5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12s-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6.002l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path></svg>
+                </button>
+                <!-- Contenido del perfil se inyectará aquí -->
+                <div id="profile-content"></div>
+            </div>
+            <footer class="text-center mt-6 text-sm text-slate-500">
+                Powered by <a href="#" id="go-to-home" class="font-bold text-blue-600 hover:underline">ZripiLink</a>
+            </footer>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL LIGHTBOX PARA EL PORTFOLIO                      -->
+    <!-- ======================================================= -->
+    <div id="lightbox" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center p-4 z-50 hidden transition-opacity duration-300">
+        <button id="lightbox-close" class="absolute top-2 right-2 text-white text-5xl font-light leading-none z-10">&times;</button>
+        <button id="lightbox-prev" class="absolute left-0 md:left-4 top-1/2 -translate-y-1/2 text-white text-5xl font-light leading-none">&#8249;</button>
+        <div class="relative w-full max-w-4xl h-full max-h-[80vh] flex items-center justify-center">
+            <img id="lightbox-image" src="" class="max-w-full max-h-full object-contain rounded-lg hidden">
+            <iframe id="lightbox-video" class="w-full h-full hidden aspect-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <button id="lightbox-next" class="absolute right-0 md:right-4 top-1/2 -translate-y-1/2 text-white text-5xl font-light leading-none">&#8250;</button>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- TOAST / NOTIFICACIÓN                                  -->
+    <!-- ======================================================= -->
+    <div id="toast" class="fixed top-5 right-5 bg-red-500 text-white py-2 px-4 rounded-lg shadow-lg transform translate-x-[calc(100%+2.5rem)] transition-transform duration-300 z-50">
+        <p id="toast-message">Mensaje de prueba</p>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL PARA URL DE YOUTUBE                             -->
+    <!-- ======================================================= -->
+    <div id="youtube-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div id="youtube-modal-content" class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md transform scale-95 opacity-0 transition-all duration-300">
+            <h3 class="font-bold text-lg mb-4 text-slate-800">Añadir Video de YouTube</h3>
+            <p class="text-sm text-slate-500 mb-4">Pega la URL completa de tu video de YouTube a continuación.</p>
+            <input type="url" id="youtube-url-input" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <div class="flex justify-end gap-4 mt-6">
+                <button type="button" id="modal-cancel-button" class="bg-slate-100 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-200 transition">Cancelar</button>
+                <button type="button" id="modal-confirm-button" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================= -->
+    <!-- MODAL PARA RECORTAR FOTO DE PERFIL (CROPPER)          -->
+    <!-- ======================================================= -->
+    <div id="cropper-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div id="cropper-modal-content" class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-lg transform scale-95 opacity-0 transition-all duration-300">
+            <h3 class="font-bold text-lg mb-2 text-slate-800">Ajustar Foto de Perfil</h3>
+            <p class="text-sm text-slate-500 mb-4">Arrastra y usa la rueda del mouse para ajustar la imagen.</p>
+            <div id="cropper-container">
+                <img id="cropper-image" src="">
+            </div>
+            <div class="flex justify-end gap-4 mt-6">
+                <button type="button" id="cropper-cancel-button" class="bg-slate-100 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-200 transition">Cancelar</button>
+                <button type="button" id="cropper-confirm-button" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ======================================================= //
+        // ESTADO INICIAL Y DATOS DE PRUEBA DE LA APLICACIÓN       //
+        // ======================================================= //
+        const appState = {
+            currentPage: 'login',
+            loggedIn: false,
+            profileData: {
+                name: "Ana López",
+                title: "Diseñadora Gráfica & Ilustradora",
+                bio: "¡Hola! 🎨 Transformo ideas en diseños visuales impactantes. Especializada en branding y marketing digital para startups. ¿Hablamos?",
+                profilePic: "https://placehold.co/200x200/a3e635/3f6212?text=Ana",
+                url: "zripilink.com/ana-lopez",
+                portfolio: [
+                    { type: 'image', src: "https://placehold.co/600x400/fbbf24/854d0e?text=Proyecto+1" },
+                    { type: 'image', src: "https://placehold.co/600x400/f87171/991b1b?text=Proyecto+2" },
+                    { type: 'image', src: "https://placehold.co/600x400/60a5fa/1e3a8a?text=Proyecto+3" },
+                    { type: 'image', src: "https://placehold.co/600x400/34d399/064e3b?text=Proyecto+4" },
+                    { type: 'image', src: "https://placehold.co/600x400/c084fc/5b21b6?text=Proyecto+5" },
+                    { type: 'image', src: "https://placehold.co/600x400/f472b6/9d174d?text=Proyecto+6" },
+                ],
+                links: [
+                    { type: 'whatsapp', value: '5491123456789', label: 'Hablemos por WhatsApp', isPrimary: true },
+                    { type: 'instagram', value: 'https://instagram.com/ana.designs', label: 'Sígueme en Instagram', isPrimary: false },
+                    { type: 'email', value: 'hola@ana.designs', label: 'Envíame un Email', isPrimary: false },
+                ]
+            },
+            lightbox: {
+                isOpen: false,
+                currentIndex: 0
+            }
+        };
+
+        // Variables globales
+        let portfolioIndexToReplace = null;
+        let cropper = null;
+
+        // ======================================================= //
+        // ELEMENTOS DEL DOM                                       //
+        // ======================================================= //
+        const pages = {
+            login: document.getElementById('login-page'),
+            signup: document.getElementById('signup-page'),
+            editor: document.getElementById('editor-page'),
+            profile: document.getElementById('profile-page'),
+        };
+
+        // Forms
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const editorForm = document.getElementById('editor-form');
+
+        // Navigation buttons
+        const goToSignup = document.getElementById('go-to-signup');
+        const goToLogin = document.getElementById('go-to-login');
+        const goToHome = document.getElementById('go-to-home');
+        const previewButton = document.getElementById('preview-button');
+        const backToEditor = document.getElementById('back-to-editor');
+        const logoutButton = document.getElementById('logout-button');
+        const shareProfileButton = document.getElementById('share-profile-button');
+
+        // Editor elements
+        const profileUrlDisplay = document.getElementById('profile-url-display');
+        const copyUrlButton = document.getElementById('copy-url-button');
+        const profilePicPreview = document.getElementById('profile-pic-preview');
+        const profilePicUpload = document.getElementById('profile-pic-upload');
+        const changePicButton = document.getElementById('change-pic-button');
+        const editorName = document.getElementById('editor-name');
+        const editorTitle = document.getElementById('editor-title');
+        const editorBio = document.getElementById('editor-bio');
+        const portfolioGrid = document.getElementById('portfolio-grid');
+        const addPortfolioButton = document.getElementById('add-portfolio-button');
+        const addVideoButton = document.getElementById('add-video-button');
+        const portfolioUpload = document.getElementById('portfolio-upload');
+        const replacePortfolioUpload = document.getElementById('replace-portfolio-upload');
+        const linksContainer = document.getElementById('links-container');
+        const addLinkButton = document.getElementById('add-link-button');
+
+        // Profile page content
+        const profileContent = document.getElementById('profile-content');
+
+        // Lightbox elements
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxVideo = document.getElementById('lightbox-video');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+
+        // Toast elements
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+        let toastTimeout;
+
+        // Modal elements
+        const youtubeModal = document.getElementById('youtube-modal');
+        const youtubeModalContent = document.getElementById('youtube-modal-content');
+        const youtubeUrlInput = document.getElementById('youtube-url-input');
+        const modalCancelButton = document.getElementById('modal-cancel-button');
+        const modalConfirmButton = document.getElementById('modal-confirm-button');
+
+        // Cropper modal elements
+        const cropperModal = document.getElementById('cropper-modal');
+        const cropperModalContent = document.getElementById('cropper-modal-content');
+        const cropperImage = document.getElementById('cropper-image');
+        const cropperCancelButton = document.getElementById('cropper-cancel-button');
+        const cropperConfirmButton = document.getElementById('cropper-confirm-button');
+
+
+        // ======================================================= //
+        // NAVEGACIÓN Y RENDERIZADO DE PÁGINAS                     //
+        // ======================================================= //
+
+        function navigateTo(pageName) {
+            appState.currentPage = pageName;
+            Object.values(pages).forEach(page => page.classList.add('hidden'));
+            if (pages[pageName]) {
+                pages[pageName].classList.remove('hidden');
+            }
+            window.location.hash = pageName;
+        }
+
+        function handleRouteChange() {
+            const hash = window.location.hash.substring(1);
+            if (['login', 'signup', 'editor', 'profile'].includes(hash)) {
+                if (hash === 'editor' && !appState.loggedIn) {
+                    navigateTo('login');
+                } else if(hash === 'profile' && !appState.loggedIn) {
+                    renderProfilePage();
+                    navigateTo('profile');
+                } else {
+                    navigateTo(hash);
+                }
+            } else {
+                navigateTo('login');
+            }
+        }
+
+        // ======================================================= //
+        // FUNCIONES HELPERS                                       //
+        // ======================================================= //
+
+        function getYoutubeVideoId(url) {
+            let videoId = '';
+            if (!url) return '';
+            try {
+                if (url.includes('youtu.be/')) {
+                    videoId = url.split('youtu.be/')[1].split(/[?&]/)[0];
+                } else if (url.includes('youtube.com/watch')) {
+                    const urlParams = new URLSearchParams(new URL(url).search);
+                    videoId = urlParams.get('v');
+                } else if (url.includes('/embed/')) {
+                    videoId = url.split('/embed/')[1].split(/[?&]/)[0];
+                }
+            } catch (e) {
+                return '';
+            }
+            return videoId;
+        }
+
+        function getYoutubeThumbnail(url) {
+            const videoId = getYoutubeVideoId(url);
+            return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://placehold.co/600x400/1e293b/ffffff?text=Video';
+        }
+
+
+        // ======================================================= //
+        // FUNCIONES DE RENDERIZADO (POBLAR VISTAS CON DATOS)      //
+        // ======================================================= //
+
+        function renderEditor() {
+            const data = appState.profileData;
+            profileUrlDisplay.value = data.url;
+            profilePicPreview.src = data.profilePic;
+            editorName.value = data.name;
+            editorTitle.value = data.title;
+            editorBio.value = data.bio;
+            renderPortfolioEditor();
+            renderLinksEditor();
+        }
+
+        function renderPortfolioEditor() {
+            portfolioGrid.innerHTML = '';
+            appState.profileData.portfolio.forEach((item, index) => {
+                const itemContainer = document.createElement('div');
+                itemContainer.className = 'portfolio-item-clickable relative group cursor-pointer';
+                itemContainer.dataset.index = index;
+
+                let thumbnailHtml = '';
+                if (item.type === 'image') {
+                    thumbnailHtml = `<img src="${item.src}" class="w-full h-24 object-cover rounded-lg">`;
+                } else if (item.type === 'video') {
+                    thumbnailHtml = `
+                            <div class="w-full h-24 bg-slate-800 rounded-lg flex items-center justify-center relative">
+                                <img src="${getYoutubeThumbnail(item.src)}" class="w-full h-full object-cover rounded-lg absolute inset-0 z-0">
+                                <div class="absolute inset-0 bg-black bg-opacity-40 rounded-lg"></div>
+                                <svg class="w-8 h-8 text-white relative z-10" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                            </div>
+                        `;
+                }
+
+                itemContainer.innerHTML = `
+                        ${thumbnailHtml}
+                        <div class="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg text-sm font-semibold">Reemplazar</div>
+                        <button data-index="${index}" class="remove-portfolio-item absolute top-1 right-1 bg-red-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition z-20">&times;</button>
+                    `;
+                portfolioGrid.appendChild(itemContainer);
+            });
+        }
+
+        function renderLinksEditor() {
+            linksContainer.innerHTML = '';
+            appState.profileData.links.forEach((link, index) => {
+                const linkEditor = document.createElement('div');
+                linkEditor.className = 'p-2 bg-slate-50 rounded-lg space-y-2';
+
+                const isPrimary = link.isPrimary;
+                const starIcon = isPrimary
+                    ? `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>`
+                    : `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400 hover:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.783-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" /></svg>`;
+
+                linkEditor.innerHTML = `
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-slate-400 cursor-move link-drag-handle flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                            <button type="button" data-index="${index}" class="set-primary-link p-2 rounded-lg hover:bg-slate-200 transition">${starIcon}</button>
+                            <select data-index="${index}" class="link-type-select bg-white border border-slate-300 rounded-lg p-2 w-full flex-grow">
+                                <option value="whatsapp" ${link.type === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
+                                <option value="instagram" ${link.type === 'instagram' ? 'selected' : ''}>Instagram</option>
+                                <option value="email" ${link.type === 'email' ? 'selected' : ''}>Email</option>
+                                <option value="website" ${link.type === 'website' ? 'selected' : ''}>Web</option>
+                                <option value="linkedin" ${link.type === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                                <option value="tiktok" ${link.type === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                                <option value="x" ${link.type === 'x' ? 'selected' : ''}>X (Twitter)</option>
+                            </select>
+                            <button data-index="${index}" class="remove-link-item bg-red-100 text-red-600 p-2 rounded-lg hover:bg-red-200 transition flex-shrink-0">&times;</button>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <input type="text" data-index="${index}" class="link-value-input w-full px-3 py-2 border border-slate-300 rounded-lg" value="${link.value}" placeholder="URL o número">
+                            <input type="text" data-index="${index}" class="link-label-input w-full px-3 py-2 border border-slate-300 rounded-lg" value="${link.label}" placeholder="Texto del botón">
+                        </div>
+                    `;
+                linksContainer.appendChild(linkEditor);
+            });
+        }
+
+        function renderProfilePage() {
+            const data = appState.profileData;
+            const getIcon = (type) => {
+                const icons = {
+                    whatsapp: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>`,
+                    instagram: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>`,
+                    email: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`,
+                    website: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><line x1="2" x2="22" y1="12" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+                    linkedin: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>`,
+                    tiktok: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`,
+                    x: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>`
+                };
+                return icons[type] || icons['website'];
+            }
+
+            const sortedLinks = [...data.links].sort((a, b) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0));
+            let linksHtml = '';
+
+            sortedLinks.forEach(link => {
+                const isPrimary = link.isPrimary;
+                const bgColor = isPrimary ? 'bg-blue-600 hover:bg-blue-700' : 'bg-slate-700 hover:bg-slate-800';
+                const textColor = 'text-white';
+                const animationClass = isPrimary ? 'pulse-light' : '';
+
+                let actualHref = '#';
+                switch (link.type) {
+                    case 'whatsapp':
+                        actualHref = `https://wa.me/${link.value.replace(/\s/g, '')}`;
+                        break;
+                    case 'email':
+                        actualHref = `mailto:${link.value}`;
+                        break;
+                    default:
+                        actualHref = link.value.startsWith('http') ? link.value : `https://${link.value}`;
+                        break;
+                }
+
+                linksHtml += `
+                        <a href="${actualHref}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-3 w-full ${bgColor} ${textColor} font-bold py-3 px-4 rounded-xl transition-transform transform hover:scale-105 shadow-md ${animationClass}">
+                            ${getIcon(link.type)}
+                            <span>${link.label}</span>
+                        </a>`;
+            });
+
+            let portfolioHtml = '';
+            if(data.portfolio.length > 0) {
+                let gridClasses = 'grid-cols-3';
+                if (data.portfolio.length === 1) gridClasses = 'grid-cols-1';
+                if (data.portfolio.length === 2 || data.portfolio.length === 4) gridClasses = 'grid-cols-2';
+
+                portfolioHtml = `
+                        <div class="mt-8">
+                            <h3 class="font-bold text-xl mb-4 text-slate-800">Mi Trabajo</h3>
+                            <div class="grid ${gridClasses} gap-2 portfolio-gallery">
+                                ${data.portfolio.map((item, index) => {
+                    if (item.type === 'image') {
+                        return `<img src="${item.src}" data-index="${index}" class="w-full h-24 object-cover rounded-lg cursor-pointer hover:scale-105 transition">`
+                    } else if (item.type === 'video') {
+                        return `
+                                            <div data-index="${index}" class="w-full h-24 bg-slate-800 rounded-lg flex items-center justify-center cursor-pointer hover:scale-105 transition relative group">
+                                                <img src="${getYoutubeThumbnail(item.src)}" class="w-full h-full object-cover rounded-lg absolute inset-0 z-0">
+                                                <div class="absolute inset-0 bg-black bg-opacity-40 rounded-lg transition-opacity group-hover:bg-opacity-10"></div>
+                                                <svg class="w-8 h-8 text-white transition-transform group-hover:scale-110 relative z-10" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                                            </div>
+                                        `;
+                    }
+                }).join('')}
+                            </div>
+                        </div>`;
+            }
+
+            profileContent.innerHTML = `
+                    <div class="flex flex-col items-center -mt-16">
+                        <img src="${data.profilePic}" class="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg">
+                    </div>
+                    <div class="mt-4">
+                        <h2 class="text-3xl font-bold text-slate-800">${data.name}</h2>
+                        <p class="text-slate-500 mt-1">${data.title}</p>
+                    </div>
+                    <p class="mt-6 text-slate-600 leading-relaxed">${data.bio}</p>
+                    ${portfolioHtml}
+                    <div class="mt-8 space-y-3">
+                        ${linksHtml}
+                    </div>
+                `;
+        }
+
+        // ======================================================= //
+        // FUNCIONES UI (TOAST, MODAL, ETC)                        //
+        // ======================================================= //
+
+        function showToast(message, isError = false) {
+            clearTimeout(toastTimeout);
+            toastMessage.textContent = message;
+            toast.className = `fixed top-5 right-5 text-white py-2 px-4 rounded-lg shadow-lg transform transition-transform duration-300 z-50 ${isError ? 'bg-red-500' : 'bg-emerald-500'}`;
+            toast.classList.remove('translate-x-[calc(100%+2.5rem)]');
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('translate-x-[calc(100%+2.5rem)]');
+            }, 3000);
+        }
+
+        function openUrlModal(existingUrl = '') {
+            youtubeUrlInput.value = existingUrl;
+            youtubeModal.classList.remove('hidden');
+            setTimeout(() => {
+                youtubeModalContent.classList.remove('scale-95', 'opacity-0');
+                youtubeModalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeUrlModal() {
+            youtubeModalContent.classList.remove('scale-100', 'opacity-100');
+            youtubeModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => youtubeModal.classList.add('hidden'), 300);
+        }
+
+        function openCropperModal(imageSrc) {
+            cropperImage.src = imageSrc;
+            cropperModal.classList.remove('hidden');
+            setTimeout(() => {
+                cropperModalContent.classList.remove('scale-95', 'opacity-0');
+                cropperModalContent.classList.add('scale-100', 'opacity-100');
+                cropper = new Cropper(cropperImage, {
+                    aspectRatio: 1,
+                    viewMode: 1,
+                    dragMode: 'move',
+                    background: false,
+                    autoCropArea: 0.8,
+                    cropBoxResizable: false,
+                    cropBoxMovable: false,
+                    guides: false,
+                    center: false,
+                    highlight: false,
+                    toggleDragModeOnDblclick: false,
+                });
+            }, 10);
+        }
+
+        function closeCropperModal() {
+            cropperModalContent.classList.remove('scale-100', 'opacity-100');
+            cropperModalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                cropperModal.classList.add('hidden');
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
+            }, 300);
+        }
+
+
+        // ======================================================= //
+        // FUNCIONES DEL LIGHTBOX (MODAL)                          //
+        // ======================================================= //
+
+        function convertToEmbedUrl(url) {
+            const videoId = getYoutubeVideoId(url);
+            return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : '';
+        }
+
+        function openLightbox(index) {
+            const portfolio = appState.profileData.portfolio;
+            if (index < 0 || index >= portfolio.length) return;
+
+            const item = portfolio[index];
+            appState.lightbox.currentIndex = index;
+            appState.lightbox.isOpen = true;
+
+            if (item.type === 'image') {
+                lightboxImage.src = item.src;
+                lightboxImage.classList.remove('hidden');
+                lightboxVideo.classList.add('hidden');
+            } else if (item.type === 'video') {
+                lightboxVideo.src = convertToEmbedUrl(item.src);
+                lightboxVideo.classList.remove('hidden');
+                lightboxImage.classList.add('hidden');
+            }
+
+            lightbox.classList.remove('hidden');
+            setTimeout(() => lightbox.classList.add('opacity-100'), 10);
+
+            const hasPrev = index > 0;
+            const hasNext = index < portfolio.length - 1;
+            lightboxPrev.classList.toggle('hidden', !hasPrev);
+            lightboxNext.classList.toggle('hidden', !hasNext);
+        }
+
+        function closeLightbox() {
+            appState.lightbox.isOpen = false;
+            lightboxVideo.src = '';
+            lightbox.classList.remove('opacity-100');
+            setTimeout(() => lightbox.classList.add('hidden'), 300);
+        }
+
+        function showPrevImage() { openLightbox(appState.lightbox.currentIndex - 1); }
+        function showNextImage() { openLightbox(appState.lightbox.currentIndex + 1); }
+
+        // ======================================================= //
+        // MANEJADORES DE EVENTOS                                  //
+        // ======================================================= //
+
+        goToSignup.addEventListener('click', (e) => { e.preventDefault(); navigateTo('signup'); });
+        goToLogin.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
+        goToHome.addEventListener('click', (e) => { e.preventDefault(); navigateTo('login'); });
+        previewButton.addEventListener('click', () => { renderProfilePage(); navigateTo('profile'); });
+        backToEditor.addEventListener('click', () => navigateTo('editor'));
+        logoutButton.addEventListener('click', () => {
+            appState.loggedIn = false;
+            navigateTo('login');
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            appState.loggedIn = true;
+            renderEditor();
+            navigateTo('editor');
+        });
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            appState.loggedIn = true;
+            appState.profileData.url = `zripilink.com/${document.getElementById('signup-url').value}`;
+            renderEditor();
+            navigateTo('editor');
+        });
+
+        copyUrlButton.addEventListener('click', () => {
+            navigator.clipboard.writeText(profileUrlDisplay.value).then(() => {
+                showToast("¡Enlace copiado!", false);
+            });
+        });
+
+        shareProfileButton.addEventListener('click', async () => {
+            const shareData = {
+                title: `Perfil de ${appState.profileData.name}`,
+                text: `Echa un vistazo al perfil de ${appState.profileData.name} en ZripiLink.`,
+                url: `https://${appState.profileData.url}`,
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                } catch (err) {
+                    console.error("Error al compartir:", err);
+                }
+            } else {
+                // Fallback para escritorio
+                navigator.clipboard.writeText(shareData.url).then(() => {
+                    showToast("¡Enlace copiado para compartir!", false);
+                });
+            }
+        });
+
+        changePicButton.addEventListener('click', () => profilePicUpload.click());
+
+        profilePicUpload.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    openCropperModal(event.target.result);
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+            e.target.value = '';
+        });
+
+        addPortfolioButton.addEventListener('click', () => portfolioUpload.click());
+
+        addVideoButton.addEventListener('click', () => {
+            if (appState.profileData.portfolio.length >= 6) {
+                showToast("Puedes agregar hasta 6 items.", true);
+                return;
+            }
+            portfolioIndexToReplace = null;
+            openUrlModal();
+        });
+
+        addLinkButton.addEventListener('click', () => {
+            const isFirstLink = appState.profileData.links.length === 0;
+            appState.profileData.links.push({ type: 'website', value: 'https://', label: 'Mi Sitio Web', isPrimary: isFirstLink });
+            renderLinksEditor();
+        });
+
+        portfolioUpload.addEventListener('change', (e) => {
+            if(e.target.files) {
+                Array.from(e.target.files).forEach(file => {
+                    if (appState.profileData.portfolio.length < 6) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            appState.profileData.portfolio.push({ type: 'image', src: event.target.result });
+                            renderPortfolioEditor();
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        showToast("El límite del portfolio es 6 items.", true);
+                    }
+                });
+                e.target.value = '';
+            }
+        });
+
+        replacePortfolioUpload.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0] && portfolioIndexToReplace !== null) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    appState.profileData.portfolio[portfolioIndexToReplace] = { type: 'image', src: event.target.result };
+                    renderPortfolioEditor();
+                    portfolioIndexToReplace = null;
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+            e.target.value = '';
+        });
+
+        editorForm.addEventListener('click', (e) => {
+            const removePortfolioBtn = e.target.closest('.remove-portfolio-item');
+            if (removePortfolioBtn) {
+                e.stopPropagation();
+                const index = parseInt(removePortfolioBtn.dataset.index);
+                appState.profileData.portfolio.splice(index, 1);
+                renderPortfolioEditor();
+                return;
+            }
+
+            const removeLinkBtn = e.target.closest('.remove-link-item');
+            if (removeLinkBtn) {
+                const index = parseInt(removeLinkBtn.dataset.index);
+                appState.profileData.links.splice(index, 1);
+                renderLinksEditor();
+                return;
+            }
+
+            const portfolioItemContainer = e.target.closest('.portfolio-item-clickable');
+            if (portfolioItemContainer) {
+                const index = parseInt(portfolioItemContainer.dataset.index);
+                const portfolioItem = appState.profileData.portfolio[index];
+                portfolioIndexToReplace = index;
+
+                if (portfolioItem.type === 'image') {
+                    replacePortfolioUpload.click();
+                } else if (portfolioItem.type === 'video') {
+                    openUrlModal(portfolioItem.src);
+                }
+            }
+
+            const setPrimaryBtn = e.target.closest('.set-primary-link');
+            if (setPrimaryBtn) {
+                const index = parseInt(setPrimaryBtn.dataset.index);
+                const isCurrentlyPrimary = appState.profileData.links[index].isPrimary;
+                if (isCurrentlyPrimary) {
+                    appState.profileData.links[index].isPrimary = false;
+                } else {
+                    appState.profileData.links.forEach((link, i) => link.isPrimary = i === index);
+                }
+                renderLinksEditor();
+            }
+        });
+
+        profileContent.addEventListener('click', (e) => {
+            const item = e.target.closest('[data-index]');
+            if (item && item.dataset.index) {
+                openLightbox(parseInt(item.dataset.index));
+            }
+        });
+
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+        lightboxPrev.addEventListener('click', showPrevImage);
+        lightboxNext.addEventListener('click', showNextImage);
+        document.addEventListener('keydown', (e) => {
+            if (appState.lightbox.isOpen) {
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') showPrevImage();
+                if (e.key === 'ArrowRight') showNextImage();
+            }
+        });
+
+        modalCancelButton.addEventListener('click', closeUrlModal);
+        youtubeModal.addEventListener('click', (e) => { if (e.target === youtubeModal) closeUrlModal(); });
+        modalConfirmButton.addEventListener('click', () => {
+            const videoUrl = youtubeUrlInput.value.trim();
+            if (videoUrl) {
+                if (getYoutubeVideoId(videoUrl)) {
+                    const newItem = { type: 'video', src: videoUrl };
+                    if (portfolioIndexToReplace !== null) {
+                        appState.profileData.portfolio.splice(portfolioIndexToReplace, 1, newItem);
+                    } else {
+                        appState.profileData.portfolio.push(newItem);
+                    }
+                    renderPortfolioEditor();
+                    closeUrlModal();
+                } else {
+                    showToast("URL no válida. Pega un enlace de YouTube.", true);
+                }
+            } else {
+                closeUrlModal();
+            }
+            portfolioIndexToReplace = null;
+        });
+
+        cropperCancelButton.addEventListener('click', closeCropperModal);
+        cropperConfirmButton.addEventListener('click', () => {
+            if(cropper){
+                const canvas = cropper.getCroppedCanvas({
+                    width: 256,
+                    height: 256,
+                });
+                const newPicUrl = canvas.toDataURL();
+                appState.profileData.profilePic = newPicUrl;
+                profilePicPreview.src = newPicUrl;
+                closeCropperModal();
+            }
+        });
+
+        editorForm.addEventListener('input', (e) => {
+            const data = appState.profileData;
+            if (e.target.id === 'editor-name') data.name = e.target.value;
+            if (e.target.id === 'editor-title') data.title = e.target.value;
+            if (e.target.id === 'editor-bio') data.bio = e.target.value;
+            if (e.target.classList.contains('link-type-select')) data.links[e.target.dataset.index].type = e.target.value;
+            if (e.target.classList.contains('link-value-input')) data.links[e.target.dataset.index].value = e.target.value;
+            if (e.target.classList.contains('link-label-input')) data.links[e.target.dataset.index].label = e.target.value;
+        });
+
+        // ======================================================= //
+        // INICIALIZACIÓN DE LA APLICACIÓN                         //
+        // ======================================================= //
+        new Sortable(portfolioGrid, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            onEnd: (evt) => {
+                const item = appState.profileData.portfolio.splice(evt.oldIndex, 1)[0];
+                appState.profileData.portfolio.splice(evt.newIndex, 0, item);
+                renderPortfolioEditor();
+            }
+        });
+
+        new Sortable(linksContainer, {
+            animation: 150,
+            handle: '.link-drag-handle',
+            ghostClass: 'sortable-ghost',
+            onEnd: (evt) => {
+                const item = appState.profileData.links.splice(evt.oldIndex, 1)[0];
+                appState.profileData.links.splice(evt.newIndex, 0, item);
+                renderLinksEditor();
+            }
+        });
+        window.addEventListener('hashchange', handleRouteChange);
+        handleRouteChange();
+    });
+</script>
+</body>
+</html>
+
+
+
+
