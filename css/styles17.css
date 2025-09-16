@@ -162,25 +162,31 @@ hr {
 #hero .actions a {
     font-family: "Raleway", sans-serif;
     text-transform: uppercase;
-    font-weight: 500;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 18px;
     letter-spacing: 1px;
     display: inline-block;
-    padding: 8px 20px;
-    border-radius: 2px;
-    transition: 0.5s;
+    padding: 12px 30px;
+    border-radius: 50px;
     margin: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+}
+
+#hero .actions a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 #hero .btn-get-started {
-    background: #03C4EB;
-    border: 2px solid #03C4EB;
+    background: #ff6128;
+    border: 2px solid #ff6128;
     color: #fff;
 }
 
 #hero .btn-get-started:hover {
-    background: none;
-    border: 2px solid #fff;
+    background: #e6521e;
+    border: 2px solid #e6521e;
     color: #fff;
 }
 
@@ -195,15 +201,15 @@ hr {
 }
 
 #hero .btn-main {
-    background: #AB9DFF;
-    border: 2px solid #AB9DFF;
+    background: transparent;
+    border: 2px solid #fff;
     color: #fff;
 }
 
 #hero .btn-main:hover {
-    background: none;
+    background: #fff;
     border: 2px solid #fff;
-    color: #fff;
+    color: #111;
 }
 
 /*--------------------------------------------------------------
@@ -2708,4 +2714,94 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 .fab-icon {
     margin-top: 16px;
+}
+
+/* Estilos adicionales para la página de consultoría */
+.service-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    height: 100%;
+    border: 1px solid #eee;
+    transition: all 0.3s ease-in-out;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+}
+
+.service-card h4 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.service-card .icon {
+    font-size: 48px;
+    color: #ff6128;
+    margin-bottom: 20px;
+}
+
+#consultoria {
+    padding: 80px 0;
+}
+
+.section-title {
+    padding-bottom: 40px;
+}
+
+.accreditation-info p {
+    margin-bottom: 15px;
+}
+
+.row-eq-height {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Estilos para el Call to Action */
+#call-to-action {
+    padding: 60px 0;
+    background: #fff;
+}
+
+#call-to-action h3 {
+    font-weight: 700;
+    font-size: 28px;
+}
+
+#call-to-action .cta-text {
+    margin: 20px auto 30px auto;
+    font-size: 18px;
+    max-width: 800px;
+}
+
+#call-to-action .cta-btn {
+    font-family: "Raleway", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 12px 32px;
+    border-radius: 50px;
+    transition: 0.5s;
+    margin: 5px;
+    color: #fff;
+    background: #ff6128; /* Zripi orange */
+    border: 2px solid #ff6128;
+}
+
+#call-to-action .cta-btn-outline {
+    background: transparent;
+    color: #ff6128;
+}
+
+#call-to-action .cta-btn:hover {
+    background: #e6521e;
+    border-color: #e6521e;
+    color: #fff;
 }
