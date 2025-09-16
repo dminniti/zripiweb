@@ -2805,3 +2805,10 @@ body.mobile-nav-active #mobile-nav-toggle {
     border-color: #e6521e;
     color: #fff;
 }
+
+/* Estilos para mejorar la separación en la versión móvil */
+@media (max-width: 768px) {
+    #consultoria .col-md-4 {
+        margin-bottom: 20px; /* Ajusta este valor si necesitas más o menos espacio */
+    }
+}
