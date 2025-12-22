@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Z-Check</title>
+
+    <!-- FAVICON: Tilde blanca sobre fondo Slate-900 (Igual al logo de la UI) -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230f172a'/%3E%3Cpolyline points='20 6 9 17 4 12' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+    <!-- 1. Tailwind CSS (Diseño) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- 2. React y ReactDOM (Framework) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- 3. Babel (Para que el navegador entienda React) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Estilos extra para animaciones -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .animate-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Scrollbar bonito */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+<div id="root"></div>
+
+<!-- 4. Lógica de la App -->
+<script type="text/babel" data-type="module">
+    // Importamos Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, doc, onSnapshot, query, serverTimestamp, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // --- TU CONFIGURACIÓN ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyBgJ2eJ_5LD7pjXa2EbJuJ7Z88Qeo9dQXU",
+        authDomain: "asistencia-clases-e9b68.firebaseapp.com",
+        projectId: "asistencia-clases-e9b68",
+        storageBucket: "asistencia-clases-e9b68.firebasestorage.app",
+        messagingSenderId: "418087377520",
+        appId: "1:418087377520:web:fab3d3c0ccbcae724632b5",
+        measurementId: "G-3XY58ZD4Z5"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const APP_ID_PREFIX = "asistencia_app_v1";
+    const { useState, useEffect } = React;
+
+    // --- COMPONENTES DE ICONOS (SVG) ---
+    const IconCheck = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>;
+    const IconUsers = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>;
+    const IconCopy = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>;
+    const IconLogOut = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>;
+    const IconArrowRight = () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>;
+    const IconLock = () => <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>;
+    const IconAlert = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>;
+    const IconActivity = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>;
+    const IconDownload = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>;
+    const IconTrash = () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
+    const IconHistory = () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>;
+
+    // --- COMPONENTES UI ---
+    const Button = ({ children, onClick, variant = 'primary', className = '', disabled = false, size = 'md' }) => {
+        const baseStyle = "w-full rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 active:scale-95 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed";
+        const sizes = {
+            sm: "py-2 px-3 text-sm",
+            md: "py-3 px-4"
+        };
+        const variants = {
+            primary: "bg-slate-900 text-white hover:bg-slate-800",
+            secondary: "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50",
+            danger: "bg-red-50 text-red-500 border border-red-100 hover:bg-red-100",
+        };
+        return (
+            <button onClick={onClick} disabled={disabled} className={`${baseStyle} ${variants[variant]} ${sizes[size]} ${className}`}>
+                {children}
+            </button>
+        );
+    };
+
+    const Input = ({ value, onChange, placeholder, maxLength, className = '' }) => (
+        <input
+            type="text"
+            value={value}
+            onChange={onChange}
+            placeholder={placeholder}
+            maxLength={maxLength}
+            className={`w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 outline-none transition-all text-slate-800 placeholder-slate-400 bg-white ${className}`}
+        />
+    );
+
+    const Card = ({ children, className = '' }) => (
+        <div className={`bg-white rounded-2xl p-6 shadow-xl shadow-slate-200/50 border border-slate-100 ${className}`}>
+            {children}
+        </div>
+    );
+
+    // --- APLICACIÓN PRINCIPAL ---
+
+    function AttendanceApp() {
+        const [user, setUser] = useState(null);
+        const [view, setView] = useState('home');
+        const [sessionId, setSessionId] = useState('');
+        const [studentName, setStudentName] = useState('');
+        const [attendees, setAttendees] = useState([]);
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState('');
+        const [successMsg, setSuccessMsg] = useState('');
+        const [history, setHistory] = useState([]); // Estado para el historial
+
+        // 1. Autenticación e Historial
+        useEffect(() => {
+            const initAuth = async () => {
+                try {
+                    await signInAnonymously(auth);
+                } catch (e) {
+                    console.error("Error auth:", e);
+                    setError("Error de conexión inicial.");
+                }
+            };
+            initAuth();
+            const unsubscribe = onAuthStateChanged(auth, setUser);
+
+            // Cargar historial local
+            const savedHistory = localStorage.getItem(APP_ID_PREFIX + '_history');
+            if (savedHistory) {
+                try {
+                    setHistory(JSON.parse(savedHistory));
+                } catch (e) { console.error("Error parsing history", e); }
+            }
+
+            return () => unsubscribe();
+        }, []);
+
+        // 2. Escuchar asistentes
+        useEffect(() => {
+            if (!user || view !== 'host' || !sessionId) return;
+            const q = query(collection(db, 'public_sessions', `session_${sessionId}`, 'attendees'));
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const list = [];
+                snapshot.forEach((doc) => {
+                    list.push({ id: doc.id, ...doc.data() });
+                });
+                list.sort((a, b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+                setAttendees(list);
+            }, (err) => console.error("Error fetching attendees:", err));
+            return () => unsubscribe();
+        }, [user, view, sessionId]);
+
+        // --- MANEJO DE HISTORIAL ---
+        const saveToHistory = (id) => {
+            const newEntry = { id, date: new Date().toISOString() };
+            // Evitar duplicados y poner el más reciente primero
+            const newHistory = [newEntry, ...history.filter(h => h.id !== id)];
+            setHistory(newHistory);
+            localStorage.setItem(APP_ID_PREFIX + '_history', JSON.stringify(newHistory));
+        };
+
+        const deleteFromHistory = (e, idToDelete) => {
+            e.stopPropagation();
+            if (!confirm('¿Borrar del historial? (No borra los datos de la nube)')) return;
+            const newHistory = history.filter(h => h.id !== idToDelete);
+            setHistory(newHistory);
+            localStorage.setItem(APP_ID_PREFIX + '_history', JSON.stringify(newHistory));
+        };
+
+        // --- FUNCIONES HOST ---
+
+        const createSession = async () => {
+            if (!user) return;
+            setLoading(true);
+            try {
+                const newId = Math.random().toString(36).substring(2, 8).toUpperCase();
+                await setDoc(doc(db, 'public_sessions', `session_${newId}`), {
+                    hostId: user.uid,
+                    createdAt: serverTimestamp(),
+                    active: true
+                });
+
+                saveToHistory(newId); // GUARDAMOS EN LOCAL
+                setSessionId(newId);
+                setView('host');
+                setAttendees([]);
+            } catch (err) {
+                console.error(err);
+                setError("No se pudo crear la sesión.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const downloadCSV = () => {
+            if (attendees.length === 0) {
+                setError("No hay asistentes para descargar.");
+                setTimeout(() => setError(''), 2000);
+                return;
+            }
+
+            const headers = ["Nombre", "Fecha", "Hora", "Dispositivo ID"];
+            const rows = attendees.map(att => {
+                // Convertir timestamp de firebase a objeto Date JS
+                const dateObj = att.timestamp?.toDate ? att.timestamp.toDate() : new Date();
+                return [
+                    `"${att.name}"`, // Comillas para evitar errores con nombres raros
+                    dateObj.toLocaleDateString(),
+                    dateObj.toLocaleTimeString(),
+                    att.deviceId || "N/A"
+                ].join(",");
+            });
+
+            const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows].join("\n");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `asistencia_sala_${sessionId}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setSuccessMsg("¡Descargando lista!");
+            setTimeout(() => setSuccessMsg(''), 2000);
+        };
+
+        const copySessionInfo = () => {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(sessionId).then(() => {
+                    setSuccessMsg("¡Código copiado!");
+                    setTimeout(() => setSuccessMsg(''), 2000);
+                });
+            } else {
+                setSuccessMsg("Copia: " + sessionId);
+            }
+        };
+
+        // --- FUNCIONES STUDENT ---
+
+        const joinSession = async () => {
+            if (!sessionId.trim()) return;
+            setLoading(true);
+            setError('');
+            try {
+                const cleanId = sessionId.trim().toUpperCase();
+                const sessionRef = doc(db, 'public_sessions', `session_${cleanId}`);
+                const sessionSnap = await getDoc(sessionRef);
+
+                if (sessionSnap.exists() && sessionSnap.data().active) {
+                    setSessionId(cleanId);
+                    setView('student');
+                    const hasAttended = localStorage.getItem(`attended_${cleanId}`);
+                    if (hasAttended) setSuccessMsg("Ya has registrado asistencia en esta sesión.");
+                } else {
+                    setError("Código inválido o sesión cerrada.");
+                }
+            } catch (err) {
+                console.error(err);
+                setError("Error al buscar la sesión.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const submitAttendance = async () => {
+            if (!studentName.trim()) {
+                setError("Por favor escribe tu nombre.");
+                return;
+            }
+            const storageKey = `attended_${sessionId}`;
+            if (localStorage.getItem(storageKey)) {
+                setError("Dispositivo bloqueado: Ya se envió un presente desde aquí.");
+                return;
+            }
+            setLoading(true);
+            try {
+                await addDoc(collection(db, 'public_sessions', `session_${sessionId}`, 'attendees'), {
+                    name: studentName.trim(),
+                    timestamp: serverTimestamp(),
+                    deviceId: "web_" + Math.random().toString(36),
+                });
+                localStorage.setItem(storageKey, 'true');
+                setSuccessMsg("¡Asistencia registrada correctamente!");
+                setStudentName('');
+            } catch (err) {
+                console.error(err);
+                setError("Error al enviar. Intenta de nuevo.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        // --- RENDERIZADO ---
+
+        const renderHome = () => (
+            <div className="flex flex-col gap-6 max-w-md mx-auto w-full animate-in">
+                <div className="text-center space-y-2 mb-4">
+                    <div className="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-slate-900/20 text-white mb-6">
+                        <IconCheck />
+                    </div>
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Z-Check</h1>
+                    <p className="text-slate-500">Gestión de presentes en tiempo real.</p>
+                </div>
+
+                <Card className="space-y-4 relative z-10">
+                    <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">Soy Estudiante</div>
+                    <div className="flex gap-2">
+                        <Input
+                            value={sessionId}
+                            onChange={(e) => setSessionId(e.target.value.toUpperCase())}
+                            placeholder="CÓDIGO DE SALA"
+                            maxLength={6}
+                            className="uppercase font-mono text-lg tracking-widest text-center"
+                        />
+                    </div>
+                    <Button onClick={joinSession} disabled={loading}>
+                        {loading ? "Buscando..." : "Dar Presente"} <span className="ml-2"><IconArrowRight /></span>
+                    </Button>
+                </Card>
+
+                <div className="relative flex py-2 items-center">
+                    <div className="flex-grow border-t border-slate-200"></div>
+                    <span className="flex-shrink-0 mx-4 text-slate-400 text-sm">Docentes</span>
+                    <div className="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <Button variant="secondary" onClick={createSession} disabled={loading}>
+                    {loading ? "Creando..." : "Crear Nueva Sesión"}
+                </Button>
+
+                {/* --- SECCIÓN HISTORIAL --- */}
+                {history.length > 0 && (
+                    <div className="mt-4 animate-in">
+                        <h3 className="text-sm font-semibold text-slate-500 mb-3 ml-1 flex items-center gap-2">
+                            <IconHistory /> Mis Sesiones Anteriores
+                        </h3>
+                        <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                            {history.map(h => (
+                                <div
+                                    key={h.id}
+                                    onClick={() => { setSessionId(h.id); setView('host'); }}
+                                    className="bg-white border border-slate-200 p-3 rounded-xl flex items-center justify-between cursor-pointer hover:border-slate-400 hover:shadow-sm transition-all group"
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <div className="bg-slate-100 p-2 rounded-lg text-slate-600 font-mono font-bold text-sm">
+                                            {h.id}
+                                        </div>
+                                        <div className="text-xs text-slate-400">
+                                            {new Date(h.date).toLocaleDateString()} <br/>
+                                            {new Date(h.date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={(e) => deleteFromHistory(e, h.id)}
+                                        className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                        title="Borrar del historial"
+                                    >
+                                        <IconTrash />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+
+        const renderHost = () => (
+            <div className="max-w-lg mx-auto w-full h-[90vh] flex flex-col gap-4 animate-in">
+                <div className="flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+                    <div onClick={() => {setView('home'); setSessionId('');}} className="cursor-pointer p-2 hover:bg-slate-50 rounded-full text-slate-400" title="Salir">
+                        <IconLogOut />
+                    </div>
+                    <div className="text-center">
+                        <p className="text-xs text-slate-400 font-medium uppercase">Código de Sesión</p>
+                        <h2 className="text-3xl font-black text-slate-900 tracking-widest font-mono">{sessionId}</h2>
+                    </div>
+                    <div className="flex gap-1">
+                        <div onClick={downloadCSV} className="cursor-pointer p-2 hover:bg-blue-50 text-slate-400 hover:text-blue-600 rounded-full transition-colors" title="Descargar Lista">
+                            <IconDownload />
+                        </div>
+                        <div onClick={copySessionInfo} className="cursor-pointer p-2 hover:bg-slate-50 rounded-full text-slate-900" title="Copiar Código">
+                            <IconCopy />
+                        </div>
+                    </div>
+                </div>
+                <Card className="flex-1 overflow-hidden flex flex-col p-0 relative">
+                    <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                        <h3 className="font-semibold text-slate-700 flex items-center gap-2">
+                            <IconUsers /> Asistentes
+                        </h3>
+                        <span className="bg-slate-900 text-white text-xs px-2.5 py-1 rounded-full font-bold">
+                                {attendees.length}
+                            </span>
+                    </div>
+                    <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                        {attendees.length === 0 ? (
+                            <div className="h-full flex flex-col items-center justify-center text-slate-400 gap-3">
+                                <div className="w-12 h-12 rounded-full bg-slate-50 flex items-center justify-center">
+                                    <div className="opacity-20"><IconActivity /></div>
+                                </div>
+                                <p>Esperando alumnos...</p>
+                            </div>
+                        ) : (
+                            attendees.map((att) => (
+                                <div key={att.id} className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl shadow-sm animate-in">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-white text-xs font-bold">
+                                            {att.name.charAt(0).toUpperCase()}
+                                        </div>
+                                        <span className="font-medium text-slate-800">{att.name}</span>
+                                    </div>
+                                    <span className="text-xs text-slate-400 font-mono">
+                                            {att.timestamp?.toDate ? att.timestamp.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '...'}
+                                        </span>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </Card>
+                {successMsg && (
+                    <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-full text-sm shadow-lg animate-in z-50">
+                        {successMsg}
+                    </div>
+                )}
+                {error && (
+                    <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-full text-sm shadow-lg animate-in z-50">
+                        {error}
+                    </div>
+                )}
+            </div>
+        );
+
+        const renderStudent = () => {
+            const hasAttended = localStorage.getItem(`attended_${sessionId}`);
+            if (hasAttended || successMsg === "¡Asistencia registrada correctamente!") {
+                return (
+                    <div className="max-w-md mx-auto w-full mt-10 animate-in">
+                        <Card className="text-center py-10 space-y-6 border-green-100 bg-green-50/30">
+                            <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <div style={{transform: 'scale(2)'}}><IconCheck /></div>
+                            </div>
+                            <div>
+                                <h2 className="text-2xl font-bold text-slate-900">¡Presente!</h2>
+                                <p className="text-slate-500 mt-2">Tu asistencia ha sido registrada.</p>
+                            </div>
+                            <div className="text-sm text-slate-400 bg-white/50 py-2 rounded-lg mx-8">
+                                Sesión: <span className="font-mono font-bold text-slate-600">{sessionId}</span>
+                            </div>
+                            <Button variant="secondary" onClick={() => {setView('home'); setSuccessMsg(''); setError(''); setStudentName('')}}>
+                                Volver al Inicio
+                            </Button>
+                        </Card>
+                    </div>
+                );
+            }
+            return (
+                <div className="max-w-md mx-auto w-full flex flex-col gap-6 animate-in">
+                    <button onClick={() => setView('home')} className="self-start text-slate-400 hover:text-slate-600 flex items-center gap-1 text-sm pl-1">
+                        ← Volver
+                    </button>
+                    <div className="text-center mb-4">
+                        <h2 className="text-2xl font-bold text-slate-900">Marcar Asistencia</h2>
+                        <p className="text-slate-500">Sala: <span className="font-mono font-bold text-slate-700">{sessionId}</span></p>
+                    </div>
+                    <Card className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-slate-700 ml-1">Nombre Completo</label>
+                            <Input
+                                value={studentName}
+                                onChange={(e) => setStudentName(e.target.value)}
+                                placeholder="Ej: Juan Pérez"
+                            />
+                            <p className="text-xs text-slate-400 ml-1 flex items-center gap-1">
+                                <IconLock /> Tu dispositivo quedará registrado.
+                            </p>
+                        </div>
+                        {error && (
+                            <div className="p-3 bg-red-50 text-red-600 text-sm rounded-lg flex items-center gap-2 border border-red-100">
+                                <IconAlert /> {error}
+                            </div>
+                        )}
+                        <Button onClick={submitAttendance} disabled={loading}>
+                            {loading ? "Enviando..." : "Confirmar Asistencia"}
+                        </Button>
+                    </Card>
+                </div>
+            );
+        };
+
+        if (!user) return <div className="min-h-screen flex items-center justify-center text-slate-400">Iniciando sistema...</div>;
+
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+                {view === 'home' && renderHome()}
+                {view === 'host' && renderHost()}
+                {view === 'student' && renderStudent()}
+
+                {/* --- FOOTER AGREGADO --- */}
+                <footer className="mt-12 text-slate-400 text-sm font-medium opacity-80 hover:opacity-100 transition-opacity">
+                    <a href="https://zripi.com.ar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                        <span>✍️</span> Creado por zripi.com.ar
+                    </a>
+                </footer>
+            </div>
+        );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<AttendanceApp />);
+</script>
+</body>
+</html>

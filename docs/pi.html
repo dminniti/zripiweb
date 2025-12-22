@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big Room Planning: Mission Control</title>
+
+  <!-- TAILWIND CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FUENTES -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+  <!-- LUCIDE ICONS -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    .fade-in { animation: fadeIn 0.4s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden-view { display: none; }
+
+    /* Estilos para el Tablero Interactivo */
+    .board-grid {
+      display: grid;
+      grid-template-columns: 150px repeat(4, 1fr); /* Columna Equipos + 4 Sprints */
+      gap: 1px;
+      background-color: #e2e8f0; /* Color de las líneas de la grilla */
+      border: 1px solid #e2e8f0;
+    }
+
+    .board-header {
+      background-color: #f8fafc;
+      font-weight: bold;
+      text-align: center;
+      padding: 10px;
+      color: #475569;
+    }
+
+    .team-cell {
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      padding: 10px;
+      border-right: 1px solid #e2e8f0;
+      color: #1e293b;
+    }
+
+    .sprint-cell {
+      background-color: #ffffff;
+      min-height: 120px;
+      padding: 8px;
+      position: relative;
+      transition: background-color 0.2s;
+    }
+
+    .sprint-cell.drag-over {
+      background-color: #f0f9ff; /* Azul muy claro al arrastrar encima */
+    }
+
+    /* Feature Card (Sticky Note) */
+    .feature-card {
+      background-color: white;
+      border-left: 4px solid;
+      padding: 8px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size: 0.75rem;
+      margin-bottom: 6px;
+      cursor: grab;
+      position: relative;
+      z-index: 10;
+      user-select: none;
+      transition: transform 0.1s;
+    }
+
+    .feature-card:active {
+      cursor: grabbing;
+      transform: scale(1.02);
+    }
+
+    /* Colores por tipo de feature */
+    .card-blue { border-color: #3b82f6; background: #eff6ff; }
+    .card-green { border-color: #22c55e; background: #f0fdf4; }
+    .card-purple { border-color: #a855f7; background: #faf5ff; }
+
+    /* SVG Overlay para dependencias */
+    #dependency-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* Dejar pasar clicks a las tarjetas */
+      z-index: 20;
+    }
+
+    .dependency-line {
+      stroke: #ef4444; /* Red string */
+      stroke-width: 2;
+      stroke-dasharray: 4; /* Línea punteada */
+      opacity: 0.6;
+      animation: dash 30s linear infinite;
+    }
+
+    .dependency-line.critical {
+      stroke-width: 3;
+      opacity: 1;
+    }
+
+    @keyframes dash {
+      to { stroke-dashoffset: 1000; }
+    }
+
+    /* Detalles expandibles */
+    .detail-box { display: none; }
+    .detail-box.show { display: block; animation: fadeIn 0.3s ease-out; }
+
+    .interactive-card { transition: all 0.3s ease; }
+    .interactive-card:hover { transform: translateY(-2px); }
+
+    /* Listas personalizadas */
+    .check-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .check-list li::before {
+      content: "✓";
+      color: #10b981;
+      font-weight: bold;
+    }
+    .deliverable-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .deliverable-list li::before {
+      content: "📦";
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-20">
+
+<!-- ================= NAVIGATION ================= -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900 text-white shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+
+    <div class="flex items-center gap-2 font-black text-xl tracking-tight">
+      <i data-lucide="rocket" class="text-indigo-400"></i>
+      <span>BRP<span class="text-indigo-400">MISSION</span></span>
+    </div>
+
+    <div class="flex gap-1 bg-slate-800 p-1 rounded-lg">
+      <button onclick="switchView('visual')" id="btn-visual" class="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold bg-indigo-600 text-white shadow transition">
+        <i data-lucide="list-checks" class="w-4 h-4"></i> <span class="hidden sm:inline">Proceso & Entregables</span>
+      </button>
+      <button onclick="switchView('example')" id="btn-example" class="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-700 transition">
+        <i data-lucide="book-open" class="w-4 h-4"></i> <span class="hidden sm:inline">Ejemplo</span>
+      </button>
+      <button onclick="switchView('board')" id="btn-board" class="flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-700 transition">
+        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> <span class="hidden sm:inline">Board Interactivo</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="h-16"></div> <!-- Spacer -->
+
+<!-- ================= VIEW 1: PROCESO & ENTREGABLES ================= -->
+<div id="view-visual" class="fade-in">
+
+  <!-- Hero -->
+  <div class="bg-slate-900 text-white py-12 mb-8 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20"></div>
+    <div class="max-w-5xl mx-auto text-center px-4 relative z-10">
+      <h1 class="text-3xl md:text-5xl font-black mb-4 tracking-tight">El Ciclo de Big Room Planning</h1>
+      <p class="text-indigo-200 text-lg max-w-2xl mx-auto leading-relaxed">
+        La BRP no es solo una reunión de dos días; es un proceso continuo de preparación, ejecución y seguimiento.
+      </p>
+    </div>
+  </div>
+
+  <!-- The 3 Phases Columns -->
+  <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-3 gap-6 -mt-8 relative z-20 pb-12">
+
+    <!-- ANTES -->
+    <div class="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col h-full">
+      <div class="bg-amber-100 p-6 border-b border-amber-200">
+        <div class="flex items-center justify-between mb-2">
+          <span class="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Fase 1</span>
+          <i data-lucide="calendar-clock" class="text-amber-600 w-6 h-6"></i>
+        </div>
+        <h2 class="text-2xl font-black text-amber-900">Antes</h2>
+        <p class="text-amber-800 text-sm font-medium">Preparación (4 semanas antes)</p>
+      </div>
+      <div class="p-6 flex-1 flex flex-col gap-6">
+        <div>
+          <h3 class="font-bold text-slate-800 mb-3 border-b pb-1">¿Qué hay que hacer?</h3>
+          <ul class="text-sm text-slate-600 space-y-2 check-list">
+            <li>Definir <strong>Contexto de Negocio</strong> y Visión.</li>
+            <li>Priorizar el Backlog (Top 10 Features).</li>
+            <li><strong>Inicio de conversaciones de dependencias.</strong></li>
+            <li>Asegurar que la Arquitectura soporte las features.</li>
+            <li>Logística: Salas, accesos, invitaciones.</li>
+          </ul>
+        </div>
+        <div class="mt-auto bg-slate-50 p-4 rounded-lg border border-slate-200">
+          <h3 class="font-bold text-slate-800 mb-2 text-sm flex items-center gap-2">
+            <i data-lucide="package" class="w-4 h-4 text-amber-500"></i> Entregables Clave
+          </h3>
+          <ul class="text-xs text-slate-600 font-medium deliverable-list space-y-1">
+            <li>Lista de Features Priorizada</li>
+            <li>Borrador de Objetivos del PI</li>
+            <li>Agenda del Evento</li>
+            <li>Arquitectura de Alto Nivel</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DURANTE -->
+    <div class="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col h-full transform lg:-translate-y-4 lg:shadow-xl ring-1 ring-slate-900/5">
+      <div class="bg-indigo-100 p-6 border-b border-indigo-200">
+        <div class="flex items-center justify-between mb-2">
+          <span class="bg-indigo-600 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Fase 2</span>
+          <i data-lucide="users" class="text-indigo-600 w-6 h-6"></i>
+        </div>
+        <h2 class="text-2xl font-black text-indigo-900">Durante</h2>
+        <p class="text-indigo-800 text-sm font-medium">El Evento (2 días)</p>
+      </div>
+      <div class="p-6 flex-1 flex flex-col gap-6">
+        <div>
+          <h3 class="font-bold text-slate-800 mb-3 border-b pb-1">¿Qué hay que hacer?</h3>
+          <ul class="text-sm text-slate-600 space-y-2 check-list">
+            <li><strong>Día 1:</strong> Líderes presentan contexto. Equipos hacen breakouts para planificar.</li>
+            <li><strong>Día 2:</strong> Resolver dependencias finales. Gestionar riesgos (ROAM).</li>
+            <li>Voto de confianza ("Fist of Five").</li>
+          </ul>
+
+          <!-- ROAM Box -->
+          <div class="mt-4 bg-indigo-50 border border-indigo-200 p-3 rounded-md">
+            <h4 class="text-xs font-black text-indigo-800 uppercase mb-2 flex items-center gap-1">
+              <i data-lucide="shield-alert" class="w-3 h-3"></i> Gestión de Riesgos: ROAM
+            </h4>
+            <div class="grid grid-cols-2 gap-2 text-[10px] sm:text-xs text-slate-700 mb-2">
+              <div><span class="font-bold text-indigo-700">R</span>esolved (Resuelto)</div>
+              <div><span class="font-bold text-indigo-700">O</span>wned (Asignado)</div>
+              <div><span class="font-bold text-indigo-700">A</span>ccepted (Aceptado)</div>
+              <div><span class="font-bold text-indigo-700">M</span>itigated (Mitigado)</div>
+            </div>
+            <div class="bg-white p-2 rounded border border-indigo-100 text-[10px] text-slate-600 italic">
+              "Ejemplo: Riesgo de no tener servidor.
+              <br><strong>Owned:</strong> Arquitectura se compromete a conseguirlo para el Sprint 1."
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-auto bg-slate-50 p-4 rounded-lg border border-slate-200">
+          <h3 class="font-bold text-slate-800 mb-2 text-sm flex items-center gap-2">
+            <i data-lucide="package" class="w-4 h-4 text-indigo-500"></i> Entregables Clave
+          </h3>
+          <ul class="text-xs text-slate-600 font-medium deliverable-list space-y-1">
+            <li><strong>Program Board</strong> (con hilos rojos)</li>
+            <li>Objetivos del PI Comprometidos</li>
+            <li>Tablero de Riesgos ROAM</li>
+            <li>Voto de Confianza del equipo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESPUÉS -->
+    <div class="bg-white rounded-xl shadow-lg border border-slate-100 overflow-hidden flex flex-col h-full">
+      <div class="bg-emerald-100 p-6 border-b border-emerald-200">
+        <div class="flex items-center justify-between mb-2">
+          <span class="bg-emerald-500 text-white text-xs font-bold px-2 py-1 rounded uppercase tracking-wide">Fase 3</span>
+          <i data-lucide="refresh-cw" class="text-emerald-600 w-6 h-6"></i>
+        </div>
+        <h2 class="text-2xl font-black text-emerald-900">Después</h2>
+        <p class="text-emerald-800 text-sm font-medium">Ejecución (El Trimestre)</p>
+      </div>
+      <div class="p-6 flex-1 flex flex-col gap-6">
+        <div>
+          <h3 class="font-bold text-slate-800 mb-3 border-b pb-1">¿Qué hay que hacer?</h3>
+          <ul class="text-sm text-slate-600 space-y-2 check-list">
+            <li>Cargar el plan final en herramientas (Jira/ADO).</li>
+            <li>Retrospectiva del evento (¿Qué mejorar?).</li>
+            <li>Ejecutar los Sprints.</li>
+            <li>Revisar dependencias periódicamente.</li>
+          </ul>
+        </div>
+        <div class="mt-auto bg-slate-50 p-4 rounded-lg border border-slate-200">
+          <h3 class="font-bold text-slate-800 mb-2 text-sm flex items-center gap-2">
+            <i data-lucide="package" class="w-4 h-4 text-emerald-500"></i> Entregables Clave
+          </h3>
+          <ul class="text-xs text-slate-600 font-medium deliverable-list space-y-1">
+            <li>Roadmap Actualizado</li>
+            <li>Backlog del PI refinado</li>
+            <li>Incrementos de Valor (cada Sprint)</li>
+            <li>System Demo (al final del PI)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Banner -->
+  <div class="max-w-4xl mx-auto px-4 pb-12 text-center">
+    <p class="text-slate-500 text-sm italic">
+      "El valor del BRP no es el plan en sí mismo, sino el alineamiento que genera el proceso de planificación."
+    </p>
+  </div>
+</div>
+
+
+<!-- ================= VIEW 2: EJEMPLO REAL ================= -->
+<div id="view-example" class="hidden-view fade-in">
+  <div class="max-w-5xl mx-auto px-4 py-12">
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-8">
+      <div class="bg-indigo-600 px-6 py-4 flex items-center gap-3">
+        <div class="bg-white/20 p-2 rounded text-white"><i data-lucide="smartphone" class="w-6 h-6"></i></div>
+        <div>
+          <h2 class="text-xl font-bold text-white">Caso: Lanzamiento Billetera Digital</h2>
+          <p class="text-indigo-200 text-sm">Objetivo del PI (3 meses): Lanzar MVP con Pagos QR.</p>
+        </div>
+      </div>
+
+      <div class="p-8 grid md:grid-cols-2 gap-12">
+        <!-- Contexto -->
+        <div>
+          <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="users" class="text-slate-400"></i> Los Equipos</h3>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-lg border border-slate-100">
+              <div class="w-3 h-12 bg-blue-500 rounded-full"></div>
+              <div>
+                <h4 class="font-bold text-sm">Equipo "App Front"</h4>
+                <p class="text-xs text-slate-500">Responsable de las pantallas (iOS/Android).</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-lg border border-slate-100">
+              <div class="w-3 h-12 bg-green-500 rounded-full"></div>
+              <div>
+                <h4 class="font-bold text-sm">Equipo "Core Backend"</h4>
+                <p class="text-xs text-slate-500">APIs de usuarios y saldos.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-4 bg-slate-50 p-3 rounded-lg border border-slate-100">
+              <div class="w-3 h-12 bg-purple-500 rounded-full"></div>
+              <div>
+                <h4 class="font-bold text-sm">Equipo "Pagos"</h4>
+                <p class="text-xs text-slate-500">Integración con red de cobros QR.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- El Problema -->
+        <div>
+          <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i data-lucide="alert-circle" class="text-red-500"></i> El Conflicto (Hilo Rojo)</h3>
+          <div class="bg-red-50 p-6 rounded-xl border border-red-100 relative">
+            <div class="absolute -left-3 top-6 bg-red-500 text-white p-1 rounded-full"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+            <p class="text-sm text-slate-700 leading-relaxed mb-4">
+              El equipo <strong>App Front</strong> quiere construir la pantalla de "Escanear QR" en el <strong>Sprint 2</strong>.
+            </p>
+            <p class="text-sm text-slate-700 leading-relaxed font-bold">
+              PERO...
+            </p>
+            <p class="text-sm text-slate-700 leading-relaxed mt-2">
+              El equipo <strong>Pagos</strong> recién tendrá lista la API de validación de QR en el <strong>Sprint 3</strong>.
+            </p>
+            <div class="mt-4 bg-white p-3 rounded border border-red-200 text-xs text-red-600 font-bold flex items-center gap-2">
+              <i data-lucide="x-circle" class="w-4 h-4"></i> Riesgo Crítico: Bloqueo detectado.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ================= VIEW 3: INTERACTIVE BOARD ================= -->
+<div id="view-board" class="hidden-view fade-in">
+  <div class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- Controls -->
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>
+        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+          <i data-lucide="layout-dashboard" class="text-indigo-600"></i> Program Board
+        </h2>
+        <p class="text-xs text-slate-500">Arrastra las tarjetas para planificar. Las líneas rojas muestran dependencias.</p>
+      </div>
+      <div class="flex gap-2 text-xs">
+        <div class="flex items-center gap-1"><div class="w-3 h-3 bg-blue-100 border border-blue-500 rounded"></div> Front</div>
+        <div class="flex items-center gap-1"><div class="w-3 h-3 bg-green-100 border border-green-500 rounded"></div> Back</div>
+        <div class="flex items-center gap-1"><div class="w-3 h-3 bg-purple-100 border border-purple-500 rounded"></div> Pagos</div>
+      </div>
+      <button onclick="resetBoard()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded text-sm font-bold transition">
+        <i data-lucide="rotate-ccw" class="w-3 h-3 inline"></i> Reset
+      </button>
+    </div>
+
+    <!-- The Board Container -->
+    <div class="relative bg-white rounded-lg shadow overflow-x-auto overflow-hidden">
+
+      <!-- SVG Layer for Dependencies -->
+      <svg id="dependency-layer" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444" />
+          </marker>
+        </defs>
+        <!-- Lines will be injected here by JS -->
+      </svg>
+
+      <!-- Board Grid -->
+      <div class="board-grid min-w-[800px]">
+        <!-- Header Row -->
+        <div class="board-header">Equipos / Sprints</div>
+        <div class="board-header">Sprint 1</div>
+        <div class="board-header">Sprint 2</div>
+        <div class="board-header">Sprint 3</div>
+        <div class="board-header">Sprint 4</div>
+
+        <!-- Row 1: Front -->
+        <div class="team-cell border-l-4 border-l-blue-500">App Front</div>
+        <div class="sprint-cell" data-team="front" data-sprint="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="front" data-sprint="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="front" data-sprint="3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="front" data-sprint="4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+        <!-- Row 2: Back -->
+        <div class="team-cell border-l-4 border-l-green-500">Core Back</div>
+        <div class="sprint-cell" data-team="back" data-sprint="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="back" data-sprint="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="back" data-sprint="3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="back" data-sprint="4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+        <!-- Row 3: Pagos -->
+        <div class="team-cell border-l-4 border-l-purple-500">Pagos</div>
+        <div class="sprint-cell" data-team="pagos" data-sprint="1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="pagos" data-sprint="2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="pagos" data-sprint="3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        <div class="sprint-cell" data-team="pagos" data-sprint="4" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+      </div>
+    </div>
+
+    <div class="mt-4 bg-yellow-50 border border-yellow-200 p-4 rounded-lg flex gap-3 text-sm text-yellow-800">
+      <i data-lucide="info" class="shrink-0 mt-0.5"></i>
+      <p><strong>Tip de Facilitador:</strong> Si ves una línea roja que va "hacia atrás" (ej. Sprint 3 a Sprint 1), tienes un problema grave de planificación.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= LOGIC ================= -->
+<script>
+  lucide.createIcons();
+
+  /* --- Navigation Logic --- */
+  function switchView(viewId) {
+    // Hide all
+    ['visual', 'example', 'board'].forEach(id => {
+      document.getElementById(`view-${id}`).classList.add('hidden-view');
+      const btn = document.getElementById(`btn-${id}`);
+      // Reset styles
+      btn.className = "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold text-slate-400 hover:text-white hover:bg-slate-700 transition";
+    });
+
+    // Show active
+    document.getElementById(`view-${viewId}`).classList.remove('hidden-view');
+    const activeBtn = document.getElementById(`btn-${viewId}`);
+    activeBtn.className = "flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold bg-indigo-600 text-white shadow transition";
+
+    if(viewId === 'board') {
+      // Pequeño delay para que el DOM se pinte antes de calcular líneas SVG
+      setTimeout(drawDependencies, 100);
+    }
+  }
+
+  function toggleDetail(id) {
+    const el = document.getElementById(`detail-${id}`);
+    if (el.classList.contains('show')) {
+      el.classList.remove('show');
+    } else {
+      el.classList.add('show');
+    }
+  }
+
+  /* --- Board Logic --- */
+
+  // Initial Data: Features and Dependencies
+  // dependsOn: ID of the feature that MUST come before
+  const initialCards = [
+    { id: 'f1', title: 'Login UI', team: 'front', sprint: 1, type: 'card-blue', dependsOn: null },
+    { id: 'f2', title: 'API Login', team: 'back', sprint: 1, type: 'card-green', dependsOn: null },
+    { id: 'f3', title: 'Pantalla QR', team: 'front', sprint: 2, type: 'card-blue', dependsOn: 'f4' }, // Dependencia!
+    { id: 'f4', title: 'API Valida QR', team: 'pagos', sprint: 2, type: 'card-purple', dependsOn: null },
+    { id: 'f5', title: 'Integración', team: 'back', sprint: 3, type: 'card-green', dependsOn: 'f3' },
+    { id: 'f6', title: 'UX Review', team: 'front', sprint: 4, type: 'card-blue', dependsOn: null }
+  ];
+
+  let cards = JSON.parse(JSON.stringify(initialCards)); // Deep copy
+
+  function initBoard() {
+    // Clear board
+    document.querySelectorAll('.sprint-cell').forEach(cell => cell.innerHTML = '');
+
+    // Place cards
+    cards.forEach(card => {
+      const cell = document.querySelector(`.sprint-cell[data-team="${card.team}"][data-sprint="${card.sprint}"]`);
+      if (cell) {
+        const el = document.createElement('div');
+        el.className = `feature-card ${card.type}`;
+        el.draggable = true;
+        el.id = card.id;
+        el.innerHTML = `<strong>${card.title}</strong>${card.dependsOn ? '<br><span class="text-xs text-red-500 font-bold">⚠️ Dep</span>' : ''}`;
+
+        // Drag Events
+        el.ondragstart = drag;
+
+        cell.appendChild(el);
+      }
+    });
+
+    drawDependencies();
+  }
+
+  function resetBoard() {
+    cards = JSON.parse(JSON.stringify(initialCards));
+    initBoard();
+  }
+
+  /* --- Drag & Drop --- */
+  function allowDrop(ev) {
+    ev.preventDefault();
+    ev.currentTarget.classList.add('drag-over');
+  }
+
+  function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+    // Remove drag-over style from all cells just in case
+    document.querySelectorAll('.sprint-cell').forEach(c => c.classList.remove('drag-over'));
+  }
+
+  function drop(ev) {
+    ev.preventDefault();
+    const cardId = ev.dataTransfer.getData("text");
+    const cardEl = document.getElementById(cardId);
+    const targetCell = ev.currentTarget;
+
+    // Clean styles
+    document.querySelectorAll('.sprint-cell').forEach(c => c.classList.remove('drag-over'));
+
+    // Check if dropping on a cell
+    if (targetCell.classList.contains('sprint-cell')) {
+      targetCell.appendChild(cardEl);
+
+      // Update Data Model
+      const card = cards.find(c => c.id === cardId);
+      card.team = targetCell.dataset.team;
+      card.sprint = parseInt(targetCell.dataset.sprint);
+
+      // Redraw Lines
+      drawDependencies();
+    }
+  }
+
+  /* --- Dependency Drawing (Red Strings) --- */
+  function drawDependencies() {
+    const svg = document.getElementById('dependency-layer');
+    svg.innerHTML = `
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                      <polygon points="0 0, 10 3.5, 0 7" fill="#ef4444" />
+                    </marker>
+                </defs>
+            `; // Clear lines
+
+    cards.forEach(card => {
+      if (card.dependsOn) {
+        const sourceId = card.dependsOn; // The prerequisite
+        const targetId = card.id;        // The dependent
+
+        const sourceEl = document.getElementById(sourceId);
+        const targetEl = document.getElementById(targetId);
+
+        if (sourceEl && targetEl) {
+          const startRect = sourceEl.getBoundingClientRect();
+          const endRect = targetEl.getBoundingClientRect();
+          const containerRect = document.querySelector('.relative.bg-white').getBoundingClientRect(); // SVG Container
+
+          // Calculate relative coordinates
+          const x1 = (startRect.left + startRect.width / 2) - containerRect.left;
+          const y1 = (startRect.top + startRect.height / 2) - containerRect.top;
+          const x2 = (endRect.left + endRect.width / 2) - containerRect.left;
+          const y2 = (endRect.top + endRect.height / 2) - containerRect.top;
+
+          // Check logical issue (Backwards dependency)
+          // If prerequisite is in a later sprint than dependent
+          const sourceCard = cards.find(c => c.id === sourceId);
+          const targetCard = cards.find(c => c.id === targetId);
+          const isCritical = sourceCard.sprint > targetCard.sprint;
+
+          // Create Line
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', x1);
+          line.setAttribute('y1', y1);
+          line.setAttribute('x2', x2);
+          line.setAttribute('y2', y2);
+          line.setAttribute('class', `dependency-line ${isCritical ? 'critical' : ''}`);
+          line.setAttribute('marker-end', 'url(#arrowhead)');
+
+          svg.appendChild(line);
+        }
+      }
+    });
+  }
+
+  // Window resize listener to redraw lines
+  window.addEventListener('resize', drawDependencies);
+
+  // Init App
+  initBoard();
+  switchView('visual'); // Default view
+
+</script>
+</body>
+</html>
