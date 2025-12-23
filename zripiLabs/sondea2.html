@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sondea by Zripi</title>
+    <link id="favicon" rel="icon" href="">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Chart.js Datalabels Plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+
+    <!-- QR Code Generator -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.js"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --primary-color-hover: #2563eb;
+            --primary-color-light: #dbeafe;
+            --primary-color-light-hover: #bfdbfe;
+            --primary-color-ring: #93c5fd;
+            --chart-bg-color: rgba(59, 130, 246, 0.7);
+            --chart-border-color: rgba(59, 130, 246, 1);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        #app-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulsate {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        .pulsate-loader {
+            animation: pulsate 1.5s ease-in-out infinite;
+        }
+        .option-input:focus-within {
+            border-color: var(--primary-color);
+        }
+        .theme-dot {
+            transition: all 0.2s ease-in-out;
+        }
+        .theme-dot.active {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--primary-color);
+        }
+        .poll-type-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        .question-card {
+            border-left: 4px solid var(--primary-color);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 p-4">
+
+<div id="app-wrapper" class="w-full">
+    <div id="app-container" class="w-full max-w-3xl mx-auto">
+
+        <!-- =================================================================== -->
+        <!-- VIEW 1: CREATE POLL                                                 -->
+        <!-- =================================================================== -->
+        <div id="create-view" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg transition-all duration-300 w-full hidden">
+            <div class="flex justify-between items-center mb-4">
+                <div></div>
+                <div class="flex items-center gap-3">
+                    <div id="logo-container" class="w-10 h-10" style="color: var(--primary-color);">
+                        <svg class="app-logo" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="4" y="10" width="4" height="10" rx="1.5"></rect>
+                            <rect x="10" y="4" width="4" height="16" rx="1.5"></rect>
+                            <rect x="16" y="14" width="4" height="6" rx="1.5"></rect>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900">Sondea</h1>
+                </div>
+                <button id="go-to-saved-btn" title="Mis Encuestas Guardadas" class="text-slate-400 hover:text-slate-600 transition">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg>
+                </button>
+            </div>
+            <p class="text-center text-slate-500 mb-6">Crea sesiones multi-pregunta en segundos.</p>
+
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-slate-600 mb-1">Título de la Sesión</label>
+                <input type="text" id="poll-title" placeholder="Ej: Clase de Historia - Unidad 1" class="w-full px-4 py-3 bg-slate-100 rounded-lg border-2 border-transparent focus:outline-none focus:ring-2 font-bold text-lg" style="--tw-ring-color: var(--primary-color);">
+            </div>
+
+            <!-- Container for Question Cards -->
+            <div id="questions-wrapper" class="space-y-6">
+                <!-- Question cards added dynamically here -->
+            </div>
+
+            <button id="add-question-block-btn" class="mt-6 w-full py-3 border-2 border-dashed rounded-lg font-semibold text-slate-500 hover:text-slate-700 hover:bg-slate-50 transition border-slate-300">
+                + Agregar Otra Pregunta
+            </button>
+
+            <div class="mt-6 flex items-center">
+                <input id="save-poll-checkbox" type="checkbox" class="h-4 w-4 rounded border-gray-300" style="color: var(--primary-color);">
+                <label for="save-poll-checkbox" class="ml-2 block text-sm text-slate-700">Guardar esta sesión para el futuro</label>
+            </div>
+
+            <div class="mt-8">
+                <button id="create-poll-btn" class="w-full text-white font-bold py-4 rounded-lg focus:outline-none focus:ring-4 transition-all duration-300 transform hover:scale-105 flex items-center justify-center" style="background-color: var(--primary-color); --tw-ring-color: var(--primary-color-ring);">
+                    Crear Sesión y Empezar
+                </button>
+            </div>
+            <div id="error-message-create" class="text-red-500 text-center mt-4 font-medium hidden"></div>
+
+            <div class="mt-8 pt-6 border-t border-slate-200">
+                <div class="flex justify-center items-center gap-4" id="theme-switcher"></div>
+            </div>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 2: FACILITATOR DASHBOARD                                       -->
+        <!-- =================================================================== -->
+        <div id="facilitator-view" class="hidden w-full">
+            <div class="flex justify-between items-center mb-4 border-b pb-4">
+                <h2 class="text-lg font-bold text-slate-600 truncate max-w-[200px]" id="facilitator-session-title"></h2>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium text-slate-500" id="question-counter">Pregunta 1/1</span>
+                </div>
+            </div>
+
+            <div class="text-center mb-6">
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900" id="facilitator-question"></h2>
+                <div class="flex justify-center gap-4 mt-4">
+                    <button id="prev-question-btn" class="text-slate-400 hover:text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <div class="bg-slate-100 rounded-full px-4 py-1 flex items-center">
+                        <span class="text-xs font-bold uppercase tracking-wide text-slate-500">Navegación</span>
+                    </div>
+                    <button id="next-question-btn" class="text-slate-400 hover:text-slate-600 disabled:opacity-30 disabled:cursor-not-allowed">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Share Section -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg mb-6 flex flex-col md:flex-row items-center gap-6">
+                <div class="flex-grow w-full">
+                    <label class="block text-sm font-medium text-slate-600 mb-1">Enlace para compartir</label>
+                    <div class="flex">
+                        <input type="text" id="share-link" readonly class="w-full px-4 py-2 bg-slate-100 rounded-l-lg border-2 border-slate-200 focus:outline-none">
+                        <button id="copy-link-btn" class="bg-slate-200 text-slate-700 font-semibold px-4 rounded-r-lg hover:bg-slate-300 transition">Copiar</button>
+                    </div>
+                    <span id="copy-feedback" class="text-sm text-green-600 mt-1 hidden">¡Copiado!</span>
+                </div>
+                <div id="qrcode-container" class="p-3 bg-white rounded-lg shadow-md"></div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg mb-6">
+                <h3 class="text-xl font-bold mb-4 text-center">Resultados en Vivo</h3>
+                <div id="results-chart-container" class="relative min-h-[120px]">
+                    <canvas id="results-chart"></canvas>
+                </div>
+                <div id="results-wall-container" class="relative w-full max-h-96 overflow-y-auto p-2 bg-slate-50 rounded-lg"></div>
+                <p class="text-center text-slate-500 mt-4 text-lg"><span id="total-count-label"></span>: <span id="total-votes" class="font-bold text-slate-800">0</span></p>
+                <div id="download-button-container" class="mt-4 text-center">
+                    <button id="download-results-btn" class="font-semibold py-2 px-4 rounded-lg transition-colors duration-200" style="color: var(--primary-color); background-color: var(--primary-color-light);">
+                        Descargar Resultados (Pregunta Actual)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Controls Section -->
+            <div class="bg-white p-6 rounded-2xl shadow-lg">
+                <h3 class="text-xl font-bold mb-4 text-center">Controles de Pregunta Actual</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button id="toggle-voting-btn" class="text-white font-semibold py-3 rounded-lg transition"></button>
+                    <button id="toggle-results-btn" class="text-white font-semibold py-3 rounded-lg transition"></button>
+                    <button id="reset-votes-btn" class="bg-red-500 text-white font-semibold py-3 rounded-lg hover:bg-red-600 transition">Reiniciar Votos</button>
+                </div>
+            </div>
+
+            <div class="text-center mt-8">
+                <button id="back-to-create-btn" class="font-semibold transition" style="color: var(--primary-color);">Crear nueva sesión</button>
+            </div>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 3: PARTICIPANT VOTING                                          -->
+        <!-- =================================================================== -->
+        <div id="participant-view" class="hidden w-full">
+            <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg">
+                <div class="mb-4 pb-2 border-b text-center text-sm text-slate-400 font-medium" id="participant-session-info"></div>
+
+                <div id="vote-content">
+                    <h2 class="text-2xl font-bold text-center mb-6 text-slate-900" id="participant-question"></h2>
+                    <div id="participant-options-mc" class="space-y-3"></div>
+                    <div id="participant-options-ot" class="space-y-4">
+                        <input type="text" id="open-text-input" placeholder="Escribe tu respuesta..." class="w-full px-4 py-3 bg-slate-100 rounded-lg border-2 border-transparent focus:outline-none focus:ring-2" style="--tw-ring-color: var(--primary-color);">
+                        <button id="submit-open-text" class="w-full text-white font-bold py-3 rounded-lg" style="background-color: var(--primary-color);">Enviar Respuesta</button>
+                    </div>
+                </div>
+
+                <div id="vote-feedback" class="hidden text-center py-8">
+                    <svg class="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 id="vote-feedback-title" class="text-2xl font-bold mt-4"></h3>
+                    <p id="results-message" class="text-slate-500 mt-2">Los resultados se mostrarán cuando el facilitador los comparta.</p>
+                </div>
+
+                <div id="voting-closed-message" class="hidden text-center py-8">
+                    <h3 class="text-2xl font-bold text-slate-700">La votación está cerrada.</h3>
+                </div>
+
+                <div id="participant-results-container" class="hidden mt-8">
+                    <h3 class="text-xl font-bold mb-4 text-center">Resultados</h3>
+                    <div id="participant-results-chart-container" class="relative min-h-[120px]">
+                        <canvas id="participant-results-chart"></canvas>
+                    </div>
+                    <div id="participant-results-wall-container" class="relative w-full max-h-80 overflow-y-auto p-2 bg-slate-50 rounded-lg"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 4: NOT FOUND                                                   -->
+        <!-- =================================================================== -->
+        <div id="not-found-view" class="hidden text-center bg-white p-8 rounded-2xl shadow-lg w-full">
+            <h2 class="text-3xl font-bold text-red-500 mb-4">Encuesta no encontrada</h2>
+            <p class="text-slate-600 mb-6">El enlace que has usado no parece correcto. Por favor, comprueba la URL.</p>
+            <button id="go-home-btn" class="text-white font-bold py-3 px-6 rounded-lg transition" style="background-color: var(--primary-color);">Crear una encuesta</button>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 5: SAVED POLLS                                                 -->
+        <!-- =================================================================== -->
+        <div id="saved-polls-view" class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg transition-all duration-300 w-full hidden">
+            <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">Mis Sesiones Guardadas</h2>
+            <div id="saved-polls-list" class="space-y-3 max-h-96 overflow-y-auto"></div>
+            <div class="mt-8">
+                <button id="back-to-create-from-saved" class="w-full font-semibold py-3 rounded-lg transition" style="color: var(--primary-color);">← Volver a Crear</button>
+            </div>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- LOADING SPINNER                                                     -->
+        <!-- =================================================================== -->
+        <div id="loading-view" class="hidden text-center">
+            <div class="w-16 h-16 mx-auto pulsate-loader" style="color: var(--primary-color);">
+                <svg class="app-logo" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="10" width="4" height="10" rx="1.5"></rect>
+                    <rect x="10" y="4" width="4" height="16" rx="1.5"></rect>
+                    <rect x="16" y="14" width="4" height="6" rx="1.5"></rect>
+                </svg>
+            </div>
+            <p class="mt-4 text-slate-500 font-semibold">Cargando...</p>
+        </div>
+    </div>
+</div>
+
+<!-- MODALS -->
+<div id="confirm-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+    <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-sm relative">
+        <h3 id="modal-title" class="text-lg font-bold mb-4">Confirmar Acción</h3>
+        <p id="modal-text" class="text-slate-600 mb-6">¿Estás seguro?</p>
+        <div class="flex justify-end gap-4">
+            <button id="modal-cancel-btn" class="px-4 py-2 bg-slate-200 rounded-lg hover:bg-slate-300 transition">Cancelar</button>
+            <button id="modal-confirm-btn" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<div id="support-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md relative">
+        <button class="modal-close-btn absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <h3 class="text-2xl font-bold text-center mb-4">¡Gracias por usar Sondea!</h3>
+        <p class="text-slate-600 text-center mb-6">Tu apoyo ayuda a mantener el servidor. ¡Cualquier aporte es bienvenido!</p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="https://link.mercadopago.com.ar/cursoszripi" target="_blank" class="flex-1 flex items-center justify-center bg-[#009EE3] text-white font-bold py-3 px-4 rounded-lg">Mercado Pago</a>
+            <a href="https://paypal.me/drminniti" target="_blank" class="flex-1 flex items-center justify-center bg-[#0070BA] text-white font-bold py-3 px-4 rounded-lg">PayPal</a>
+        </div>
+    </div>
+</div>
+
+<div id="suggestion-modal" class="hidden fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md relative">
+        <button class="modal-close-btn absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <h3 class="text-2xl font-bold text-center mb-4">Sugerir una función</h3>
+        <p class="text-slate-600 text-center mb-6">Envíanos tus ideas a info@zripi.com.ar</p>
+        <div class="text-center">
+            <a href="mailto:info@zripi.com.ar" class="inline-block text-white font-bold py-3 px-6 rounded-lg transition" style="background-color: var(--primary-color);">Enviar correo</a>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center py-4 text-sm text-slate-500 flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-x-4">
+    <span>✍️ Creado por <a href="https://zripi.com.ar" target="_blank" class="font-semibold hover:underline" style="color: var(--primary-color);">zripi.com.ar</a></span>
+    <span class="hidden sm:inline">|</span>
+    <button id="support-btn" class="font-semibold hover:underline" style="color: var(--primary-color);">❤️ Apoyar</button>
+    <span class="hidden sm:inline">|</span>
+    <button id="suggest-btn" class="font-semibold hover:underline" style="color: var(--primary-color);">💡 Sugerir</button>
+</footer>
+
+
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, runTransaction, arrayUnion, collection, addDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    Chart.register(ChartDataLabels);
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyDchTtiZCEXp7jd4GYR1FVS2WZn6VcXKnY",
+        authDomain: "encuestas-zripi.firebaseapp.com",
+        projectId: "encuestas-zripi",
+        storageBucket: "encuestas-zripi.appspot.com",
+        messagingSenderId: "884493452309",
+        appId: "1:884493452309:web:28eccfbe77d095ba227a1c",
+        measurementId: "G-G8M6LK09PS"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let currentPollId = null;
+    let facilitatorChart = null;
+    let participantChart = null;
+    let unsubscribePoll = null;
+    let unsubscribeSavedPolls = null;
+    let currentUserId = null;
+    let questionCounter = 0; // To track unique IDs in DOM
+
+    // --- THEME LOGIC ---
+    const themes = [
+        { name: 'blue', primary: '#3b82f6', hover: '#2563eb', light: '#dbeafe', lightHover: '#bfdbfe', ring: '#93c5fd', chartBg: 'rgba(59, 130, 246, 0.7)', chartBorder: 'rgba(59, 130, 246, 1)' },
+        { name: 'orange', primary: '#f97316', hover: '#ea580c', light: '#ffedd5', lightHover: '#fed7aa', ring: '#fdba74', chartBg: 'rgba(249, 115, 22, 0.7)', chartBorder: 'rgba(249, 115, 22, 1)' },
+        { name: 'green', primary: '#16a34a', hover: '#15803d', light: '#dcfce7', lightHover: '#bbf7d0', ring: '#86efac', chartBg: 'rgba(22, 163, 74, 0.7)', chartBorder: 'rgba(22, 163, 74, 1)' },
+        { name: 'purple', primary: '#8b5cf6', hover: '#7c3aed', light: '#ede9fe', lightHover: '#ddd6fe', ring: '#c4b5fd', chartBg: 'rgba(139, 92, 246, 0.7)', chartBorder: 'rgba(139, 92, 246, 1)' },
+        { name: 'slate', primary: '#64748b', hover: '#475569', light: '#f1f5f9', lightHover: '#e2e8f0', ring: '#cbd5e1', chartBg: 'rgba(100, 116, 139, 0.7)', chartBorder: 'rgba(100, 116, 139, 1)' },
+    ];
+
+    function applyTheme(themeName) {
+        const theme = themes.find(t => t.name === themeName) || themes[0];
+        const root = document.documentElement;
+        root.style.setProperty('--primary-color', theme.primary);
+        root.style.setProperty('--primary-color-hover', theme.hover);
+        root.style.setProperty('--primary-color-light', theme.light);
+        root.style.setProperty('--primary-color-light-hover', theme.lightHover);
+        root.style.setProperty('--primary-color-ring', theme.ring);
+        root.style.setProperty('--chart-bg-color', theme.chartBg);
+        root.style.setProperty('--chart-border-color', theme.chartBorder);
+        localStorage.setItem('poll-theme', theme.name);
+        document.querySelectorAll('.theme-dot').forEach(dot => dot.classList.toggle('active', dot.dataset.theme === theme.name));
+        updateFavicon(theme.primary);
+    }
+
+    function updateFavicon(color) {
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="${color}"><rect x="4" y="10" width="4" height="10" rx="1.5"></rect><rect x="10" y="4" width="4" height="16" rx="1.5"></rect><rect x="16" y="14" width="4" height="6" rx="1.5"></rect></svg>`;
+        document.getElementById('favicon').href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+    }
+
+    function setupThemeSwitcher() {
+        const switcher = document.getElementById('theme-switcher');
+        switcher.innerHTML = '';
+        themes.forEach(theme => {
+            const dot = document.createElement('button');
+            dot.className = 'theme-dot w-6 h-6 rounded-full cursor-pointer';
+            dot.style.backgroundColor = theme.primary;
+            dot.dataset.theme = theme.name;
+            dot.addEventListener('click', () => applyTheme(theme.name));
+            switcher.appendChild(dot);
+        });
+        applyTheme(localStorage.getItem('poll-theme') || 'blue');
+    }
+
+    // --- UI Elements ---
+    const views = {
+        create: document.getElementById('create-view'),
+        facilitator: document.getElementById('facilitator-view'),
+        participant: document.getElementById('participant-view'),
+        notFound: document.getElementById('not-found-view'),
+        loading: document.getElementById('loading-view'),
+        savedPolls: document.getElementById('saved-polls-view')
+    };
+
+    const confirmModal = document.getElementById('confirm-modal');
+    const supportModal = document.getElementById('support-modal');
+    const suggestionModal = document.getElementById('suggestion-modal');
+    let confirmCallback = null;
+
+    function showConfirmModal(title, text, onConfirm) {
+        confirmModal.querySelector('#modal-title').textContent = title;
+        confirmModal.querySelector('#modal-text').textContent = text;
+        confirmCallback = onConfirm;
+        confirmModal.classList.remove('hidden');
+    }
+    function hideModal(modal) { modal.classList.add('hidden'); }
+    function showView(viewName) {
+        if (unsubscribePoll) unsubscribePoll();
+        if (unsubscribeSavedPolls) unsubscribeSavedPolls();
+        unsubscribePoll = null;
+        unsubscribeSavedPolls = null;
+        if (facilitatorChart) facilitatorChart.destroy();
+        if (participantChart) participantChart.destroy();
+        facilitatorChart = null;
+        participantChart = null;
+        Object.values(views).forEach(view => view.classList.add('hidden'));
+        if (views[viewName]) views[viewName].classList.remove('hidden');
+    }
+
+    // --- DOM BUILDER FOR CREATE VIEW ---
+    function addQuestionBlock(data = null) {
+        questionCounter++;
+        const id = questionCounter;
+        const wrapper = document.getElementById('questions-wrapper');
+
+        const div = document.createElement('div');
+        div.className = 'question-card bg-slate-50 p-4 rounded-lg relative';
+        div.dataset.id = id;
+
+        // Default values
+        const qText = data ? data.question : '';
+        const qType = data ? data.type : 'multiple-choice';
+
+        div.innerHTML = `
+            <div class="flex justify-between items-start mb-2">
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Pregunta ${wrapper.children.length + 1}</h3>
+                <button class="text-red-400 hover:text-red-600 remove-question-btn ${wrapper.children.length === 0 ? 'hidden' : ''}" title="Eliminar pregunta">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </button>
+            </div>
+
+            <div class="mb-3">
+                <input type="text" class="question-input w-full px-4 py-2 bg-white rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Escribe tu pregunta aquí..." value="${qText}">
+            </div>
+
+            <div class="mb-3">
+                <div class="grid grid-cols-2 gap-2 text-sm">
+                    <button class="type-btn type-mc ${qType === 'multiple-choice' ? 'bg-blue-100 text-blue-700 font-bold' : 'bg-slate-200 text-slate-600'} py-1 rounded transition" data-type="multiple-choice">Opción Múltiple</button>
+                    <button class="type-btn type-ot ${qType === 'open-text' ? 'bg-blue-100 text-blue-700 font-bold' : 'bg-slate-200 text-slate-600'} py-1 rounded transition" data-type="open-text">Texto Libre</button>
+                </div>
+            </div>
+
+            <div class="options-area ${qType === 'open-text' ? 'hidden' : ''}">
+                <div class="options-list space-y-2"></div>
+                <button class="add-opt-btn mt-2 text-sm font-medium text-blue-500 hover:underline">+ Añadir Opción</button>
+            </div>
+        `;
+
+        wrapper.appendChild(div);
+
+        // Events for this block
+        const mcBtn = div.querySelector('.type-mc');
+        const otBtn = div.querySelector('.type-ot');
+        const optionsArea = div.querySelector('.options-area');
+
+        mcBtn.addEventListener('click', () => {
+            mcBtn.className = 'type-btn type-mc bg-blue-100 text-blue-700 font-bold py-1 rounded transition';
+            otBtn.className = 'type-btn type-ot bg-slate-200 text-slate-600 py-1 rounded transition';
+            optionsArea.classList.remove('hidden');
+        });
+
+        otBtn.addEventListener('click', () => {
+            otBtn.className = 'type-btn type-ot bg-blue-100 text-blue-700 font-bold py-1 rounded transition';
+            mcBtn.className = 'type-btn type-mc bg-slate-200 text-slate-600 py-1 rounded transition';
+            optionsArea.classList.add('hidden');
+        });
+
+        div.querySelector('.remove-question-btn').addEventListener('click', () => {
+            div.remove();
+            updateQuestionNumbers();
+        });
+
+        const optionsList = div.querySelector('.options-list');
+        const addOptBtn = div.querySelector('.add-opt-btn');
+
+        const addOpt = (val = '') => {
+            const optDiv = document.createElement('div');
+            optDiv.className = 'flex items-center gap-2';
+            optDiv.innerHTML = `
+                <div class="w-2 h-2 rounded-full bg-slate-300"></div>
+                <input type="text" class="opt-input flex-grow px-3 py-1 bg-white border border-slate-200 rounded text-sm focus:outline-none focus:border-blue-400" placeholder="Opción" value="${val}">
+                <button class="del-opt text-slate-300 hover:text-red-400">×</button>
+            `;
+            optDiv.querySelector('.del-opt').addEventListener('click', () => optDiv.remove());
+
+            // UX: Enter key
+            optDiv.querySelector('input').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addOpt();
+                    optionsList.lastChild.querySelector('input').focus();
+                }
+            });
+
+            optionsList.appendChild(optDiv);
+        };
+
+        addOptBtn.addEventListener('click', () => addOpt());
+
+        // Fill initial options if any
+        if (data && data.options) {
+            data.options.forEach(o => addOpt(o.text));
+        } else {
+            addOpt('Opción 1');
+            addOpt('Opción 2');
+        }
+    }
+
+    function updateQuestionNumbers() {
+        const wrapper = document.getElementById('questions-wrapper');
+        Array.from(wrapper.children).forEach((child, index) => {
+            child.querySelector('h3').textContent = `Pregunta ${index + 1}`;
+            const delBtn = child.querySelector('.remove-question-btn');
+            if(index === 0 && wrapper.children.length === 1) delBtn.classList.add('hidden');
+            else delBtn.classList.remove('hidden');
+        });
+    }
+
+    // --- APP LOGIC ---
+
+    function generatePollId() {
+        return Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+
+    async function handleCreatePoll() {
+        const createBtn = document.getElementById('create-poll-btn');
+        const errorMessage = document.getElementById('error-message-create');
+        const title = document.getElementById('poll-title').value.trim() || 'Sin Título';
+        const shouldSave = document.getElementById('save-poll-checkbox').checked;
+
+        const wrapper = document.getElementById('questions-wrapper');
+        const questionCards = wrapper.querySelectorAll('.question-card');
+
+        let questions = [];
+        let isValid = true;
+
+        questionCards.forEach((card, index) => {
+            const qText = card.querySelector('.question-input').value.trim();
+            const type = card.querySelector('.type-mc').classList.contains('font-bold') ? 'multiple-choice' : 'open-text';
+
+            if (!qText) { isValid = false; return; }
+
+            let questionObj = {
+                id: index, // Use index as ID
+                text: qText,
+                type: type
+            };
+
+            if (type === 'multiple-choice') {
+                const optInputs = card.querySelectorAll('.opt-input');
+                const options = Array.from(optInputs).map(i => i.value.trim()).filter(v => v !== '');
+                if (options.length < 2) { isValid = false; return; }
+                questionObj.options = options.map((txt, i) => ({ id: i, text: txt, votes: 0 }));
+            } else {
+                questionObj.responses = [];
+            }
+            questions.push(questionObj);
+        });
+
+        if (!isValid || questions.length === 0) {
+            errorMessage.textContent = 'Por favor, completa todas las preguntas y asegúrate de que las de opción múltiple tengan al menos 2 opciones.';
+            errorMessage.classList.remove('hidden');
+            return;
+        }
+
+        errorMessage.classList.add('hidden');
+        createBtn.disabled = true;
+        createBtn.innerHTML = `<svg class="spinner w-6 h-6 mr-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Creando...`;
+
+        const pollData = {
+            title: title,
+            questions: questions,
+            currentQuestionIndex: 0,
+            theme: localStorage.getItem('poll-theme') || 'blue',
+            createdAt: new Date(),
+            status: 'open',
+            showResults: true,
+            version: 1
+        };
+
+        if (shouldSave && currentUserId) {
+            try {
+                const savedPollsCollection = collection(db, 'users', currentUserId, 'polls');
+                await addDoc(savedPollsCollection, { ...pollData, savedAt: new Date() });
+            } catch (error) {
+                console.error("Error saving poll:", error);
+            }
+        }
+
+        try {
+            const newPollId = generatePollId();
+            // Remove savedAt for live poll
+            let liveData = {...pollData};
+            delete liveData.savedAt;
+
+            await setDoc(doc(db, "polls", newPollId), liveData);
+            window.location.hash = `poll/${newPollId}/facilitator`;
+        } catch (error) {
+            console.error(error);
+            createBtn.disabled = false;
+            createBtn.innerHTML = 'Crear Sesión y Empezar';
+            errorMessage.textContent = 'Error al crear la sesión.';
+            errorMessage.classList.remove('hidden');
+        }
+    }
+
+    // --- CHART & DISPLAY ---
+
+    function formatLabel(str, maxwidth){
+        let sections = [];
+        let words = str.split(" ");
+        let temp = "";
+        words.forEach((item, index) => {
+            if(temp.length > 0) temp += " " + item;
+            else temp = item;
+            if(temp.length > maxwidth){ sections.push(temp); temp = ""; }
+            if(index === words.length - 1 && temp.length > 0) sections.push(temp);
+        });
+        return sections;
+    }
+
+    function createChart(canvasId, questionData, themeName) {
+        const theme = themes.find(t => t.name === themeName) || themes[0];
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return null;
+
+        const container = canvas.parentElement;
+        container.style.height = `${60 + questionData.options.length * 50}px`;
+
+        const ctx = canvas.getContext('2d');
+        const totalVotes = questionData.options.reduce((sum, opt) => sum + opt.votes, 0);
+
+        return new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: questionData.options.map(o => formatLabel(o.text, 30)),
+                datasets: [{
+                    label: 'Votos',
+                    data: questionData.options.map(o => o.votes),
+                    backgroundColor: theme.chartBg,
+                    borderColor: theme.chartBorder,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { beginAtZero: true, ticks: { display: false }, grid: { display: false } },
+                    y: { grid: { display: false }, ticks: { font: { size: 14 } } }
+                },
+                plugins: {
+                    legend: { display: false },
+                    datalabels: {
+                        anchor: 'center', align: 'center', color: '#ffffff',
+                        font: { weight: 'bold', size: 14 },
+                        formatter: (value) => {
+                            if (value === 0) return '';
+                            if (totalVotes === 0) return `${value} (0%)`;
+                            return `${value} (${((value / totalVotes) * 100).toFixed(0)}%)`;
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function updateResponseWall(containerId, responses) {
+        const wall = document.getElementById(containerId);
+        wall.innerHTML = '';
+        if (!responses || responses.length === 0) {
+            wall.innerHTML = `<p class="text-slate-400 text-center p-4">Esperando respuestas...</p>`;
+            return;
+        }
+        const frag = document.createDocumentFragment();
+        responses.forEach(r => {
+            const div = document.createElement('div');
+            div.className = 'bg-white p-3 rounded-lg shadow mb-2';
+            div.textContent = r;
+            frag.appendChild(div);
+        });
+        wall.appendChild(frag);
+    }
+
+    // --- FACILITATOR LOGIC ---
+
+    function setupFacilitatorView(pollId, pollData) {
+        currentPollId = pollId;
+        applyTheme(pollData.theme);
+        updateFacilitatorView(pollData);
+
+        const link = `${window.location.origin}${window.location.pathname}#poll/${pollId}`;
+        document.getElementById('share-link').value = link;
+        const qr = qrcode(0, 'L');
+        qr.addData(link);
+        qr.make();
+        document.getElementById('qrcode-container').innerHTML = qr.createImgTag(5, 8);
+    }
+
+    function updateFacilitatorView(pollData) {
+        const qIndex = pollData.currentQuestionIndex || 0;
+        const question = pollData.questions[qIndex];
+
+        document.getElementById('facilitator-session-title').textContent = pollData.title || 'Sondea';
+        document.getElementById('question-counter').textContent = `Pregunta ${qIndex + 1}/${pollData.questions.length}`;
+        document.getElementById('facilitator-question').textContent = question.text;
+
+        // Navigation state
+        const prevBtn = document.getElementById('prev-question-btn');
+        const nextBtn = document.getElementById('next-question-btn');
+        prevBtn.disabled = qIndex === 0;
+        nextBtn.disabled = qIndex === pollData.questions.length - 1;
+
+        // Render Results
+        const totalCountLabel = document.getElementById('total-count-label');
+        if (question.type === 'open-text') {
+            document.getElementById('results-chart-container').style.display = 'none';
+            document.getElementById('results-wall-container').style.display = 'block';
+            updateResponseWall('results-wall-container', question.responses);
+            totalCountLabel.textContent = 'Respuestas';
+            document.getElementById('total-votes').textContent = question.responses ? question.responses.length : 0;
+        } else {
+            document.getElementById('results-chart-container').style.display = 'block';
+            document.getElementById('results-wall-container').style.display = 'none';
+
+            if (facilitatorChart) facilitatorChart.destroy();
+            facilitatorChart = createChart('results-chart', question, pollData.theme);
+
+            totalCountLabel.textContent = 'Total Votos';
+            const total = question.options.reduce((a,b) => a + b.votes, 0);
+            document.getElementById('total-votes').textContent = total;
+        }
+
+        updateFacilitatorControls(pollData);
+    }
+
+    function updateFacilitatorControls(pollData) {
+        const toggleVotingBtn = document.getElementById('toggle-voting-btn');
+        const toggleResultsBtn = document.getElementById('toggle-results-btn');
+
+        if (pollData.status === 'open') {
+            toggleVotingBtn.textContent = 'Cerrar Votación';
+            toggleVotingBtn.className = 'bg-green-500 hover:bg-green-600 text-white font-semibold py-3 rounded-lg transition';
+        } else {
+            toggleVotingBtn.textContent = 'Abrir Votación';
+            toggleVotingBtn.className = 'bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 rounded-lg transition';
+        }
+
+        if (pollData.showResults) {
+            toggleResultsBtn.textContent = 'Ocultar Resultados';
+            toggleResultsBtn.className = 'bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-lg transition';
+        } else {
+            toggleResultsBtn.textContent = 'Mostrar Resultados';
+            toggleResultsBtn.className = 'bg-blue-500 text-white font-semibold py-3 rounded-lg transition';
+            toggleResultsBtn.style.backgroundColor = 'var(--primary-color)';
+        }
+    }
+
+    // Facilitator Actions
+    async function changeQuestion(offset) {
+        const pollRef = doc(db, "polls", currentPollId);
+        await runTransaction(db, async (t) => {
+            const docSnap = await t.get(pollRef);
+            if (!docSnap.exists()) return;
+            const data = docSnap.data();
+            const newIndex = data.currentQuestionIndex + offset;
+            if (newIndex >= 0 && newIndex < data.questions.length) {
+                t.update(pollRef, { currentQuestionIndex: newIndex, status: 'open' }); // Re-open on change? Usually yes.
+            }
+        });
+    }
+
+    async function handleToggleVoting() {
+        const pollRef = doc(db, "polls", currentPollId);
+        const snap = await getDoc(pollRef);
+        const newStatus = snap.data().status === 'open' ? 'closed' : 'open';
+        await updateDoc(pollRef, { status: newStatus });
+    }
+
+    async function handleToggleResults() {
+        const pollRef = doc(db, "polls", currentPollId);
+        const snap = await getDoc(pollRef);
+        await updateDoc(pollRef, { showResults: !snap.data().showResults });
+    }
+
+    async function handleResetVotes() {
+        showConfirmModal('Reiniciar Votos', 'Esto borrará los votos de la PREGUNTA ACTUAL.', async () => {
+            const pollRef = doc(db, "polls", currentPollId);
+            await runTransaction(db, async (t) => {
+                const docSnap = await t.get(pollRef);
+                const data = docSnap.data();
+                const qIndex = data.currentQuestionIndex;
+
+                // Deep copy array
+                let qs = JSON.parse(JSON.stringify(data.questions));
+                if (qs[qIndex].type === 'open-text') qs[qIndex].responses = [];
+                else qs[qIndex].options.forEach(o => o.votes = 0);
+
+                t.update(pollRef, { questions: qs, version: (data.version || 0) + 1 });
+            });
+        });
+    }
+
+    // --- PARTICIPANT LOGIC ---
+
+    function setupParticipantView(pollId, pollData) {
+        currentPollId = pollId;
+        applyTheme(pollData.theme);
+        updateParticipantView(pollData);
+    }
+
+    function updateParticipantView(pollData) {
+        const qIndex = pollData.currentQuestionIndex || 0;
+        const question = pollData.questions[qIndex];
+
+        document.getElementById('participant-session-info').textContent = `${pollData.title || 'Sondea'} • Pregunta ${qIndex + 1}`;
+        document.getElementById('participant-question').textContent = question.text;
+
+        // Unique key per question to allow voting on each
+        const storageKey = `voted_${currentPollId}_q${qIndex}_v${pollData.version || 1}`;
+        const hasVoted = sessionStorage.getItem(storageKey);
+
+        const contentDiv = document.getElementById('vote-content');
+        const closedDiv = document.getElementById('voting-closed-message');
+        const feedbackDiv = document.getElementById('vote-feedback');
+        const resultsDiv = document.getElementById('participant-results-container');
+
+        // Reset inputs
+        const openTextInput = document.getElementById('open-text-input');
+        const submitBtn = document.getElementById('submit-open-text');
+        openTextInput.value = '';
+        openTextInput.disabled = false;
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar Respuesta';
+
+        if (hasVoted) {
+            contentDiv.classList.add('hidden');
+            closedDiv.classList.add('hidden');
+            feedbackDiv.classList.remove('hidden');
+            document.getElementById('vote-feedback-title').textContent = '¡Recibido!';
+
+            if (pollData.showResults) {
+                document.getElementById('results-message').classList.add('hidden');
+                resultsDiv.classList.remove('hidden');
+
+                if (question.type === 'open-text') {
+                    document.getElementById('participant-results-chart-container').style.display = 'none';
+                    document.getElementById('participant-results-wall-container').style.display = 'block';
+                    updateResponseWall('participant-results-wall-container', question.responses);
+                } else {
+                    document.getElementById('participant-results-chart-container').style.display = 'block';
+                    document.getElementById('participant-results-wall-container').style.display = 'none';
+                    if (participantChart) participantChart.destroy();
+                    participantChart = createChart('participant-results-chart', question, pollData.theme);
+                }
+            } else {
+                document.getElementById('results-message').classList.remove('hidden');
+                resultsDiv.classList.add('hidden');
+            }
+
+        } else if (pollData.status === 'closed') {
+            contentDiv.classList.add('hidden');
+            feedbackDiv.classList.add('hidden');
+            resultsDiv.classList.add('hidden');
+            closedDiv.classList.remove('hidden');
+        } else {
+            // SHOW VOTING FORM
+            contentDiv.classList.remove('hidden');
+            closedDiv.classList.add('hidden');
+            feedbackDiv.classList.add('hidden');
+            resultsDiv.classList.add('hidden');
+
+            if (question.type === 'multiple-choice') {
+                document.getElementById('participant-options-ot').style.display = 'none';
+                const mcContainer = document.getElementById('participant-options-mc');
+                mcContainer.style.display = 'block';
+                mcContainer.innerHTML = '';
+
+                question.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = 'w-full text-left p-4 bg-slate-100 rounded-lg border-2 border-transparent focus:outline-none transition-all duration-200 hover:bg-blue-50';
+                    btn.textContent = opt.text;
+                    btn.style.setProperty('--tw-ring-color', 'var(--primary-color)');
+                    btn.addEventListener('click', () => handleVote(opt.id, qIndex, pollData.version));
+                    mcContainer.appendChild(btn);
+                });
+            } else {
+                document.getElementById('participant-options-mc').style.display = 'none';
+                document.getElementById('participant-options-ot').style.display = 'block';
+            }
+        }
+    }
+
+    async function handleVote(optionId, qIndex, version) {
+        // Optimistic UI update could go here, but for simplicity we wait for DB
+        const storageKey = `voted_${currentPollId}_q${qIndex}_v${version || 1}`;
+        sessionStorage.setItem(storageKey, 'true');
+
+        // Force UI refresh to show feedback immediately
+        const pollRef = doc(db, "polls", currentPollId); // We assume listeners will fire, but we can hide UI locally first
+
+        await runTransaction(db, async (t) => {
+            const docSnap = await t.get(pollRef);
+            if (!docSnap.exists()) return;
+            const data = docSnap.data();
+
+            // Deep copy array to modify
+            let questions = data.questions;
+            // Find option and increment
+            const optIndex = questions[qIndex].options.findIndex(o => o.id === optionId);
+            if(optIndex !== -1) {
+                questions[qIndex].options[optIndex].votes++;
+            }
+            t.update(pollRef, { questions: questions });
+        });
+    }
+
+    async function handleOpenTextSubmit() {
+        const input = document.getElementById('open-text-input');
+        const btn = document.getElementById('submit-open-text');
+        const txt = input.value.trim();
+
+        if (!txt || btn.disabled) return;
+
+        // FIX: Prevent double submit
+        btn.disabled = true;
+        input.disabled = true;
+        btn.textContent = 'Enviando...';
+
+        const pollRef = doc(db, "polls", currentPollId);
+
+        try {
+            await runTransaction(db, async (t) => {
+                const docSnap = await t.get(pollRef);
+                if (!docSnap.exists()) throw "No doc";
+                const data = docSnap.data();
+                const qIndex = data.currentQuestionIndex;
+
+                let questions = data.questions;
+                if(!questions[qIndex].responses) questions[qIndex].responses = [];
+                questions[qIndex].responses.push(txt);
+
+                t.update(pollRef, { questions: questions });
+
+                const storageKey = `voted_${currentPollId}_q${qIndex}_v${data.version || 1}`;
+                sessionStorage.setItem(storageKey, 'true');
+            });
+        } catch (e) {
+            console.error(e);
+            btn.disabled = false;
+            input.disabled = false;
+            btn.textContent = 'Enviar Respuesta';
+        }
+    }
+
+    // --- ROUTER & INIT ---
+
+    async function router() {
+        showView('loading');
+        const hash = window.location.hash;
+
+        if (hash.startsWith('#poll/')) {
+            const parts = hash.split('/');
+            const pollId = parts[1];
+            const role = parts[2];
+
+            try {
+                const snap = await getDoc(doc(db, "polls", pollId));
+                if (!snap.exists()) { showView('notFound'); return; }
+
+                // BACKWARD COMPATIBILITY: Transform old single-question to multi-question structure
+                let data = snap.data();
+                if (!data.questions) {
+                    data.questions = [{
+                        text: data.question,
+                        type: data.type,
+                        options: data.options,
+                        responses: data.responses
+                    }];
+                    data.currentQuestionIndex = 0;
+                }
+
+                if (role === 'facilitator') {
+                    showView('facilitator');
+                    setupFacilitatorView(pollId, data);
+                    unsubscribePoll = onSnapshot(doc(db, "polls", pollId), (d) => {
+                        if(d.exists()) {
+                            let updatedData = d.data();
+                            // Compat check again for real-time updates
+                            if (!updatedData.questions) {
+                                updatedData.questions = [{
+                                    text: updatedData.question,
+                                    type: updatedData.type,
+                                    options: updatedData.options,
+                                    responses: updatedData.responses
+                                }];
+                                updatedData.currentQuestionIndex = 0;
+                            }
+                            updateFacilitatorView(updatedData);
+                        }
+                    });
+                } else {
+                    showView('participant');
+                    setupParticipantView(pollId, data);
+                    unsubscribePoll = onSnapshot(doc(db, "polls", pollId), (d) => {
+                        if(d.exists()) {
+                            let updatedData = d.data();
+                            if (!updatedData.questions) {
+                                updatedData.questions = [{
+                                    text: updatedData.question,
+                                    type: updatedData.type,
+                                    options: updatedData.options,
+                                    responses: updatedData.responses
+                                }];
+                                updatedData.currentQuestionIndex = 0;
+                            }
+                            updateParticipantView(updatedData);
+                        }
+                    });
+                }
+            } catch (e) { console.error(e); showView('notFound'); }
+
+        } else if (hash === '#saved') {
+            showView('savedPolls');
+            if (currentUserId) {
+                unsubscribeSavedPolls = onSnapshot(collection(db, 'users', currentUserId, 'polls'), (snap) => {
+                    const list = document.getElementById('saved-polls-list');
+                    list.innerHTML = '';
+                    if (snap.empty) { list.innerHTML = `<p class="text-slate-400 text-center">Sin encuestas.</p>`; return; }
+
+                    snap.forEach(d => {
+                        const p = d.data();
+                        const title = p.title || p.question || 'Sin título';
+                        const div = document.createElement('div');
+                        div.className = 'bg-slate-50 p-3 rounded-lg flex justify-between items-center';
+                        div.innerHTML = `
+                            <div>
+                                <div class="font-bold text-slate-700">${title}</div>
+                                <div class="text-xs text-slate-400">${p.questions ? p.questions.length + ' Preguntas' : '1 Pregunta'}</div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="launch-btn bg-blue-500 text-white px-3 py-1 rounded font-bold text-sm">Lanzar</button>
+                                <button class="delete-btn text-red-400 hover:text-red-600"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                            </div>
+                        `;
+                        div.querySelector('.launch-btn').onclick = async () => {
+                            // Convert old format if needed before launching new instance
+                            let template = {...p};
+                            if(!template.questions) {
+                                template.questions = [{
+                                    text: template.question,
+                                    type: template.type,
+                                    options: template.options,
+                                    responses: template.responses
+                                }];
+                                template.title = template.question;
+                            }
+                            // Reset values
+                            template.currentQuestionIndex = 0;
+                            delete template.savedAt;
+                            delete template.id; // Delete old ID
+
+                            showView('loading');
+                            const newId = generatePollId();
+                            await setDoc(doc(db, "polls", newId), {...template, createdAt: new Date(), status: 'open', showResults: true, version: 1});
+                            window.location.hash = `poll/${newId}/facilitator`;
+                        };
+                        div.querySelector('.delete-btn').onclick = () => {
+                            showConfirmModal('Eliminar', '¿Borrar esta plantilla?', async () => {
+                                await deleteDoc(doc(db, 'users', currentUserId, 'polls', d.id));
+                            });
+                        };
+                        list.appendChild(div);
+                    });
+                });
+            }
+        } else {
+            showView('create');
+            document.getElementById('questions-wrapper').innerHTML = '';
+            document.getElementById('poll-title').value = '';
+            questionCounter = 0;
+            addQuestionBlock(); // Add first block
+            setupThemeSwitcher();
+        }
+    }
+
+    // --- EVENTS ---
+    window.addEventListener('hashchange', router);
+    onAuthStateChanged(auth, (u) => {
+        if (u) { currentUserId = u.uid; router(); }
+        else signInAnonymously(auth);
+    });
+
+    document.getElementById('add-question-block-btn').addEventListener('click', () => addQuestionBlock());
+    document.getElementById('create-poll-btn').addEventListener('click', handleCreatePoll);
+
+    document.getElementById('toggle-voting-btn').addEventListener('click', handleToggleVoting);
+    document.getElementById('toggle-results-btn').addEventListener('click', handleToggleResults);
+    document.getElementById('reset-votes-btn').addEventListener('click', handleResetVotes);
+
+    document.getElementById('prev-question-btn').addEventListener('click', () => changeQuestion(-1));
+    document.getElementById('next-question-btn').addEventListener('click', () => changeQuestion(1));
+
+    document.getElementById('submit-open-text').addEventListener('click', handleOpenTextSubmit);
+
+    // Common navigation
+    ['back-to-create-btn', 'go-home-btn', 'back-to-create-from-saved'].forEach(id => {
+        document.getElementById(id)?.addEventListener('click', () => window.location.hash = '');
+    });
+    document.getElementById('go-to-saved-btn').addEventListener('click', () => window.location.hash = '#saved');
+
+    // Copy link
+    document.getElementById('copy-link-btn').addEventListener('click', () => {
+        const link = document.getElementById('share-link');
+        link.select();
+        document.execCommand('copy');
+        document.getElementById('copy-feedback').classList.remove('hidden');
+        setTimeout(() => document.getElementById('copy-feedback').classList.add('hidden'), 2000);
+    });
+
+    // Modal buttons
+    document.getElementById('modal-cancel-btn').addEventListener('click', () => hideModal(confirmModal));
+    document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+        if (confirmCallback) confirmCallback();
+        hideModal(confirmModal);
+    });
+
+    // Support/Suggestion modals
+    document.getElementById('support-btn').addEventListener('click', () => supportModal.classList.remove('hidden'));
+    document.getElementById('suggest-btn').addEventListener('click', () => suggestionModal.classList.remove('hidden'));
+    document.querySelectorAll('.modal-close-btn').forEach(b => b.addEventListener('click', (e) => {
+        e.target.closest('.fixed').classList.add('hidden');
+    }));
+
+</script>
+</body>
+</html>
