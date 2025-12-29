@@ -3,533 +3,329 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QBR Suite: Road Trip & Guía Practitioner</title>
+    <title>QBR Pit Stop Infographic</title>
 
-    <!-- 1. TAILWIND CSS (Para el diseño visual sin escribir mil líneas de CSS) -->
+    <!-- TAILWIND CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- 2. FUENTES (Google Fonts) -->
+    <!-- GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-    <!-- 3. LUCIDE ICONS (Para los iconos de auto, herramientas, etc.) -->
+    <!-- LUCIDE ICONS -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- ESTILOS PERSONALIZADOS / ANIMACIONES -->
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
+        .race-font { font-family: 'Anton', sans-serif; letter-spacing: 1px; }
 
-        /* Animación suave para mostrar contenido */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
+        .road-stripes {
+            background-image: repeating-linear-gradient(to bottom, #334155 0, #334155 20px, transparent 20px, transparent 40px);
+            width: 4px;
+            height: 100%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 0;
+            opacity: 0.5;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Utilidad para ocultar/mostrar vistas */
-        .hidden-view { display: none; }
-
-        /* Estilos específicos para estados activos en las tarjetas */
-        .card-active {
-            transform: scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .rt-phase-detail {
-            display: none; /* Oculto por defecto */
-        }
-        .rt-phase-detail.show {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .guide-stage-detail {
-            display: none;
-        }
-        .guide-stage-detail.show {
-            display: block;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        /* Animación suave para transiciones de borde/fondo */
-        .interactive-card {
+        .step-card {
             transition: all 0.3s ease;
+        }
+        .step-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+        }
+
+        /* Checkered flag pattern */
+        .checkered {
+            background-color: #fff;
+            background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000),
+            linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen pb-20">
+<body class="p-4 md:p-8 min-h-screen flex justify-center">
 
-<!-- ================= NAVIGATION ================= -->
-<nav class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md px-2 py-2 rounded-full shadow-lg border border-slate-200 flex gap-2">
-    <button onclick="switchView('roadtrip')" id="btn-roadtrip" class="px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 transition-all bg-blue-600 text-white shadow-md">
-        <i data-lucide="car" class="w-4 h-4"></i>
-        <span class="hidden sm:inline">Modo Visual (Road Trip)</span>
-    </button>
-    <button onclick="switchView('guide')" id="btn-guide" class="px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 transition-all text-slate-500 hover:bg-slate-100">
-        <i data-lucide="file-text" class="w-4 h-4"></i>
-        <span class="hidden sm:inline">Guía Practitioner</span>
-    </button>
-</nav>
+<div class="max-w-4xl w-full bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-700 relative">
 
-<!-- ================= VIEW 1: ROAD TRIP (ANALOGÍA) ================= -->
-<div id="view-roadtrip" class="fade-in">
+    <!-- Header Section -->
+    <div class="relative bg-gradient-to-r from-blue-900 to-indigo-900 p-8 md:p-12 text-center overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute top-0 right-0 w-32 h-32 checkered opacity-10 rotate-12 -translate-y-10 translate-x-10"></div>
+        <div class="absolute bottom-0 left-0 w-24 h-24 checkered opacity-10 -rotate-12 translate-y-10 -translate-x-10"></div>
 
-    <!-- Hero Section -->
-    <div class="bg-gradient-to-b from-blue-900 to-indigo-800 text-white pt-24 pb-32 px-4 relative overflow-hidden rounded-b-[3rem]">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-full border-l-4 border-r-4 border-dashed border-white/20 opacity-30"></div>
+        <h1 class="race-font text-5xl md:text-7xl uppercase text-white mb-6 italic drop-shadow-lg">
+            La QBR es tu <span class="text-yellow-400">Pit Stop</span>
+        </h1>
 
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <div class="inline-flex items-center gap-2 bg-yellow-400 text-yellow-900 px-4 py-1 rounded-full font-bold text-sm mb-6 shadow-lg animate-bounce">
-                <i data-lucide="car" class="w-4 h-4"></i>
-                ANALOGÍA VISUAL
-            </div>
-            <h1 class="text-4xl md:text-5xl font-black mb-6 tracking-tight">
-                LA QBR ES TU <span class="text-yellow-400">PIT STOP</span>
-            </h1>
-            <p class="text-lg text-blue-100 max-w-2xl mx-auto leading-relaxed">
+        <!-- Storytelling Block -->
+        <div class="max-w-3xl mx-auto space-y-6 relative z-10">
+            <p class="text-blue-100 text-lg font-medium leading-relaxed">
                 Imagina que el año es un viaje largo en auto hacia un destino lejano (La Estrategia).
-                La QBR es la parada técnica obligatoria cada 3 meses para asegurar que llegaremos.
+                <span class="text-white font-bold">La QBR es la parada técnica obligatoria cada 3 meses para asegurar que llegaremos.</span>
             </p>
+
+            <div class="bg-slate-900/40 p-5 rounded-2xl border border-blue-500/20 backdrop-blur-sm mx-auto inline-block">
+                <p class="text-yellow-400 font-bold mb-2 uppercase text-xs tracking-widest flex items-center justify-center gap-2">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i> ¿Por qué paramos?
+                </p>
+                <p class="text-slate-300 text-sm italic max-w-lg mx-auto">
+                    "No paramos solo para descansar. Si seguimos manejando sin mirar el tablero, nos quedamos sin nafta o fundimos el motor."
+                </p>
+            </div>
+
+            <div class="flex flex-wrap justify-center gap-3 pt-2">
+                <div class="bg-blue-600/20 px-4 py-2 rounded-full border border-blue-500/30 flex items-center gap-2 text-blue-200 text-sm font-bold">
+                    <i data-lucide="map" class="w-4 h-4 text-emerald-400"></i> Chequear la Ruta
+                </div>
+                <div class="bg-blue-600/20 px-4 py-2 rounded-full border border-blue-500/30 flex items-center gap-2 text-blue-200 text-sm font-bold">
+                    <i data-lucide="gauge" class="w-4 h-4 text-amber-400"></i> Ver el Tablero
+                </div>
+                <div class="bg-blue-600/20 px-4 py-2 rounded-full border border-blue-500/30 flex items-center gap-2 text-blue-200 text-sm font-bold">
+                    <i data-lucide="wrench" class="w-4 h-4 text-red-400"></i> Ajustar el Auto
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="max-w-5xl mx-auto px-4 -mt-20 relative z-20">
+    <!-- The Road / Timeline -->
+    <div class="relative p-6 md:p-12">
+        <!-- Central Road Line -->
+        <div class="road-stripes hidden md:block"></div>
 
-        <!-- Card: Why Stop? -->
-        <div class="bg-white rounded-3xl shadow-xl p-8 mb-12 border-b-8 border-indigo-600">
-            <div class="flex flex-col md:flex-row items-center gap-8">
-                <div class="bg-indigo-100 p-6 rounded-full shrink-0">
-                    <i data-lucide="fuel" class="w-12 h-12 text-indigo-600"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold mb-3 text-indigo-900">¿Por qué paramos? (El Propósito)</h2>
-                    <p class="text-slate-600 text-lg mb-4">
-                        No paramos solo para descansar. Si seguimos manejando sin mirar el tablero, nos quedamos sin nafta o fundimos el motor.
-                    </p>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center gap-3">
-                            <i data-lucide="map" class="text-blue-500 w-6 h-6"></i>
-                            <span class="font-bold text-sm">Chequear la Ruta</span>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center gap-3">
-                            <i data-lucide="gauge" class="text-red-500 w-6 h-6"></i>
-                            <span class="font-bold text-sm">Ver el Tablero</span>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex items-center gap-3">
-                            <i data-lucide="wrench" class="text-green-500 w-6 h-6"></i>
-                            <span class="font-bold text-sm">Ajustar el Auto</span>
-                        </div>
+        <div class="space-y-12 relative z-10">
+
+            <!-- STEP 1: PRE QBR -->
+            <div class="flex flex-col md:flex-row items-center gap-6 step-card group">
+                <div class="hidden md:flex w-1/2 justify-end pr-8">
+                    <div class="text-right">
+                        <h2 class="race-font text-3xl text-white group-hover:text-blue-400 transition">1. PRE QBR</h2>
+                        <p class="text-slate-400 text-sm mt-1 leading-relaxed">
+                            Mirada al retrovisor y al frente.<br>
+                            <span class="text-blue-400 font-bold">Resultados y Focos.</span>
+                        </p>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Interactive Timeline -->
-        <div class="relative">
-            <div class="absolute left-8 md:left-1/2 top-0 bottom-0 w-1 bg-slate-300 -translate-x-1/2 hidden md:block border-dashed"></div>
-
-            <h3 class="text-center text-3xl font-black text-slate-700 mb-12 uppercase tracking-widest">
-                Los 3 Pasos del Pit Stop
-            </h3>
-
-            <!-- PHASE 1 -->
-            <div class="group relative mb-12 cursor-pointer transition-all duration-300" onclick="toggleRoadTrip(1)" id="rt-card-1">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div class="w-full md:w-5/12 order-2 md:order-1">
-                        <div id="rt-box-1" class="bg-white p-6 rounded-2xl shadow-lg border-l-8 border-orange-500 hover:shadow-2xl interactive-card">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded-full">FASE 1: PRE-QBR</span>
-                                <i data-lucide="car" class="text-orange-500"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Mirarse al Espejo</h3>
-                            <p class="text-slate-600 text-sm mb-4">
-                                Estás dentro del auto con tu equipo. A puertas cerradas. Es el momento de la verdad sin excusas.
-                            </p>
-                            <!-- Detail (Hidden by default) -->
-                            <div id="rt-detail-1" class="rt-phase-detail bg-orange-50 p-4 rounded-xl text-sm space-y-2">
-                                <div class="flex gap-2">
-                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-orange-600 mt-1"></i>
-                                    <span><strong>Espejo Retrovisor:</strong> ¿Llegamos? (Datos duros).</span>
-                                </div>
-                                <div class="flex gap-2">
-                                    <i data-lucide="arrow-right" class="w-4 h-4 text-orange-600 mt-1"></i>
-                                    <span><strong>Parabrisas:</strong> ¿A dónde vamos? El plan.</span>
-                                </div>
-                            </div>
-                            <p class="text-center text-xs text-orange-400 mt-2 font-bold tap-hint">👇 Toca para ver detalle</p>
-                        </div>
+                <div class="relative flex-shrink-0">
+                    <div class="w-16 h-16 rounded-full bg-slate-800 border-4 border-blue-500 flex items-center justify-center shadow-[0_0_15px_rgba(59,130,246,0.5)] z-10 relative">
+                        <span class="race-font text-2xl text-white">01</span>
                     </div>
-                    <div class="hidden md:flex order-1 md:order-2 w-16 h-16 bg-orange-500 rounded-full items-center justify-center text-white font-bold text-2xl shadow-xl border-4 border-slate-100 z-10 shrink-0">1</div>
-                    <div class="hidden md:block w-5/12 order-3"></div>
                 </div>
-            </div>
 
-            <!-- PHASE 2 -->
-            <div class="group relative mb-12 cursor-pointer transition-all duration-300" onclick="toggleRoadTrip(2)" id="rt-card-2">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div class="hidden md:block w-5/12 order-1"></div>
-                    <div class="hidden md:flex order-1 md:order-2 w-16 h-16 bg-blue-600 rounded-full items-center justify-center text-white font-bold text-2xl shadow-xl border-4 border-slate-100 z-10 shrink-0">2</div>
-                    <div class="w-full md:w-5/12 order-2 md:order-3">
-                        <div id="rt-box-2" class="bg-white p-6 rounded-2xl shadow-lg border-l-8 border-blue-600 hover:shadow-2xl interactive-card">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded-full">FASE 2: SHOW & TELL</span>
-                                <i data-lucide="handshake" class="text-blue-600"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">La Negociación</h3>
-                            <p class="text-slate-600 text-sm mb-4">
-                                Sales del auto y vas al taller. Hablas con los otros mecánicos (IT, Marketing). Es un "toma y daca".
-                            </p>
-                            <!-- Detail -->
-                            <div id="rt-detail-2" class="rt-phase-detail bg-blue-50 p-4 rounded-xl text-sm space-y-3">
-                                <div class="flex items-start gap-2">
-                                    <i data-lucide="alert-triangle" class="w-4 h-4 text-blue-600 mt-1"></i>
-                                    <span><strong>El Peligro:</strong> No puedes salir si IT no arregló el motor.</span>
-                                </div>
-                                <div class="bg-white p-2 rounded border border-blue-100 italic text-slate-600 text-xs">
-                                    "Te pido X (Pedido). Me comprometo a Y (Compromiso)."
-                                </div>
-                            </div>
-                            <p class="text-center text-xs text-blue-400 mt-2 font-bold tap-hint">👇 Toca para ver detalle</p>
-                        </div>
+                <div class="md:hidden text-center">
+                    <h2 class="race-font text-3xl text-white">1. PRE QBR</h2>
+                    <p class="text-slate-400 text-sm mt-1">Resultados y Focos.</p>
+                </div>
+
+                <div class="w-full md:w-1/2 md:pl-8">
+                    <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-blue-500 shadow-lg">
+                        <ul class="space-y-3 text-sm text-slate-300">
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="bar-chart-2" class="w-4 h-4 text-blue-400 mt-1 shrink-0"></i>
+                                <span>Revisamos principales <strong>Resultados</strong> del periodo transcurrido.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="crosshair" class="w-4 h-4 text-blue-400 mt-1 shrink-0"></i>
+                                <span>Comunicamos los <strong>Focos organizacionales</strong> para el siguiente ciclo.</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- PHASE 3 -->
-            <div class="group relative mb-12 cursor-pointer transition-all duration-300" onclick="toggleRoadTrip(3)" id="rt-card-3">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div class="w-full md:w-5/12 order-2 md:order-1">
-                        <div id="rt-box-3" class="bg-white p-6 rounded-2xl shadow-lg border-l-8 border-green-500 hover:shadow-2xl interactive-card">
-                            <div class="flex justify-between items-center mb-4">
-                                <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-1 rounded-full">FASE 3: MARKETPLACE</span>
-                                <i data-lucide="flag" class="text-green-500"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">La Feria (Luz Verde)</h3>
-                            <p class="text-slate-600 text-sm mb-4">
-                                La reunión final con los jefes. Muestras tu plan ya acordado.
-                            </p>
-                            <!-- Detail -->
-                            <div id="rt-detail-3" class="rt-phase-detail bg-green-50 p-4 rounded-xl text-sm space-y-2">
-                                <div class="flex gap-2">
-                                    <i data-lucide="check-circle-2" class="w-4 h-4 text-green-600 mt-1"></i>
-                                    <span><strong>GPS Alineado:</strong> Todos los autos salen hacia el mismo destino.</span>
-                                </div>
-                            </div>
-                            <p class="text-center text-xs text-green-400 mt-2 font-bold tap-hint">👇 Toca para ver detalle</p>
-                        </div>
+            <!-- STEP 2: OKR DESIGN -->
+            <div class="flex flex-col md:flex-row-reverse items-center gap-6 step-card group">
+                <div class="hidden md:flex w-1/2 justify-start pl-8">
+                    <div class="text-left">
+                        <h2 class="race-font text-3xl text-white group-hover:text-emerald-400 transition">2. OKR Design</h2>
+                        <p class="text-slate-400 text-sm mt-1 leading-relaxed">
+                            Ajuste de motor.<br>
+                            <span class="text-emerald-400 font-bold">Alineación y Prioridades.</span>
+                        </p>
                     </div>
-                    <div class="hidden md:flex order-1 md:order-2 w-16 h-16 bg-green-500 rounded-full items-center justify-center text-white font-bold text-2xl shadow-xl border-4 border-slate-100 z-10 shrink-0">3</div>
-                    <div class="hidden md:block w-5/12 order-3"></div>
+                </div>
+
+                <div class="relative flex-shrink-0">
+                    <div class="w-16 h-16 rounded-full bg-slate-800 border-4 border-emerald-500 flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.5)] z-10 relative">
+                        <span class="race-font text-2xl text-white">02</span>
+                    </div>
+                </div>
+
+                <div class="md:hidden text-center">
+                    <h2 class="race-font text-3xl text-white">2. OKR Design</h2>
+                    <p class="text-slate-400 text-sm mt-1">Alineación y Prioridades.</p>
+                </div>
+
+                <div class="w-full md:w-1/2 md:pr-8">
+                    <div class="bg-slate-800 p-4 rounded-xl border-r-4 border-emerald-500 shadow-lg text-right md:text-left">
+                        <ul class="space-y-3 text-sm text-slate-300 md:text-right" style="direction: rtl;">
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="git-merge" class="w-4 h-4 text-emerald-400 mt-1 shrink-0"></i>
+                                <span>Redefinición de OKRs y alineación entre áreas.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="book-open" class="w-4 h-4 text-emerald-400 mt-1 shrink-0"></i>
+                                <span>Capitalización de aprendizajes previos.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="list-checks" class="w-4 h-4 text-emerald-400 mt-1 shrink-0"></i>
+                                <span>Identificación de prioridades, necesidades y dependencias.</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
 
-        </div>
+            <!-- STEP 3: SHOW & TELL -->
+            <div class="flex flex-col md:flex-row items-center gap-6 step-card group">
+                <div class="hidden md:flex w-1/2 justify-end pr-8">
+                    <div class="text-right">
+                        <h2 class="race-font text-3xl text-white group-hover:text-amber-400 transition">3. SHOW & TELL</h2>
+                        <p class="text-slate-400 text-sm mt-1 leading-relaxed">
+                            Prueba de pista.<br>
+                            <span class="text-amber-400 font-bold">Feedback y Acuerdos.</span>
+                        </p>
+                    </div>
+                </div>
 
-        <!-- Footer Summary -->
-        <div class="bg-slate-800 text-white rounded-3xl p-8 text-center shadow-2xl mt-12">
-            <h2 class="text-2xl font-bold mb-4">Resumen "Para Llevar" 🥡</h2>
-            <div class="flex flex-col md:flex-row justify-center gap-6 text-slate-300 text-sm">
-                <div class="flex items-center gap-2 justify-center"><i data-lucide="x-circle" class="text-red-400"></i><span>No es un reporte.</span></div>
-                <div class="flex items-center gap-2 justify-center"><i data-lucide="handshake" class="text-blue-400"></i><span>Es negociar.</span></div>
-                <div class="flex items-center gap-2 justify-center"><i data-lucide="check-circle-2" class="text-green-400"></i><span>Es alinear.</span></div>
+                <div class="relative flex-shrink-0">
+                    <div class="w-16 h-16 rounded-full bg-slate-800 border-4 border-amber-500 flex items-center justify-center shadow-[0_0_15px_rgba(245,158,11,0.5)] z-10 relative">
+                        <span class="race-font text-2xl text-white">03</span>
+                    </div>
+                </div>
+
+                <div class="md:hidden text-center">
+                    <h2 class="race-font text-3xl text-white">3. SHOW & TELL</h2>
+                    <p class="text-slate-400 text-sm mt-1">Feedback y Acuerdos.</p>
+                </div>
+
+                <div class="w-full md:w-1/2 md:pl-8">
+                    <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-amber-500 shadow-lg">
+                        <ul class="space-y-3 text-sm text-slate-300">
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="users" class="w-4 h-4 text-amber-400 mt-1 shrink-0"></i>
+                                <span>Se comparten los planes con <strong>stakeholders</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="message-circle" class="w-4 h-4 text-amber-400 mt-1 shrink-0"></i>
+                                <span>Obtener feedback temprano.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="handshake" class="w-4 h-4 text-amber-400 mt-1 shrink-0"></i>
+                                <span>Revisar dependencias y generar acuerdos.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+
+            <!-- STEP 4: Review -->
+            <div class="flex flex-col md:flex-row-reverse items-center gap-6 step-card group">
+                <div class="hidden md:flex w-1/2 justify-start pl-8">
+                    <div class="text-left">
+                        <h2 class="race-font text-3xl text-white group-hover:text-purple-400 transition">4. Review</h2>
+                        <p class="text-slate-400 text-sm mt-1 leading-relaxed">
+                            Transparencia total.<br>
+                            <span class="text-purple-400 font-bold">Publicación y Conversación.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative flex-shrink-0">
+                    <div class="w-16 h-16 rounded-full bg-slate-800 border-4 border-purple-500 flex items-center justify-center shadow-[0_0_15px_rgba(168,85,247,0.5)] z-10 relative">
+                        <span class="race-font text-2xl text-white">04</span>
+                    </div>
+                </div>
+
+                <div class="md:hidden text-center">
+                    <h2 class="race-font text-3xl text-white">4. Review</h2>
+                    <p class="text-slate-400 text-sm mt-1">Publicación y Conversación.</p>
+                </div>
+
+                <div class="w-full md:w-1/2 md:pr-8">
+                    <div class="bg-slate-800 p-4 rounded-xl border-r-4 border-purple-500 shadow-lg text-right md:text-left">
+                        <ul class="space-y-3 text-sm text-slate-300 md:text-right" style="direction: rtl;">
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="file-check" class="w-4 h-4 text-purple-400 mt-1 shrink-0"></i>
+                                <span>Publicación digital del <strong>QBR Doc</strong>.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="eye" class="w-4 h-4 text-purple-400 mt-1 shrink-0"></i>
+                                <span>Transparentar OKRs y planes de acción.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="message-square-heart" class="w-4 h-4 text-purple-400 mt-1 shrink-0"></i>
+                                <span>Oportunidad para conversar y regalar feedback.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 5: MARKETPLACE -->
+            <div class="flex flex-col md:flex-row items-center gap-6 step-card group">
+                <div class="hidden md:flex w-1/2 justify-end pr-8">
+                    <div class="text-right">
+                        <h2 class="race-font text-3xl text-white group-hover:text-red-500 transition">5. MARKETPLACE</h2>
+                        <p class="text-slate-400 text-sm mt-1 leading-relaxed">
+                            Bandera verde.<br>
+                            <span class="text-red-500 font-bold">Sello Final y Mirada Compartida.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="relative flex-shrink-0">
+                    <div class="w-16 h-16 rounded-full bg-slate-800 border-4 border-red-500 flex items-center justify-center shadow-[0_0_15px_rgba(239,68,68,0.5)] z-10 relative">
+                        <span class="race-font text-2xl text-white">05</span>
+                    </div>
+                </div>
+
+                <div class="md:hidden text-center">
+                    <h2 class="race-font text-3xl text-white">5. MARKETPLACE</h2>
+                    <p class="text-slate-400 text-sm mt-1">Sello Final y Mirada Compartida.</p>
+                </div>
+
+                <div class="w-full md:w-1/2 md:pl-8">
+                    <div class="bg-slate-800 p-4 rounded-xl border-l-4 border-red-500 shadow-lg">
+                        <ul class="space-y-3 text-sm text-slate-300">
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="presentation" class="w-4 h-4 text-red-500 mt-1 shrink-0"></i>
+                                <span>Presentación del QBR Doc a la Organización.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="stamp" class="w-4 h-4 text-red-500 mt-1 shrink-0"></i>
+                                <span>Obtener <strong>sello final</strong> sobre los planes de acción.</span>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i data-lucide="globe" class="w-4 h-4 text-red-500 mt-1 shrink-0"></i>
+                                <span>Generar mirada compartida.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
+
+    <!-- Footer -->
+    <div class="bg-slate-800 p-6 text-center border-t border-slate-700">
+        <p class="text-slate-400 text-xs uppercase tracking-widest font-bold">
+            "La carrera no se gana en la recta, se gana en la curva."
+        </p>
+    </div>
+
 </div>
 
-
-<!-- ================= VIEW 2: GUIDE (METODOLOGÍA) ================= -->
-<div id="view-guide" class="hidden-view fade-in">
-    <!-- Header -->
-    <header class="relative bg-gradient-to-br from-slate-900 to-slate-800 text-white pt-24 pb-24 overflow-hidden rounded-b-[3rem]">
-        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <div class="inline-block px-4 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 font-medium text-sm mb-6">
-                Metodología OKR Practitioner
-            </div>
-            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
-                Proceso Formal QBR
-            </h1>
-            <p class="text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
-                El framework detallado para la alineación organizacional, desde el monitoreo hasta la planificación anual.
-            </p>
-            <div class="mt-8 flex justify-center gap-4 text-sm font-medium flex-wrap">
-                <button onclick="scrollToId('sec-cycle')" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition">El Ciclo</button>
-                <button onclick="scrollToId('sec-phases')" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition">Las 3 Fases</button>
-                <button onclick="scrollToId('sec-docs')" class="px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition">Artefactos</button>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 -mt-12 relative z-20 space-y-16">
-
-        <!-- SECTION: CYCLE -->
-        <section id="sec-cycle" class="bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
-            <h2 class="text-2xl font-bold text-slate-800 mb-6 text-center">El Ciclo de Seguimiento</h2>
-            <div class="grid md:grid-cols-3 gap-6 relative">
-                <div class="hidden md:block absolute top-10 left-0 w-full h-1 bg-slate-100 -z-10"></div>
-
-                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center">
-                    <div class="w-10 h-10 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center mx-auto mb-3 font-bold">1</div>
-                    <h3 class="font-bold mb-2">Monitoreo Mensual</h3>
-                    <p class="text-xs text-slate-500">Check-ins cortos (20 min) sobre métricas y confianza.</p>
-                </div>
-                <div class="bg-indigo-50 p-6 rounded-2xl border border-indigo-200 text-center shadow-lg transform md:-translate-y-2">
-                    <div class="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-bold">2</div>
-                    <h3 class="font-bold text-indigo-900 mb-2">QBR (Trimestral)</h3>
-                    <p class="text-xs text-indigo-700">Ajuste táctico y cierre de ciclo. Se hace en el último mes.</p>
-                </div>
-                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 text-center">
-                    <div class="w-10 h-10 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center mx-auto mb-3 font-bold">3</div>
-                    <h3 class="font-bold mb-2">Planificación Anual</h3>
-                    <p class="text-xs text-slate-500">Estrategia organizacional Top-down y Bottom-up.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SECTION: PHASES -->
-        <section id="sec-phases">
-            <div class="flex items-center gap-3 mb-6">
-                <i data-lucide="layers" class="text-indigo-600"></i>
-                <h2 class="text-3xl font-bold text-slate-800">Fases de Ejecución</h2>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-6">
-
-                <!-- Guide Phase 1 -->
-                <div onclick="toggleGuide(1)" id="guide-card-1" class="cursor-pointer p-6 rounded-2xl transition-all border bg-slate-800 text-white shadow-xl scale-105 border-slate-800 interactive-card">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs font-bold uppercase tracking-wider opacity-70">Fase 1</span>
-                        <i data-lucide="search" id="icon-g-1" class="text-blue-400"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Pre QBR</h3>
-                    <p class="text-sm opacity-80 mb-4">Revisión & Diseño (Interno)</p>
-
-                    <ul id="guide-detail-1" class="guide-stage-detail text-xs space-y-2 text-slate-300 show">
-                        <li>• Revisión de resultados sin excusas.</li>
-                        <li>• Redefinición de OKRs.</li>
-                        <li>• Output: QBR Doc (Borrador).</li>
-                    </ul>
-                </div>
-
-                <!-- Guide Phase 2 -->
-                <div onclick="toggleGuide(2)" id="guide-card-2" class="cursor-pointer p-6 rounded-2xl transition-all border bg-white hover:bg-slate-50 border-slate-200 interactive-card">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs font-bold uppercase tracking-wider opacity-70">Fase 2</span>
-                        <i data-lucide="git-pull-request" id="icon-g-2" class="text-slate-400"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Show & Tell</h3>
-                    <p class="text-sm opacity-80 mb-4">Alineación & Feedback (Cruzado)</p>
-
-                    <ul id="guide-detail-2" class="guide-stage-detail text-xs space-y-2 text-blue-800 bg-blue-50 p-2 rounded">
-                        <li>• Compartir planes con Stakeholders.</li>
-                        <li>• Revisar dependencias.</li>
-                        <li>• Output: Acuerdos firmados.</li>
-                    </ul>
-                </div>
-
-                <!-- Guide Phase 3 -->
-                <div onclick="toggleGuide(3)" id="guide-card-3" class="cursor-pointer p-6 rounded-2xl transition-all border bg-white hover:bg-slate-50 border-slate-200 interactive-card">
-                    <div class="flex justify-between items-start mb-4">
-                        <span class="text-xs font-bold uppercase tracking-wider opacity-70">Fase 3</span>
-                        <i data-lucide="megaphone" id="icon-g-3" class="text-slate-400"></i>
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Marketplace</h3>
-                    <p class="text-sm opacity-80 mb-4">Publicación & Compromiso (Público)</p>
-
-                    <ul id="guide-detail-3" class="guide-stage-detail text-xs space-y-2 text-green-800 bg-green-50 p-2 rounded">
-                        <li>• Presentación final tipo "Feria".</li>
-                        <li>• Sello final organizacional.</li>
-                        <li>• Mirada compartida.</li>
-                    </ul>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- SECTION: ARTIFACTS -->
-        <section id="sec-docs" class="grid md:grid-cols-2 gap-8">
-            <!-- QBR DOC -->
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
-                <h3 class="flex items-center gap-2 font-bold text-xl mb-6 text-slate-800">
-                    <i data-lucide="file-text" class="text-blue-600"></i> Estructura QBR Doc
-                </h3>
-                <div class="space-y-4">
-                    <div class="flex gap-3">
-                        <div class="bg-blue-100 p-2 rounded-lg h-fit"><i data-lucide="target" class="w-4 h-4 text-blue-600"></i></div>
-                        <div>
-                            <h4 class="font-bold text-sm">1. Resumen Ejecutivo</h4>
-                            <p class="text-xs text-slate-500">Logros del periodo y "Big Bets" futuras.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <div class="bg-indigo-100 p-2 rounded-lg h-fit"><i data-lucide="bar-chart-3" class="w-4 h-4 text-indigo-600"></i></div>
-                        <div>
-                            <h4 class="font-bold text-sm">2. OKRs & KPIs</h4>
-                            <p class="text-xs text-slate-500">Estado de salud. ¿Qué funcionó y qué no?</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-3">
-                        <div class="bg-purple-100 p-2 rounded-lg h-fit"><i data-lucide="layout" class="w-4 h-4 text-purple-600"></i></div>
-                        <div>
-                            <h4 class="font-bold text-sm">3. Roadmap</h4>
-                            <p class="text-xs text-slate-500">Hitos clave a mediano plazo (+18 meses).</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ACUERDOS -->
-            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
-                <h3 class="flex items-center gap-2 font-bold text-xl mb-6 text-slate-800">
-                    <i data-lucide="handshake" class="text-green-600"></i> Matriz de Acuerdos
-                </h3>
-                <div class="space-y-6">
-                    <div class="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-lg">
-                        <h4 class="font-bold text-orange-900 text-sm mb-1">LO QUE PIDO (Acuerdos)</h4>
-                        <p class="text-xs text-slate-600 italic mb-2">"Espero recibir de otro equipo..."</p>
-                        <div class="text-xs font-mono bg-white p-2 rounded border border-orange-100">
-                            IT &gt; API Scoring &gt; Q2
-                        </div>
-                    </div>
-                    <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
-                        <h4 class="font-bold text-green-900 text-sm mb-1">LO QUE DOY (Compromisos)</h4>
-                        <p class="text-xs text-slate-600 italic mb-2">"Me comprometo a entregar a otro..."</p>
-                        <div class="text-xs font-mono bg-white p-2 rounded border border-green-100">
-                            MKT &gt; Nuevos Diseños &gt; Q2
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-</div>
-
-<!-- Footer -->
-<footer class="bg-slate-900 text-slate-400 py-8 text-center text-xs border-t border-slate-800 mt-12">
-    <p class="mb-2 font-bold text-slate-200">OKR & QBR</p>
-</footer>
-
-<!-- ================= LOGIC / JAVASCRIPT ================= -->
 <script>
-    // Inicializar Iconos
     lucide.createIcons();
-
-    // --- Navegación ---
-    function switchView(viewName) {
-        const rtView = document.getElementById('view-roadtrip');
-        const guideView = document.getElementById('view-guide');
-        const btnRt = document.getElementById('btn-roadtrip');
-        const btnGuide = document.getElementById('btn-guide');
-
-        if (viewName === 'roadtrip') {
-            rtView.classList.remove('hidden-view');
-            guideView.classList.add('hidden-view');
-
-            // Estilos Botones
-            btnRt.classList.remove('text-slate-500', 'hover:bg-slate-100');
-            btnRt.classList.add('bg-blue-600', 'text-white', 'shadow-md');
-
-            btnGuide.classList.remove('bg-slate-800', 'text-white', 'shadow-md');
-            btnGuide.classList.add('text-slate-500', 'hover:bg-slate-100');
-        } else {
-            rtView.classList.add('hidden-view');
-            guideView.classList.remove('hidden-view');
-
-            // Estilos Botones
-            btnRt.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
-            btnRt.classList.add('text-slate-500', 'hover:bg-slate-100');
-
-            btnGuide.classList.remove('text-slate-500', 'hover:bg-slate-100');
-            btnGuide.classList.add('bg-slate-800', 'text-white', 'shadow-md');
-        }
-    }
-
-    // --- Lógica Road Trip (Acordeón) ---
-    let currentRtStop = null;
-
-    function toggleRoadTrip(stopNum) {
-        // Reset all
-        for (let i = 1; i <= 3; i++) {
-            document.getElementById(`rt-detail-${i}`).classList.remove('show');
-            document.getElementById(`rt-card-${i}`).classList.remove('scale-105');
-            const hint = document.querySelector(`#rt-box-${i} .tap-hint`);
-            if(hint) hint.style.display = 'block';
-        }
-
-        if (currentRtStop === stopNum) {
-            // Si clickeo el mismo, se cierra (estado null)
-            currentRtStop = null;
-        } else {
-            // Abrir nuevo
-            currentRtStop = stopNum;
-            document.getElementById(`rt-detail-${stopNum}`).classList.add('show');
-            document.getElementById(`rt-card-${stopNum}`).classList.add('scale-105');
-            const hint = document.querySelector(`#rt-box-${stopNum} .tap-hint`);
-            if(hint) hint.style.display = 'none';
-        }
-    }
-
-    // --- Lógica Guía (Tabs/Cards) ---
-    let currentGuideStage = 1;
-
-    function toggleGuide(stageNum) {
-        currentGuideStage = stageNum;
-
-        // Reset Styles for all
-        for (let i = 1; i <= 3; i++) {
-            const card = document.getElementById(`guide-card-${i}`);
-            const detail = document.getElementById(`guide-detail-${i}`);
-            const icon = document.getElementById(`icon-g-${i}`);
-
-            // Remove active classes
-            card.classList.remove('bg-slate-800', 'text-white', 'shadow-xl', 'scale-105', 'border-slate-800');
-            card.classList.remove('bg-blue-600', 'border-blue-600');
-            card.classList.remove('bg-green-600', 'border-green-600');
-
-            // Add default inactive classes
-            card.classList.add('bg-white', 'hover:bg-slate-50', 'border-slate-200');
-
-            // Hide details
-            detail.classList.remove('show');
-
-            // Reset Icons colors
-            icon.className = "text-slate-400";
-        }
-
-        // Apply Active Style based on stage
-        const activeCard = document.getElementById(`guide-card-${stageNum}`);
-        const activeDetail = document.getElementById(`guide-detail-${stageNum}`);
-        const activeIcon = document.getElementById(`icon-g-${stageNum}`);
-
-        activeCard.classList.remove('bg-white', 'hover:bg-slate-50', 'border-slate-200');
-        activeDetail.classList.add('show');
-
-        if (stageNum === 1) { // Pre QBR (Slate/Dark)
-            activeCard.classList.add('bg-slate-800', 'text-white', 'shadow-xl', 'scale-105', 'border-slate-800');
-            activeIcon.className = "text-blue-400";
-            activeDetail.classList.add('text-slate-300');
-        } else if (stageNum === 2) { // Show & Tell (Blue)
-            activeCard.classList.add('bg-blue-600', 'text-white', 'shadow-xl', 'scale-105', 'border-blue-600');
-            activeIcon.className = "text-white";
-            // Detail container style adjust for readability on blue
-            activeDetail.className = "guide-stage-detail text-xs space-y-2 text-blue-100 show animate-fade-in";
-        } else if (stageNum === 3) { // Marketplace (Green)
-            activeCard.classList.add('bg-green-600', 'text-white', 'shadow-xl', 'scale-105', 'border-green-600');
-            activeIcon.className = "text-white";
-            activeDetail.className = "guide-stage-detail text-xs space-y-2 text-green-100 show animate-fade-in";
-        }
-    }
-
-    // --- Scroll Helper ---
-    function scrollToId(id) {
-        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    }
-
 </script>
 </body>
 </html>
